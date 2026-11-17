@@ -1,0 +1,3616 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ-панель — Retro</title>
+    <meta name="description" content="Панель управления каталогом Retro: добавление, редактирование и удаление товаров.">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#f7f4ff">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%237b2ff7'/%3E%3Cpath d='M36 7 15 36h14l-2 21 22-31H34l2-19Z' fill='%23c8ff4d'/%3E%3C/svg%3E">
+
+    <style>
+        /* ============================================================
+           1. ПЕРЕМЕННЫЕ И БАЗОВЫЕ СТИЛИ
+           Оформление повторяет витрину index.html: тёмная тема,
+           оранжевый акцент, скругления и мягкие тени.
+           ============================================================ */
+        :root {
+            --bg: #f7f4ff;
+            --bg-soft: #ffffff;
+            --surface: #ffffff;
+            --surface-2: #f3eeff;
+            --surface-3: #e9e0ff;
+            --line: rgba(35, 20, 70, .09);
+            --line-strong: rgba(35, 20, 70, .16);
+            --text: #171029;
+            --muted: #625a78;
+            --dim: #8b839f;
+            --accent: #7b2ff7;
+            --accent-2: #c8ff4d;
+            --accent-3: #a855f7;
+            --accent-soft: rgba(123, 47, 247, .1);
+            --danger: #e5484d;
+            --success: #14945f;
+            --radius: 24px;
+            --radius-sm: 14px;
+            --shadow: 0 30px 80px rgba(76, 40, 150, .14);
+            --container: 1320px;
+            --ease: cubic-bezier(.2, .7, .2, 1);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; }
+        [hidden] { display: none !important; }
+
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+        }
+
+        body {
+            margin: 0;
+            min-width: 320px;
+            min-height: 100vh;
+            font-family: "Inter", "SF Pro Display", "Segoe UI", system-ui, -apple-system, sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            color: var(--text);
+            background:
+                radial-gradient(1000px 640px at 90% -10%, rgba(123, 47, 247, .15), transparent 62%),
+                radial-gradient(900px 600px at -10% 35%, rgba(200, 255, 77, .16), transparent 60%),
+                var(--bg);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background-image:
+                linear-gradient(rgba(73, 42, 140, .045) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(73, 42, 140, .045) 1px, transparent 1px);
+            background-size: 84px 84px;
+            -webkit-mask-image: radial-gradient(circle at 50% 0%, #000 0%, transparent 72%);
+            mask-image: radial-gradient(circle at 50% 0%, #000 0%, transparent 72%);
+        }
+
+        body.is-locked { overflow: hidden; }
+
+        button, input, select, textarea { font: inherit; color: inherit; }
+        button { cursor: pointer; }
+        a { color: inherit; text-decoration: none; }
+        h1, h2, h3, p { margin: 0; }
+        img, svg { display: block; max-width: 100%; }
+        ::selection { background: var(--accent); color: #08090b; }
+
+        :focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 3px;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* ============================================================
+           2. КНОПКИ
+           ============================================================ */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 9px;
+            padding: 12px 18px;
+            border: 1px solid transparent;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .02em;
+            transition: transform .2s var(--ease), background .2s, border-color .2s, color .2s, opacity .2s, box-shadow .2s;
+        }
+        .btn:hover { transform: translateY(-1px); }
+        .btn:disabled { opacity: .55; cursor: not-allowed; transform: none; }
+        .btn--primary {
+            background: linear-gradient(135deg, var(--accent-2), var(--accent));
+            color: #08090b;
+            box-shadow: 0 14px 30px rgba(255, 138, 0, .18);
+        }
+        .btn--primary:hover { box-shadow: 0 18px 36px rgba(255, 138, 0, .24); }
+        .btn--ghost {
+            border-color: var(--line-strong);
+            background: rgba(255, 255, 255, .03);
+            color: var(--text);
+        }
+        .btn--ghost:hover { border-color: rgba(255, 138, 0, .35); color: var(--accent-2); }
+        .btn--danger {
+            border-color: rgba(255, 93, 93, .3);
+            background: rgba(255, 93, 93, .08);
+            color: #ff8a8a;
+        }
+        .btn--danger:hover { background: rgba(255, 93, 93, .16); }
+        .btn--block { width: 100%; }
+        .btn--sm { padding: 9px 12px; border-radius: 10px; font-size: 11px; }
+        .btn.is-loading { pointer-events: none; }
+        .btn.is-loading::after {
+            content: "";
+            width: 13px;
+            height: 13px;
+            border: 2px solid currentColor;
+            border-right-color: transparent;
+            border-radius: 50%;
+            animation: spin .7s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* ============================================================
+           3. ЭКРАН ВХОДА
+           ============================================================ */
+        .login-screen {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            min-height: 100vh;
+            place-items: center;
+            padding: 32px 20px;
+        }
+        .login-card {
+            width: min(100%, 460px);
+            padding: 34px;
+            border: 1px solid var(--line);
+            border-radius: 26px;
+            background: linear-gradient(180deg, rgba(21, 25, 32, .97), rgba(11, 13, 16, .99));
+            box-shadow: var(--shadow);
+        }
+        .brand { display: inline-flex; align-items: center; gap: 12px; }
+        .logo-mark {
+            display: grid;
+            width: 44px;
+            height: 44px;
+            flex: 0 0 auto;
+            place-items: center;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--accent-2), var(--accent));
+            color: #08090b;
+            box-shadow: 0 10px 24px rgba(255, 138, 0, .22);
+        }
+        .logo-mark svg { width: 24px; height: 24px; }
+        .logo-text { display: flex; flex-direction: column; line-height: 1; }
+        .logo-name {
+            max-width: 220px;
+            overflow: hidden;
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: .14em;
+            text-overflow: ellipsis;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        .logo-sub { margin-top: 4px; color: var(--dim); font-size: 8px; letter-spacing: .26em; }
+        .login-card .brand { margin-bottom: 30px; }
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            color: var(--accent);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .18em;
+            text-transform: uppercase;
+        }
+        .eyebrow::before {
+            content: "";
+            width: 22px;
+            height: 1px;
+            background: currentColor;
+            opacity: .8;
+        }
+        .login-card h1 {
+            margin-top: 14px;
+            font-size: clamp(27px, 4vw, 34px);
+            line-height: 1.08;
+            letter-spacing: -.035em;
+            font-weight: 800;
+        }
+        .login-sub {
+            margin-top: 12px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.65;
+        }
+        .login-form { margin-top: 24px; }
+        .login-note {
+            margin-top: 16px;
+            padding: 12px 14px;
+            border: 1px solid rgba(255, 196, 77, .16);
+            border-radius: 12px;
+            background: rgba(255, 196, 77, .05);
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.6;
+        }
+        .login-note strong { color: var(--accent-2); }
+        .login-note code {
+            padding: 2px 6px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, .07);
+            color: var(--text);
+            font-size: 10.5px;
+        }
+        .back-link {
+            display: inline-flex;
+            margin-top: 20px;
+            color: var(--dim);
+            font-size: 11px;
+            transition: color .2s;
+        }
+        .back-link:hover { color: var(--accent-2); }
+
+        /* ============================================================
+           4. ПОЛЯ И ОШИБКИ
+           ============================================================ */
+        .field { display: flex; flex-direction: column; gap: 7px; }
+        .field label {
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .04em;
+        }
+        .field input,
+        .field select,
+        .field textarea {
+            width: 100%;
+            border: 1px solid var(--line-strong);
+            border-radius: 12px;
+            background: rgba(255, 255, 255, .035);
+            padding: 12px 13px;
+            color: var(--text);
+            outline: none;
+            transition: border-color .2s, background .2s, box-shadow .2s;
+        }
+        .field textarea { min-height: 92px; resize: vertical; }
+        .field input::placeholder,
+        .field textarea::placeholder { color: var(--dim); }
+        .field input:focus,
+        .field select:focus,
+        .field textarea:focus {
+            border-color: var(--accent);
+            background: rgba(255, 138, 0, .05);
+            box-shadow: 0 0 0 3px rgba(255, 138, 0, .1);
+        }
+        .field.is-invalid input,
+        .field.is-invalid select,
+        .field.is-invalid textarea { border-color: var(--danger); }
+        .field-error {
+            display: none;
+            color: var(--danger);
+            font-size: 11px;
+            line-height: 1.4;
+        }
+        .field.is-invalid .field-error,
+        .field-error.is-visible { display: block; }
+        .field-hint { color: var(--dim); font-size: 10.5px; line-height: 1.5; }
+        .image-upload {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 12px;
+            border: 1px dashed var(--line-strong);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, .02);
+        }
+        .image-preview {
+            position: relative;
+            display: grid;
+            width: 104px;
+            height: 104px;
+            flex: 0 0 auto;
+            place-items: center;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background:
+                radial-gradient(circle at 50% 45%, rgba(255, 138, 0, .12), transparent 70%),
+                #12151b;
+            color: var(--dim);
+            text-align: center;
+        }
+        .image-preview img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .image-preview svg { width: 30px; height: 30px; opacity: .65; }
+        .image-preview-empty { padding: 0 6px; font-size: 9.5px; line-height: 1.35; }
+        .image-preview img[hidden],
+        .image-preview-empty[hidden] { display: none; }
+        .image-upload-body {
+            display: flex;
+            flex: 1;
+            min-width: 0;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .image-upload-body input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--line-strong);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, .035);
+            color: var(--muted);
+            font-size: 11px;
+        }
+        .image-upload-body input[type="file"]::file-selector-button {
+            margin-right: 10px;
+            padding: 7px 10px;
+            border: 0;
+            border-radius: 8px;
+            background: var(--surface-3);
+            color: var(--text);
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background .2s, color .2s;
+        }
+        .image-upload-body input[type="file"]::file-selector-button:hover {
+            background: rgba(255, 138, 0, .18);
+            color: var(--accent-2);
+        }
+        .image-upload-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+        .upload-status {
+            min-height: 14px;
+            color: var(--dim);
+            font-size: 10.5px;
+            line-height: 1.45;
+        }
+        .upload-status.is-success { color: var(--success); }
+        .upload-status.is-error { color: var(--danger); }
+        .password-wrap { position: relative; }
+        .password-wrap input { padding-right: 52px; }
+        .password-toggle {
+            position: absolute;
+            top: 50%;
+            right: 8px;
+            display: grid;
+            width: 36px;
+            height: 36px;
+            place-items: center;
+            border: 0;
+            border-radius: 9px;
+            background: transparent;
+            color: var(--dim);
+            transform: translateY(-50%);
+            transition: color .2s, background .2s;
+        }
+        .password-toggle:hover { color: var(--text); background: rgba(255, 255, 255, .06); }
+        .password-toggle svg { width: 18px; height: 18px; }
+
+        /* ============================================================
+           5. ШАПКА И ОСНОВНАЯ СЕТКА
+           ============================================================ */
+        .admin-app { position: relative; z-index: 1; min-height: 100vh; }
+        .admin-header {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            border-bottom: 1px solid var(--line);
+            background: rgba(8, 9, 11, .82);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+        .admin-header-inner {
+            display: flex;
+            width: min(100% - 40px, var(--container));
+            min-height: 70px;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            margin-inline: auto;
+        }
+        .header-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .mode-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 10px;
+            border: 1px solid rgba(83, 214, 139, .2);
+            border-radius: 999px;
+            background: rgba(83, 214, 139, .06);
+            color: var(--success);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: .04em;
+        }
+        .mode-badge--demo {
+            border-color: rgba(255, 196, 77, .22);
+            background: rgba(255, 196, 77, .06);
+            color: var(--accent-2);
+        }
+        .mode-badge::before {
+            content: "";
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: currentColor;
+            box-shadow: 0 0 8px currentColor;
+        }
+        .admin-main {
+            width: min(100% - 40px, var(--container));
+            margin-inline: auto;
+            padding: 40px 0 70px;
+        }
+        .admin-hero {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+        .admin-hero h1 {
+            margin-top: 12px;
+            font-size: clamp(30px, 4vw, 46px);
+            line-height: 1.05;
+            letter-spacing: -.035em;
+            font-weight: 800;
+        }
+        .admin-hero p {
+            max-width: 620px;
+            margin-top: 12px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+        .stat-card {
+            min-width: 180px;
+            padding: 18px 20px;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            background: linear-gradient(180deg, rgba(255, 138, 0, .07), rgba(255, 255, 255, .02));
+            text-align: right;
+        }
+        .stat-card span {
+            display: block;
+            color: var(--accent-2);
+            font-size: 36px;
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: -.05em;
+        }
+        .stat-card small {
+            display: block;
+            margin-top: 7px;
+            color: var(--dim);
+            font-size: 10px;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+        }
+        .setup-banner {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            margin-top: 26px;
+            padding: 16px 18px;
+            border: 1px solid rgba(255, 196, 77, .22);
+            border-radius: 16px;
+            background: rgba(255, 196, 77, .055);
+        }
+        .setup-banner svg { width: 20px; height: 20px; flex: 0 0 auto; margin-top: 2px; color: var(--accent-2); }
+        .setup-banner strong { display: block; font-size: 12.5px; }
+        .setup-banner p { margin-top: 4px; color: var(--muted); font-size: 11.5px; line-height: 1.6; }
+        .settings-panel { margin-top: 26px; }
+        .settings-form {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            flex-wrap: wrap;
+            padding: 20px 22px;
+        }
+        .settings-form .field { flex: 1 1 320px; }
+        .settings-form .btn { margin-top: 25px; }
+        .settings-form .form-status { flex: 0 0 100%; margin-top: 0; }
+        .admin-grid {
+            display: grid;
+            grid-template-columns: minmax(340px, 400px) minmax(0, 1fr);
+            gap: 22px;
+            align-items: start;
+            margin-top: 26px;
+        }
+
+        /* ============================================================
+           6. ПАНЕЛИ, ФОРМА И ТАБЛИЦА
+           ============================================================ */
+        .panel {
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            background: linear-gradient(180deg, rgba(21, 25, 32, .78), rgba(12, 14, 18, .92));
+            box-shadow: 0 24px 70px rgba(0, 0, 0, .22);
+        }
+        .panel--list { min-width: 0; }
+        .panel-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 20px 22px;
+            border-bottom: 1px solid var(--line);
+        }
+        .panel-head h2 { font-size: 15px; font-weight: 800; letter-spacing: -.01em; }
+        .panel-hint { color: var(--dim); font-size: 10px; }
+        .list-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--line);
+            background: rgba(255, 255, 255, .012);
+        }
+        .search-box {
+            position: relative;
+            display: flex;
+            flex: 1 1 220px;
+            align-items: center;
+            min-width: 0;
+        }
+        .search-box svg {
+            position: absolute;
+            left: 12px;
+            width: 16px;
+            height: 16px;
+            color: var(--dim);
+            pointer-events: none;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 10px 36px;
+            border: 1px solid var(--line-strong);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, .035);
+            color: var(--text);
+            font-size: 11.5px;
+            outline: none;
+            transition: border-color .2s, box-shadow .2s;
+        }
+        .search-box input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(255, 138, 0, .1);
+        }
+        .search-box input::placeholder { color: var(--dim); }
+        .search-clear {
+            position: absolute;
+            right: 6px;
+            display: grid;
+            width: 28px;
+            height: 28px;
+            place-items: center;
+            border: 0;
+            border-radius: 7px;
+            background: transparent;
+            color: var(--dim);
+            font-size: 17px;
+            line-height: 1;
+        }
+        .search-clear:hover { background: rgba(255, 255, 255, .07); color: var(--text); }
+        .sort-box { flex: 0 1 190px; min-width: 150px; }
+        .sort-box select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--line-strong);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, .035);
+            color: var(--text);
+            font-size: 11.5px;
+            outline: none;
+            cursor: pointer;
+        }
+        .sort-box select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(255, 138, 0, .1);
+        }
+        .product-form { padding: 22px; }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .field--full { grid-column: 1 / -1; }
+        .form-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+        .form-status {
+            min-height: 18px;
+            margin-top: 12px;
+            color: var(--muted);
+            font-size: 11.5px;
+            line-height: 1.5;
+        }
+        .form-status.is-success { color: var(--success); }
+        .form-status.is-error { color: var(--danger); }
+
+        .table-wrap { overflow-x: auto; }
+        .product-table { width: 100%; min-width: 720px; border-collapse: collapse; }
+        .product-table th {
+            padding: 12px 12px;
+            border-bottom: 1px solid var(--line);
+            color: var(--dim);
+            font-size: 9.5px;
+            font-weight: 700;
+            letter-spacing: .12em;
+            text-align: left;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+        .product-table td {
+            padding: 14px 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, .05);
+            vertical-align: middle;
+        }
+        .product-table tbody tr:last-child td { border-bottom: 0; }
+        .product-table tbody tr:hover { background: rgba(255, 255, 255, .018); }
+        .table-product { display: flex; min-width: 220px; align-items: center; gap: 12px; }
+        .table-thumb {
+            position: relative;
+            display: grid;
+            width: 46px;
+            height: 46px;
+            flex: 0 0 auto;
+            place-items: center;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background:
+                radial-gradient(circle at 50% 45%, rgba(255, 138, 0, .12), transparent 70%),
+                #12151b;
+            color: var(--accent-2);
+        }
+        .table-thumb svg {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 1.2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+        .table-thumb img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .table-product-info { min-width: 0; }
+        .table-product-info strong {
+            display: block;
+            max-width: 260px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 12.5px;
+            font-weight: 700;
+        }
+        .table-product-info small {
+            display: block;
+            max-width: 260px;
+            margin-top: 3px;
+            overflow: hidden;
+            color: var(--dim);
+            font-size: 10.5px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .pill {
+            display: inline-flex;
+            padding: 5px 9px;
+            border: 1px solid var(--line-strong);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .03);
+            color: var(--muted);
+            font-size: 9.5px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .price-cell strong { display: block; font-size: 12.5px; font-weight: 800; white-space: nowrap; }
+        .price-cell small {
+            display: block;
+            margin-top: 3px;
+            color: var(--dim);
+            font-size: 10px;
+            text-decoration: line-through;
+            white-space: nowrap;
+        }
+        .badge-cell {
+            max-width: 120px;
+            overflow: hidden;
+            color: var(--muted);
+            font-size: 11px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .table-state {
+            padding: 50px 24px !important;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.6;
+            text-align: center;
+        }
+        .table-state strong { display: block; margin-bottom: 5px; color: var(--text); font-size: 13px; }
+        .table-note {
+            padding: 14px 20px;
+            border-top: 1px solid var(--line);
+            color: var(--dim);
+            font-size: 10.5px;
+            line-height: 1.55;
+        }
+        .table-product-mobile-price { display: none; }
+        .row-actions {
+            display: grid;
+            grid-template-columns: auto auto;
+            justify-content: end;
+            gap: 6px;
+        }
+        .row-actions .btn {
+            padding: 8px 10px;
+            font-size: 10.5px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        /* ============================================================
+           7. ИНСТРУКЦИЯ FIREBASE И МОДАЛЬНОЕ ОКНО УДАЛЕНИЯ
+           ============================================================ */
+        .setup-note {
+            margin-top: 22px;
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            background: rgba(255, 255, 255, .018);
+        }
+        .setup-note summary {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 16px 20px;
+            color: var(--muted);
+            font-size: 12px;
+            font-weight: 700;
+            list-style: none;
+            cursor: pointer;
+        }
+        .setup-note summary::-webkit-details-marker { display: none; }
+        .setup-note summary::after { content: "+"; color: var(--accent-2); font-size: 18px; line-height: 1; }
+        .setup-note[open] summary::after { content: "−"; }
+        .setup-note-body {
+            padding: 0 20px 20px;
+            color: var(--muted);
+            font-size: 11.5px;
+            line-height: 1.7;
+        }
+        .setup-note-body ol { margin: 0; padding-left: 20px; }
+        .setup-note-body li + li { margin-top: 7px; }
+        .setup-note-body a { color: var(--accent-2); }
+        .setup-note-body code {
+            padding: 2px 5px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, .07);
+            color: var(--text);
+            font-size: 10.5px;
+        }
+        .setup-note-body pre {
+            margin: 12px 0 0;
+            padding: 14px;
+            overflow: auto;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: #0a0c0f;
+            color: #c9d1d9;
+            font-size: 10.5px;
+            line-height: 1.55;
+            white-space: pre;
+        }
+        .confirm-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .confirm-modal.is-open { display: flex; }
+        .confirm-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, .7);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+        .confirm-dialog {
+            position: relative;
+            width: min(100%, 430px);
+            padding: 28px;
+            border: 1px solid var(--line-strong);
+            border-radius: var(--radius);
+            background: linear-gradient(180deg, #151920, #0b0d10);
+            box-shadow: var(--shadow);
+        }
+        .confirm-dialog h2 { font-size: 20px; letter-spacing: -.02em; }
+        .confirm-dialog p { margin-top: 10px; color: var(--muted); font-size: 12.5px; line-height: 1.6; }
+        .confirm-dialog strong { color: var(--text); }
+        .confirm-error {
+            min-height: 16px;
+            margin-top: 10px;
+            color: var(--danger);
+            font-size: 11.5px;
+            line-height: 1.5;
+        }
+        .confirm-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 18px; }
+
+        /* ============================================================
+           8. АДАПТИВНОСТЬ
+           ============================================================ */
+        @media (max-width: 1080px) {
+            .admin-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 720px) {
+            .admin-header-inner,
+            .admin-main { width: min(100% - 28px, var(--container)); }
+            .admin-header-inner {
+                min-height: auto;
+                align-items: flex-start;
+                flex-direction: column;
+                padding: 14px 0;
+            }
+            .header-actions { width: 100%; }
+            .header-actions .btn { flex: 1; }
+            .mode-badge { width: 100%; justify-content: center; }
+            .admin-main { padding-top: 28px; }
+            .admin-hero { align-items: flex-start; }
+            .stat-card { width: 100%; text-align: left; }
+            .form-grid { grid-template-columns: 1fr; }
+            .panel-head { padding: 17px 18px; }
+            .product-form { padding: 18px; }
+            .settings-form { padding: 18px; }
+            .settings-form .btn { width: 100%; margin-top: 0; }
+            .login-card { padding: 26px 20px; }
+            .list-toolbar { padding: 12px; }
+            .search-box { flex: 1 1 100%; }
+            .sort-box { flex: 1 1 100%; min-width: 0; }
+            .image-upload { gap: 11px; padding: 10px; }
+            .image-preview { width: 88px; height: 88px; }
+
+            /* На телефоне оставляем в таблице товар, цену и действия. */
+            .product-table { min-width: 0; width: 100%; }
+            .product-table th:nth-child(2),
+            .product-table td:nth-child(2),
+            .product-table th:nth-child(4),
+            .product-table td:nth-child(4) { display: none; }
+            .product-table th,
+            .product-table td { padding: 12px 8px; }
+            .table-product { min-width: 0; gap: 9px; }
+            .table-thumb { width: 38px; height: 38px; border-radius: 10px; }
+            .table-thumb svg { width: 20px; height: 20px; }
+            .table-product-info strong { max-width: 140px; }
+            .table-product-info small { display: none; }
+            .product-table th:nth-child(3),
+            .product-table td:nth-child(3),
+            .product-table th:last-child,
+            .product-table td:last-child { text-align: right; }
+            .row-actions { display: flex; flex-direction: column; align-items: stretch; }
+            .product-table .row-actions .btn { padding: 7px 8px; font-size: 9.5px; }
+        }
+        @media (max-width: 520px) {
+            /* На узких экранах цена переезжает под название товара. */
+            .product-table th:nth-child(3),
+            .product-table td:nth-child(3) { display: none; }
+            .table-product-info strong { max-width: 120px; }
+            .table-product-mobile-price {
+                display: block;
+                margin-top: 3px;
+                color: var(--accent-2);
+                font-size: 10px;
+                font-weight: 700;
+            }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after {
+                animation-duration: .001ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: .001ms !important;
+            }
+        }
+
+        /* ============================================================
+           9. СВЕТЛАЯ ТЕМА RETRO — ФИНАЛЬНЫЕ ПЕРЕОПРЕДЕЛЕНИЯ
+           ============================================================ */
+        ::selection { background: var(--accent); color: #fff; }
+
+        .btn--primary {
+            color: #fff;
+            background: linear-gradient(135deg, #9d5cff, var(--accent) 52%, #5b21b6);
+            box-shadow: 0 14px 30px rgba(123, 47, 247, .24), inset 0 1px 0 rgba(255, 255, 255, .3);
+        }
+        .btn--primary:hover { box-shadow: 0 18px 38px rgba(123, 47, 247, .32); }
+        .btn--ghost {
+            border-color: rgba(123, 47, 247, .18);
+            background: rgba(255, 255, 255, .62);
+            color: var(--text);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        .btn--ghost:hover {
+            border-color: rgba(123, 47, 247, .4);
+            color: var(--accent);
+            background: #fff;
+        }
+        .btn--danger {
+            border-color: rgba(229, 72, 77, .26);
+            background: rgba(229, 72, 77, .07);
+            color: var(--danger);
+        }
+        .btn--danger:hover { background: rgba(229, 72, 77, .13); }
+        .btn--glass {
+            border-color: rgba(255, 255, 255, .9);
+            background: linear-gradient(135deg, rgba(255, 255, 255, .9), rgba(255, 255, 255, .5));
+            color: #2b1459;
+            box-shadow: 0 10px 26px rgba(76, 40, 150, .12), inset 0 1px 0 #fff;
+            backdrop-filter: blur(14px) saturate(150%);
+            -webkit-backdrop-filter: blur(14px) saturate(150%);
+        }
+        .btn--glass:hover {
+            border-color: rgba(123, 47, 247, .35);
+            color: var(--accent);
+            background: #fff;
+        }
+        .btn--lime {
+            color: #171029;
+            background: linear-gradient(135deg, #e2ff9a, var(--accent-2) 55%, #a8e62e);
+            box-shadow: 0 12px 26px rgba(150, 200, 40, .26);
+        }
+
+        /* ---------- Экран входа ---------- */
+        .login-screen { overflow: hidden; }
+        .login-screen::before,
+        .login-screen::after {
+            content: "";
+            position: absolute;
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(8px);
+        }
+        .login-screen::before {
+            top: -120px;
+            right: -80px;
+            width: 460px;
+            height: 460px;
+            background: radial-gradient(circle, rgba(200, 255, 77, .4), transparent 66%);
+            animation: admin-blob 14s ease-in-out infinite;
+        }
+        .login-screen::after {
+            bottom: -180px;
+            left: -100px;
+            width: 520px;
+            height: 520px;
+            background: radial-gradient(circle, rgba(123, 47, 247, .18), transparent 68%);
+            animation: admin-blob 18s ease-in-out infinite reverse;
+        }
+        .login-card {
+            position: relative;
+            z-index: 1;
+            border-color: rgba(255, 255, 255, .9);
+            background: linear-gradient(180deg, rgba(255, 255, 255, .96), rgba(251, 248, 255, .92));
+            box-shadow: 0 34px 90px rgba(76, 40, 150, .18);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            animation: admin-rise .7s var(--ease) both;
+        }
+        .logo-mark {
+            color: #fff;
+            background: linear-gradient(135deg, #9d5cff, var(--accent) 58%, #5b21b6);
+            box-shadow: 0 10px 24px rgba(123, 47, 247, .3);
+        }
+        .logo-sub { color: var(--dim); }
+        .eyebrow { color: var(--accent); }
+        .login-note {
+            border-color: rgba(123, 47, 247, .16);
+            background: rgba(123, 47, 247, .05);
+            color: var(--muted);
+        }
+        .login-note strong { color: var(--accent); }
+        .login-note code {
+            background: rgba(123, 47, 247, .1);
+            color: var(--accent);
+        }
+        .back-link:hover { color: var(--accent); }
+        .password-toggle:hover { color: var(--accent); background: rgba(123, 47, 247, .07); }
+
+        /* ---------- Поля ---------- */
+        .field label { color: var(--muted); }
+        .field input,
+        .field select,
+        .field textarea {
+            border-color: var(--line-strong);
+            background-color: #fff;
+            color: var(--text);
+        }
+        .field input::placeholder,
+        .field textarea::placeholder { color: #a49bb8; }
+        .field input:focus,
+        .field select:focus,
+        .field textarea:focus {
+            border-color: rgba(123, 47, 247, .68);
+            background-color: #fff;
+            box-shadow: 0 0 0 3px rgba(123, 47, 247, .12);
+        }
+        .field-hint { color: var(--dim); }
+
+        /* ---------- Шапка и каркас ---------- */
+        .admin-header {
+            border-bottom-color: rgba(255, 255, 255, .8);
+            background: rgba(255, 255, 255, .74);
+            box-shadow: 0 1px 0 rgba(35, 20, 70, .04);
+            backdrop-filter: blur(18px) saturate(160%);
+            -webkit-backdrop-filter: blur(18px) saturate(160%);
+        }
+        .mode-badge {
+            border-color: rgba(20, 148, 95, .22);
+            background: rgba(20, 148, 95, .07);
+            color: var(--success);
+        }
+        .mode-badge--demo {
+            border-color: rgba(123, 47, 247, .2);
+            background: rgba(123, 47, 247, .07);
+            color: var(--accent);
+        }
+        .admin-main { animation: admin-rise .6s var(--ease) both; }
+        .admin-hero p { color: var(--muted); }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(128px, 1fr));
+            gap: 10px;
+            width: min(100%, 660px);
+        }
+        .stat-card {
+            min-width: 0;
+            padding: 15px 16px;
+            border-color: rgba(35, 20, 70, .08);
+            border-radius: 18px;
+            background: linear-gradient(180deg, rgba(255, 255, 255, .92), rgba(248, 244, 255, .8));
+            box-shadow: 0 12px 30px rgba(76, 40, 150, .06);
+            text-align: left;
+        }
+        .stat-card span {
+            color: var(--text);
+            font-size: clamp(20px, 2.2vw, 28px);
+            letter-spacing: -.04em;
+        }
+        .stat-card--value span { color: var(--accent); font-size: clamp(17px, 1.8vw, 22px); }
+        .stat-card--photos span { color: #4d6b00; }
+        .stat-card--hidden span { color: var(--dim); }
+        .stat-card small { color: var(--dim); }
+        .setup-banner {
+            border-color: rgba(123, 47, 247, .18);
+            background: linear-gradient(135deg, rgba(200, 255, 77, .18), rgba(123, 47, 247, .05));
+        }
+        .setup-banner svg { color: var(--accent); }
+
+        /* ---------- Панели ---------- */
+        .panel {
+            border-color: rgba(35, 20, 70, .08);
+            background: linear-gradient(180deg, #fff 0%, #fbf9ff 100%);
+            box-shadow: 0 24px 70px rgba(76, 40, 150, .08);
+        }
+        .panel-head { border-bottom-color: var(--line); }
+        .panel-head-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+        .list-toolbar {
+            border-bottom-color: var(--line);
+            background: rgba(123, 47, 247, .03);
+        }
+        .filter-box { flex: 0 1 155px; min-width: 135px; }
+        .search-box input,
+        .sort-box select {
+            border-color: var(--line-strong);
+            background: #fff;
+            color: var(--text);
+        }
+        .search-box input::placeholder { color: var(--dim); }
+        .search-box input:focus,
+        .sort-box select:focus {
+            border-color: rgba(123, 47, 247, .65);
+            box-shadow: 0 0 0 3px rgba(123, 47, 247, .12);
+        }
+        .search-clear:hover { background: rgba(123, 47, 247, .08); color: var(--accent); }
+        .settings-form { background: rgba(123, 47, 247, .02); }
+
+        /* ---------- Таблица ---------- */
+        .product-table th {
+            border-bottom-color: var(--line);
+            color: var(--dim);
+        }
+        .product-table td { border-bottom-color: rgba(35, 20, 70, .06); }
+        .product-table tbody tr:hover { background: rgba(123, 47, 247, .035); }
+        .table-thumb {
+            border-color: var(--line);
+            background:
+                radial-gradient(circle at 50% 45%, rgba(123, 47, 247, .13), transparent 70%),
+                linear-gradient(155deg, #f7f2ff, #ece2ff);
+            color: var(--accent);
+        }
+        .thumb-count {
+            position: absolute;
+            right: 3px;
+            bottom: 3px;
+            z-index: 2;
+            padding: 1px 5px;
+            border-radius: 999px;
+            background: rgba(23, 16, 41, .66);
+            color: #fff;
+            font-size: 8.5px;
+            font-weight: 700;
+        }
+        .pill {
+            border-color: var(--line-strong);
+            background: rgba(255, 255, 255, .7);
+            color: var(--muted);
+        }
+        .pill--visible {
+            border-color: rgba(20, 148, 95, .22);
+            background: rgba(20, 148, 95, .08);
+            color: var(--success);
+        }
+        .pill--hidden {
+            border-color: rgba(229, 72, 77, .22);
+            background: rgba(229, 72, 77, .08);
+            color: var(--danger);
+        }
+        .badge-stack {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 5px;
+        }
+        .badge-cell { color: var(--muted); }
+        .price-cell small { color: var(--dim); }
+        .table-state { color: var(--muted); }
+        .table-note { border-top-color: var(--line); color: var(--dim); }
+        .table-product-mobile-price { color: var(--accent); }
+
+        /* ---------- Настройки Firebase ---------- */
+        .setup-note {
+            border-color: rgba(35, 20, 70, .08);
+            background: rgba(255, 255, 255, .66);
+        }
+        .setup-note summary { color: var(--muted); }
+        .setup-note summary::after { color: var(--accent); }
+        .setup-note-body a { color: var(--accent); }
+        .setup-note-body code {
+            background: rgba(123, 47, 247, .09);
+            color: var(--accent);
+        }
+        .setup-note-body pre {
+            border-color: var(--line);
+            background: #f4eeff;
+            color: #32215c;
+        }
+
+        /* ---------- Модальное окно удаления ---------- */
+        .confirm-backdrop {
+            background: rgba(23, 16, 41, .55);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+        .confirm-dialog {
+            border-color: rgba(255, 255, 255, .92);
+            background: linear-gradient(180deg, #fff, #fbf8ff);
+            box-shadow: 0 34px 90px rgba(23, 16, 41, .34);
+            animation: admin-rise .35s var(--ease) both;
+        }
+
+        /* ---------- Загрузка нескольких фото ---------- */
+        .image-uploader {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 14px;
+            border: 1px dashed rgba(123, 47, 247, .28);
+            border-radius: 16px;
+            background: rgba(255, 255, 255, .55);
+        }
+        .image-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+        }
+        .image-gallery-empty {
+            grid-column: 1 / -1;
+            padding: 18px 12px;
+            border-radius: 12px;
+            background: rgba(123, 47, 247, .04);
+            color: var(--dim);
+            font-size: 11px;
+            line-height: 1.55;
+            text-align: center;
+        }
+        .image-tile {
+            position: relative;
+            aspect-ratio: 1.12;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 13px;
+            background: linear-gradient(155deg, #f7f2ff, #ece2ff);
+        }
+        .image-tile.is-cover {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 2px rgba(123, 47, 247, .16);
+        }
+        .image-tile img { width: 100%; height: 100%; object-fit: cover; }
+        .image-tile-badge {
+            position: absolute;
+            top: 7px;
+            left: 7px;
+            z-index: 2;
+            padding: 3px 7px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #e2ff9a, var(--accent-2));
+            color: #171029;
+            font-size: 8.5px;
+            font-weight: 800;
+            letter-spacing: .03em;
+        }
+        .image-tile-actions {
+            position: absolute;
+            inset: auto 0 0;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 4px;
+            padding: 8px;
+            background: linear-gradient(transparent, rgba(23, 16, 41, .62));
+        }
+        .image-tile-btn {
+            padding: 4px 7px;
+            border: 1px solid rgba(255, 255, 255, .6);
+            border-radius: 7px;
+            background: rgba(255, 255, 255, .82);
+            color: #2b1459;
+            font-size: 8.5px;
+            font-weight: 700;
+            line-height: 1.2;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            transition: background .2s, color .2s;
+        }
+        .image-tile-btn:hover { background: #fff; color: var(--accent); }
+        .image-tile-btn--remove {
+            display: grid;
+            width: 24px;
+            height: 24px;
+            padding: 0;
+            place-items: center;
+            font-size: 15px;
+            line-height: 1;
+        }
+        .file-drop {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 13px 15px;
+            border: 1px dashed rgba(123, 47, 247, .3);
+            border-radius: 14px;
+            background: rgba(123, 47, 247, .04);
+            cursor: pointer;
+            transition: border-color .2s, background .2s, transform .2s;
+        }
+        .file-drop:hover,
+        .file-drop.is-dragover {
+            border-color: var(--accent);
+            background: rgba(123, 47, 247, .08);
+            transform: translateY(-1px);
+        }
+        .file-drop svg { width: 26px; height: 26px; flex: 0 0 auto; color: var(--accent); }
+        .file-drop strong { display: block; font-size: 12.5px; }
+        .file-drop small { display: block; margin-top: 2px; color: var(--dim); font-size: 10.5px; }
+        .image-upload-body { gap: 9px; }
+        .image-upload-actions { gap: 8px; }
+        .upload-status { color: var(--dim); }
+        .upload-status.is-success { color: var(--success); }
+        .upload-status.is-error { color: var(--danger); }
+
+        /* ---------- Анимации ---------- */
+        @keyframes admin-blob {
+            0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+            50% { transform: translate3d(-16px, 20px, 0) scale(1.06); }
+        }
+        @keyframes admin-rise {
+            from { opacity: 0; transform: translateY(18px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .panel { animation: admin-rise .55s var(--ease) both; }
+        .panel:nth-child(2) { animation-delay: .06s; }
+
+        @media (max-width: 1080px) {
+            .stats-grid { width: 100%; grid-template-columns: repeat(4, minmax(120px, 1fr)); }
+        }
+        @media (max-width: 720px) {
+            .stats-grid { grid-template-columns: 1fr 1fr; width: 100%; }
+            .image-gallery { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 520px) {
+            .image-gallery { grid-template-columns: 1fr 1fr; }
+            .file-drop { align-items: flex-start; }
+        }
+
+    </style>
+</head>
+<body>
+    <!-- ============================================================
+         ЭКРАН ВХОДА
+         ============================================================ -->
+    <main class="login-screen" id="loginScreen">
+        <section class="login-card" aria-labelledby="loginTitle">
+            <a class="brand" href="index.html" aria-label="Retro — на витрину" data-admin-store-link="на витрину">
+                <span class="logo-mark">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M13.5 2 4.8 13.4h6.1L10 22l9.2-11.9h-6.4L13.5 2Z" fill="currentColor" stroke="none"/>
+                    </svg>
+                </span>
+                <span class="logo-text">
+                    <span class="logo-name" data-admin-store-name>RETRO</span>
+                    <span class="logo-sub">TECH ADMIN</span>
+                </span>
+            </a>
+
+            <span class="eyebrow">Панель управления</span>
+            <h1 id="loginTitle">Вход в админ-панель</h1>
+            <p class="login-sub">Введите пароль администратора, чтобы добавлять, редактировать и удалять товары магазина.</p>
+
+            <form class="login-form" id="loginForm" novalidate>
+                <div class="field">
+                    <label for="adminPassword">Пароль</label>
+                    <div class="password-wrap">
+                        <input id="adminPassword" name="password" type="password" autocomplete="current-password" placeholder="••••••••" required>
+                        <button class="password-toggle" id="togglePassword" type="button" aria-label="Показать пароль" aria-pressed="false">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <span class="field-error" id="loginError" role="alert"></span>
+                </div>
+                <button class="btn btn--primary btn--block" id="loginSubmit" type="submit">Войти</button>
+            </form>
+
+            <div class="login-note" id="loginModeNote"></div>
+            <a class="back-link" href="index.html">← Вернуться в магазин</a>
+        </section>
+    </main>
+
+    <!-- ============================================================
+         ПАНЕЛЬ УПРАВЛЕНИЯ
+         ============================================================ -->
+    <div class="admin-app" id="adminApp" hidden>
+        <header class="admin-header">
+            <div class="admin-header-inner">
+                <a class="brand" href="index.html" aria-label="Retro — на витрину" data-admin-store-link="на витрину">
+                    <span class="logo-mark">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M13.5 2 4.8 13.4h6.1L10 22l9.2-11.9h-6.4L13.5 2Z" fill="currentColor" stroke="none"/>
+                        </svg>
+                    </span>
+                    <span class="logo-text">
+                        <span class="logo-name" data-admin-store-name>RETRO</span>
+                        <span class="logo-sub">TECH ADMIN</span>
+                    </span>
+                </a>
+
+                <div class="header-actions">
+                    <span class="mode-badge" id="modeBadge">Демо-режим</span>
+                    <a class="btn btn--glass btn--sm" href="index.html" target="_blank" rel="noopener">Открыть витрину ↗</a>
+                    <button class="btn btn--glass btn--sm" id="logoutBtn" type="button">Выйти</button>
+                </div>
+            </div>
+        </header>
+
+        <main class="admin-main">
+            <section class="admin-hero" aria-labelledby="adminTitle">
+                <div>
+                    <span class="eyebrow">Управление каталогом</span>
+                    <h1 id="adminTitle">Товары магазина</h1>
+                    <p>Добавляйте новые позиции, редактируйте цены и фото, удаляйте проданные. Витрина берёт товары из Firebase Firestore, а в демо-режиме — из локального хранилища браузера.</p>
+                </div>
+                <div class="stats-grid" aria-label="Сводка по каталогу">
+                    <div class="stat-card">
+                        <span id="productCount">0</span>
+                        <small>товаров</small>
+                    </div>
+                    <div class="stat-card stat-card--value">
+                        <span id="totalValue">0 ₽</span>
+                        <small>стоимость каталога</small>
+                    </div>
+                    <div class="stat-card stat-card--photos">
+                        <span id="photoCount">0</span>
+                        <small>с фото</small>
+                    </div>
+                    <div class="stat-card stat-card--hidden">
+                        <span id="hiddenCount">0</span>
+                        <small>скрыто</small>
+                    </div>
+                </div>
+            </section>
+
+            <div class="setup-banner" id="setupBanner" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="12" r="9"/>
+                    <path d="M12 8v5M12 16.5v.1"/>
+                </svg>
+                <div>
+                    <strong>Firebase ещё не подключён — включён демо-режим</strong>
+                    <p>Товары и фото сохраняются только в этом браузере. Вставьте firebaseConfig в index.html и admin.html, включите Firestore и Storage, затем создайте администратора в Firebase Authentication. Подробности — в блоке «Как подключить Firebase» ниже.</p>
+                </div>
+            </div>
+
+            <section class="panel settings-panel" aria-labelledby="settingsTitle">
+                <div class="panel-head">
+                    <h2 id="settingsTitle">Настройки магазина</h2>
+                    <span class="panel-hint">Название видно на витрине</span>
+                </div>
+                <form class="settings-form" id="storeSettingsForm" novalidate>
+                    <div class="field">
+                        <label for="storeNameInput">Название магазина</label>
+                        <input id="storeNameInput" name="storeName" type="text" maxlength="40" placeholder="Retro" required>
+                        <span class="field-hint">Показывается в шапке, подвале и заголовке вкладки. От 2 до 40 символов.</span>
+                        <span class="field-error">Введите название — от 2 до 40 символов</span>
+                    </div>
+                    <button class="btn btn--primary" id="storeNameSubmit" type="submit">Сохранить название</button>
+                    <p class="form-status" id="storeNameStatus" role="status" aria-live="polite"></p>
+                </form>
+            </section>
+
+            <div class="admin-grid">
+                <section class="panel" aria-labelledby="addTitle">
+                    <div class="panel-head">
+                        <h2 id="addTitle">Добавить товар</h2>
+                        <span class="panel-hint">* обязательные поля</span>
+                    </div>
+
+                    <form class="product-form" id="productForm" novalidate>
+                        <div class="form-grid">
+                            <div class="field field--full">
+                                <label for="productName">Название *</label>
+                                <input id="productName" name="name" type="text" maxlength="120" placeholder="Например, iPhone 13 Pro 256 ГБ" required>
+                                <span class="field-error">Введите название товара — минимум 2 символа</span>
+                            </div>
+
+                            <div class="field">
+                                <label for="productPrice">Цена, ₽ *</label>
+                                <input id="productPrice" name="price" type="number" min="1" step="1" inputmode="numeric" placeholder="54900" required>
+                                <span class="field-error">Введите целую цену больше 0</span>
+                            </div>
+
+                            <div class="field">
+                                <label for="productOldPrice">Старая цена, ₽</label>
+                                <input id="productOldPrice" name="oldPrice" type="number" min="1" step="1" inputmode="numeric" placeholder="59900">
+                                <span class="field-error">Старая цена должна быть больше текущей</span>
+                            </div>
+
+                            <div class="field">
+                                <label for="productCategory">Категория *</label>
+                                <select id="productCategory" name="category" required>
+                                    <option value="" selected disabled>Выберите</option>
+                                    <option value="phones">Смартфоны</option>
+                                    <option value="laptops">Ноутбуки</option>
+                                    <option value="accessories">Аксессуары</option>
+                                </select>
+                                <span class="field-error">Выберите категорию</span>
+                            </div>
+
+                            <div class="field">
+                                <label for="productBadge">Бейдж</label>
+                                <input id="productBadge" name="badge" type="text" maxlength="30" list="badgeOptions" placeholder="Например, Хит">
+                                <datalist id="badgeOptions">
+                                    <option value="Хит"></option>
+                                    <option value="−10%"></option>
+                                    <option value="−15%"></option>
+                                    <option value="−20%"></option>
+                                    <option value="Новое поступление"></option>
+                                    <option value="Бизнес-класс"></option>
+                                    <option value="Гарантия"></option>
+                                </datalist>
+                                <span class="field-hint">Необязательно. Показывается в углу карточки.</span>
+                            </div>
+
+                            <div class="field field--full">
+                                <label for="productDescription">Описание</label>
+                                <textarea id="productDescription" name="description" maxlength="400" rows="3" placeholder="Состояние, комплектация, особенности..."></textarea>
+                                <span class="field-hint">До 400 символов. На карточке показываются первые строки.</span>
+                            </div>
+
+                            <div class="field field--full">
+                                <label for="productImage">Фотографии товара <span style="text-transform:none;letter-spacing:0;color:var(--dim);font-weight:400">— до 6 штук</span></label>
+                                <div class="image-uploader">
+                                    <div class="image-gallery" id="imageGallery" aria-live="polite"></div>
+                                    <div class="image-upload-body">
+                                        <label class="file-drop" id="imageDropZone" for="productImage">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                                <path d="M12 16V4M7 9l5-5 5 5"/>
+                                                <path d="M4 16v2.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V16"/>
+                                            </svg>
+                                            <span class="file-drop-text">
+                                                <strong>Выбрать фото с компьютера</strong>
+                                                <small>Можно выбрать сразу несколько файлов или перетащить их сюда</small>
+                                            </span>
+                                        </label>
+                                        <input id="productImage" name="imageFiles" type="file" accept="image/*" multiple class="sr-only">
+                                        <span class="field-hint">JPG, PNG или WebP до 12 МБ. Первое фото — обложка, остальные появятся в галерее карточки. Максимум 6 фото.</span>
+                                        <span class="field-hint" id="imageCurrentNote" hidden></span>
+                                        <div class="image-upload-actions">
+                                            <button class="btn btn--ghost btn--sm" id="removeAllImagesBtn" type="button" hidden>Удалить все фото</button>
+                                        </div>
+                                        <span class="upload-status" id="uploadStatus" role="status" aria-live="polite"></span>
+                                    </div>
+                                </div>
+                                <span class="field-error">Выберите изображение до 12 МБ</span>
+                            </div>
+
+                            <div class="field field--full">
+                                <label for="productCondition">Состояние</label>
+                                <input id="productCondition" name="condition" type="text" maxlength="60" placeholder="Состояние A · АКБ 89%">
+                                <span class="field-hint">Необязательно. Например: «Состояние A · Комплект».</span>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button class="btn btn--primary" id="productSubmit" type="submit">Добавить товар</button>
+                            <button class="btn btn--ghost" id="productReset" type="button">Очистить</button>
+                        </div>
+                        <p class="form-status" id="formStatus" role="status" aria-live="polite"></p>
+                    </form>
+                </section>
+
+                <section class="panel panel--list" aria-labelledby="listTitle">
+                    <div class="panel-head">
+                        <h2 id="listTitle">Список товаров</h2>
+                        <div class="panel-head-actions">
+                            <button class="btn btn--glass btn--sm" id="exportBtn" type="button">Экспорт JSON</button>
+                            <button class="btn btn--ghost btn--sm" id="refreshBtn" type="button">Обновить</button>
+                        </div>
+                    </div>
+
+                    <div class="list-toolbar">
+                        <div class="search-box">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <circle cx="11" cy="11" r="7"/>
+                                <path d="m16.5 16.5 4 4"/>
+                            </svg>
+                            <input id="productSearch" type="search" placeholder="Поиск по названию…" autocomplete="off" aria-label="Поиск товаров по названию">
+                            <button class="search-clear" id="clearSearchBtn" type="button" aria-label="Очистить поиск" hidden>×</button>
+                        </div>
+                        <label class="sort-box filter-box">
+                            <span class="sr-only">Фильтр по категории</span>
+                            <select id="categoryFilter" aria-label="Фильтр по категории">
+                                <option value="all">Все категории</option>
+                                <option value="phones">Смартфоны</option>
+                                <option value="laptops">Ноутбуки</option>
+                                <option value="accessories">Аксессуары</option>
+                            </select>
+                        </label>
+                        <label class="sort-box filter-box">
+                            <span class="sr-only">Фильтр по статусу</span>
+                            <select id="visibilityFilter" aria-label="Фильтр по статусу">
+                                <option value="all">Все статусы</option>
+                                <option value="visible">В наличии</option>
+                                <option value="hidden">Скрытые</option>
+                            </select>
+                        </label>
+                        <label class="sort-box">
+                            <span class="sr-only">Сортировка товаров</span>
+                            <select id="productSort" aria-label="Сортировка товаров">
+                                <option value="date-desc">Сначала новые</option>
+                                <option value="date-asc">Сначала старые</option>
+                                <option value="price-asc">Цена: по возрастанию</option>
+                                <option value="price-desc">Цена: по убыванию</option>
+                            </select>
+                        </label>
+                    </div>
+
+                    <div class="table-wrap">
+                        <table class="product-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Товар</th>
+                                    <th scope="col">Категория</th>
+                                    <th scope="col">Цена</th>
+                                    <th scope="col">Бейдж</th>
+                                    <th scope="col" aria-label="Действия"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="productTableBody">
+                                <tr>
+                                    <td class="table-state" colspan="5">
+                                        <strong>Загружаем товары…</strong>
+                                        Пожалуйста, подождите.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="table-note" id="tableNote">Проверяем данные каталога…</p>
+                </section>
+            </div>
+
+            <details class="setup-note">
+                <summary>Как подключить Firebase и защитить админку</summary>
+                <div class="setup-note-body">
+                    <ol>
+                        <li>Создайте проект на <a href="https://console.firebase.google.com/" target="_blank" rel="noopener">console.firebase.google.com</a> (тариф Spark бесплатный).</li>
+                        <li>Включите Firestore Database в режиме Production, Storage и Authentication → Sign-in method → Email/Password.</li>
+                        <li>В Authentication → Users создайте администратора с email <code>admin@retro.ru</code>. Если нужен другой email, измените константу <code>ADMIN_EMAIL</code> в admin.html и email в правилах <code>allow write</code> ниже.</li>
+                        <li>Откройте Project settings → Your apps → Web <code>&lt;/&gt;</code>, скопируйте <code>firebaseConfig</code> и вставьте его в <code>index.html</code> и <code>admin.html</code>.</li>
+                        <li>В Firestore → Rules опубликуйте правила ниже. Они разрешают чтение каталога и названия магазина всем, а запись — только администратору.</li>
+                        <li>В Storage → Rules опубликуйте правила для загрузки фото. Читать фото смогут все, загружать — только администратор.</li>
+                    </ol>
+                    <pre>rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if request.auth != null
+                   && request.auth.token.email == 'admin@retro.ru';
+    }
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if request.auth != null
+                   && request.auth.token.email == 'admin@retro.ru';
+    }
+  }
+}</pre>
+                    <pre>rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /products/{allPaths=**} {
+      allow read: if true;
+      allow write: if request.auth != null
+                   && request.auth.token.email == 'admin@retro.ru';
+    }
+  }
+}</pre>
+                    <p style="margin-top:12px">Для GitHub Pages добавьте домен <code>ВАШ_ЛОГИН.github.io</code> в Authentication → Settings → Authorized domains. Пароль демо-режима <code>admin123</code> работает только пока Firebase не настроен и не защищает реальные данные.</p>
+                </div>
+            </details>
+        </main>
+    </div>
+
+    <!-- ============================================================
+         ПОДТВЕРЖДЕНИЕ УДАЛЕНИЯ
+         ============================================================ -->
+    <div class="confirm-modal" id="confirmModal" aria-hidden="true">
+        <div class="confirm-backdrop" data-confirm-close></div>
+        <div class="confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+            <h2 id="confirmTitle">Удалить товар?</h2>
+            <p>Товар <strong id="confirmProductName">…</strong> будет удалён из каталога. Это действие нельзя отменить.</p>
+            <p class="confirm-error" id="confirmError" role="alert"></p>
+            <div class="confirm-actions">
+                <button class="btn btn--ghost" type="button" data-confirm-close>Отмена</button>
+                <button class="btn btn--danger" type="button" id="confirmDeleteBtn">Удалить</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SVG-спрайт для превью товаров в таблице. -->
+    <svg class="svg-sprite" aria-hidden="true" focusable="false" style="position:absolute;width:0;height:0;overflow:hidden">
+        <defs>
+            <symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="6.5" y="2.5" width="11" height="19" rx="2.6"/>
+                <path d="M10.5 5.5h3"/>
+                <circle cx="12" cy="18" r=".8" fill="currentColor" stroke="none"/>
+            </symbol>
+            <symbol id="i-laptop" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="4" y="4.5" width="16" height="11" rx="1.8"/>
+                <path d="M2.5 19h19l-1.7-3.5H4.2L2.5 19Z"/>
+                <path d="M10 17h4"/>
+            </symbol>
+            <symbol id="i-headphones" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 13v-1a8 8 0 0 1 16 0v1"/>
+                <rect x="2.8" y="12.5" width="4.4" height="7.2" rx="2.2"/>
+                <rect x="16.8" y="12.5" width="4.4" height="7.2" rx="2.2"/>
+            </symbol>
+            <symbol id="i-watch" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="7" y="6" width="10" height="12" rx="3"/>
+                <path d="M9 6V3.2h6V6M9 18v2.8h6V18"/>
+                <circle cx="12" cy="12" r="2.4"/>
+                <path d="M12 10.8V12l.9.6"/>
+            </symbol>
+            <symbol id="i-earbuds" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M7.5 4.2c-1.7 0-3 1.4-3 3.1v3.2a2 2 0 1 0 4 0V7.3c0-1.7-.4-3.1-1-3.1Z"/>
+                <path d="M8.5 12.3v5.5a1.7 1.7 0 0 0 3.4 0v-3.2"/>
+                <path d="M16.5 4.2c1.7 0 3 1.4 3 3.1v3.2a2 2 0 1 1-4 0V7.3c0-1.7.4-3.1 1-3.1Z"/>
+                <path d="M15.5 12.3v5.5a1.7 1.7 0 0 1-3.4 0v-3.2"/>
+            </symbol>
+            <symbol id="i-speaker" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="6" y="2.5" width="12" height="19" rx="4"/>
+                <circle cx="12" cy="8" r="2.2"/>
+                <circle cx="12" cy="15.3" r="3.3"/>
+                <path d="M12 13.8v3"/>
+            </symbol>
+        </defs>
+    </svg>
+
+    <!-- ============================================================
+         ЛОГИКА АДМИН-ПАНЕЛИ
+         ============================================================ -->
+    <script type="module">
+        /* ============================================================
+           АДМИН-ПАНЕЛЬ RETRO — ПОДРОБНАЯ ИНСТРУКЦИЯ
+           ============================================================
+
+           Что делает этот файл
+           --------------------
+           • Показывает экран входа с паролем.
+           • В демо-режиме (Firebase не настроен) пускает по паролю admin123
+             и хранит товары и фото в localStorage этого браузера.
+           • После настройки Firebase входит через Firebase Authentication
+             (email администратора + пароль), работает с Firestore и Storage.
+           • Добавляет, редактирует и удаляет товары в коллекции products.
+           • Загружает фото в Firebase Storage и подставляет ссылку в товар.
+           • Меняет название магазина (документ settings/store).
+           • Витрина index.html читает те же данные и показывает товары.
+
+           КАК СОЗДАТЬ ПРОЕКТ FIREBASE
+           ---------------------------
+           1. Откройте https://console.firebase.google.com/ и войдите
+              в аккаунт Google.
+           2. Нажмите «Создать проект» (Add project). Название любое,
+              например retro-tech. Google Analytics можно отключить.
+           3. В меню «Build» откройте «Firestore Database» → «Create database».
+              Выберите Production mode и регион (например, europe-west3).
+           4. В меню «Build» откройте «Storage» → «Get started». Storage нужен
+              для загрузки фото товаров. Если Firebase предложит тариф Blaze,
+              проверьте актуальные условия бесплатного тарифа.
+           5. В меню «Build» откройте «Authentication» → «Get started» →
+              вкладка «Sign-in method» → включите Email/Password.
+           6. На вкладке «Users» нажмите «Add user» и создайте администратора:
+                 Email: admin@retro.ru
+                 Пароль: придумайте надёжный пароль (не admin123)
+              Этот email записан в константе ADMIN_EMAIL ниже. Если создадите
+              пользователя с другим email — измените ADMIN_EMAIL и email
+              в правилах allow write ниже.
+           7. Откройте «Project settings» (шестерёнка) → «General» →
+              «Your apps» → Web </> → зарегистрируйте приложение.
+              Firebase покажет объект firebaseConfig. Скопируйте его.
+           8. Вставьте firebaseConfig ниже в этом файле и точно такой же
+              конфиг в index.html. Оба файла должны смотреть в один проект.
+           9. Откройте Firestore Database → Rules и опубликуйте правила:
+
+                 rules_version = '2';
+                 service cloud.firestore {
+                   match /databases/{database}/documents {
+                     match /products/{productId} {
+                       allow read: if true;
+                       allow write: if request.auth != null
+                                    && request.auth.token.email == 'admin@retro.ru';
+                     }
+                     match /settings/{settingId} {
+                       allow read: if true;
+                       allow write: if request.auth != null
+                                    && request.auth.token.email == 'admin@retro.ru';
+                     }
+                   }
+                 }
+
+              Коллекция products создастся сама при добавлении первого товара.
+              Документ settings/store создастся при сохранении названия магазина.
+          10. Откройте Storage → Rules и опубликуйте правила загрузки фото:
+
+                 rules_version = '2';
+                 service firebase.storage {
+                   match /b/{bucket}/o {
+                     match /products/{allPaths=**} {
+                       allow read: if true;
+                       allow write: if request.auth != null
+                                    && request.auth.token.email == 'admin@retro.ru';
+                     }
+                   }
+                 }
+
+          11. Если сайт на GitHub Pages, добавьте домен
+              ВАШ_ЛОГИН.github.io в Authentication → Settings →
+              Authorized domains. Иначе Firebase может блокировать вход.
+          12. Откройте admin.html, войдите с email и паролем администратора,
+              добавьте товар с фото и обновите index.html — товар появится
+              в каталоге.
+
+           ВАЖНО
+           -----
+           apiKey из firebaseConfig не является секретом. Доступ защищают
+           правила Firestore и Firebase Authentication. Демо-пароль admin123
+           хранится прямо в коде и работает только пока Firebase не настроен.
+           Для реального магазина обязательно подключите Firebase Auth.
+
+           GITHUB PAGES
+           ------------
+           Сборка не нужна. Загрузите index.html, admin.html и остальные файлы
+           в репозиторий и включите GitHub Pages. Firebase SDK загрузится с CDN,
+           а Firestore будет работать по HTTPS без собственного сервера.
+           ============================================================ */
+
+        const firebaseConfig = {
+            apiKey: "ВСТАВЬТЕ_API_KEY",
+            authDomain: "ВАШ_ПРОЕКТ.firebaseapp.com",
+            projectId: "ВАШ_ПРОЕКТ",
+            storageBucket: "ВАШ_ПРОЕКТ.firebasestorage.app",
+            messagingSenderId: "ВСТАВЬТЕ_SENDER_ID",
+            appId: "ВСТАВЬТЕ_APP_ID"
+        };
+
+        // Email администратора, созданного в Firebase Authentication.
+        // Пользователь вводит только пароль — email подставляется автоматически.
+        const ADMIN_EMAIL = 'admin@retro.ru';
+
+        // Пароль демо-режима. Работает только пока firebaseConfig не заполнен.
+        const DEMO_PASSWORD = 'admin123';
+        const PRODUCTS_COLLECTION = 'products';
+        const STORE_SETTINGS_COLLECTION = 'settings';
+        const STORE_SETTINGS_DOC = 'store';
+        const DEFAULT_STORE_NAME = 'Retro';
+        // Ключи демо-данных оставлены прежними, чтобы не потерять товары,
+        // добавленные в браузере до переименования магазина.
+        const DEMO_STORAGE_KEY = 'sitecrafting_products_v1';
+        const DEMO_SESSION_KEY = 'sitecrafting_admin_demo_v1';
+        const DEMO_STORE_NAME_KEY = 'retro_store_name_v1';
+        const FIREBASE_SDK_VERSION = '10.12.5';
+        const PLACEHOLDER_MARKERS = ['ВСТАВЬТЕ', 'ВАШ_ПРОЕКТ', 'PASTE_', 'YOUR_'];
+        const MAX_IMAGE_BYTES = 12 * 1024 * 1024;
+        const MAX_IMAGES = 6;
+        const IMAGE_MAX_SIDE_FIREBASE = 1200;
+        const IMAGE_MAX_SIDE_DEMO = 900;
+        const IMAGE_QUALITY = .8;
+
+        // Стартовый каталог демо-режима. Такой же список используется в index.html,
+        // чтобы витрина и админка видели одинаковые товары до подключения Firebase.
+        const SEED_PRODUCTS = [
+            {
+                id: 'seed-01',
+                name: 'iPhone 13 Pro 256 ГБ',
+                price: 54900,
+                oldPrice: 59900,
+                category: 'phones',
+                description: 'Graphite, полный комплект. Без царапин и следов ремонта.',
+                imageUrl: '',
+                badge: 'Хит',
+                condition: 'Состояние A+ · АКБ 89%',
+                icon: 'i-phone',
+                glow: 'rgba(255, 138, 0, .17)',
+                createdAt: '2026-11-12T10:00:00.000Z'
+            },
+            {
+                id: 'seed-02',
+                name: 'Samsung Galaxy S22 128 ГБ',
+                price: 32900,
+                oldPrice: 37400,
+                category: 'phones',
+                description: 'Phantom Black, один владелец. Чистый IMEI, полный комплект.',
+                imageUrl: '',
+                badge: '−12%',
+                condition: 'Состояние A · АКБ 91%',
+                icon: 'i-phone',
+                glow: 'rgba(120, 170, 255, .14)',
+                createdAt: '2026-11-11T10:00:00.000Z'
+            },
+            {
+                id: 'seed-03',
+                name: 'Xiaomi 13T 256 ГБ',
+                price: 28500,
+                oldPrice: null,
+                category: 'phones',
+                description: 'Alpine Blue, 256 ГБ. Яркий AMOLED и камера Leica.',
+                imageUrl: '',
+                badge: 'Новое поступление',
+                condition: 'Состояние A · АКБ 94%',
+                icon: 'i-phone',
+                glow: 'rgba(255, 196, 77, .16)',
+                createdAt: '2026-11-10T10:00:00.000Z'
+            },
+            {
+                id: 'seed-04',
+                name: 'Google Pixel 7 128 ГБ',
+                price: 26900,
+                oldPrice: 29400,
+                category: 'phones',
+                description: 'Obsidian, 128 ГБ. Лучшая камера в своём классе.',
+                imageUrl: '',
+                badge: '−8%',
+                condition: 'Состояние B+ · АКБ 87%',
+                icon: 'i-phone',
+                glow: 'rgba(130, 255, 205, .1)',
+                createdAt: '2026-11-09T10:00:00.000Z'
+            },
+            {
+                id: 'seed-05',
+                name: 'MacBook Air M1 13" 8/256 ГБ',
+                price: 49900,
+                oldPrice: 57900,
+                category: 'laptops',
+                description: 'Silver, цикл батареи 124. Лёгкий и полностью рабочий.',
+                imageUrl: '',
+                badge: 'Хит',
+                condition: 'Состояние A · Цикл 124',
+                icon: 'i-laptop',
+                glow: 'rgba(255, 138, 0, .15)',
+                createdAt: '2026-11-08T10:00:00.000Z'
+            },
+            {
+                id: 'seed-06',
+                name: 'ASUS Zenbook 14 OLED',
+                price: 41500,
+                oldPrice: 46000,
+                category: 'laptops',
+                description: 'Core i5, 16/512 ГБ. OLED 2.8K, корпус без вмятин.',
+                imageUrl: '',
+                badge: '−10%',
+                condition: 'Состояние A · 2 месяца',
+                icon: 'i-laptop',
+                glow: 'rgba(120, 170, 255, .13)',
+                createdAt: '2026-11-07T10:00:00.000Z'
+            },
+            {
+                id: 'seed-07',
+                name: 'Lenovo ThinkPad X1 Carbon',
+                price: 38900,
+                oldPrice: null,
+                category: 'laptops',
+                description: 'Gen 9, i7, 16/512 ГБ. Лёгкий корпус, отличная клавиатура.',
+                imageUrl: '',
+                badge: 'Бизнес-класс',
+                condition: 'Состояние A · 14"',
+                icon: 'i-laptop',
+                glow: 'rgba(255, 196, 77, .13)',
+                createdAt: '2026-11-06T10:00:00.000Z'
+            },
+            {
+                id: 'seed-08',
+                name: 'HP Spectre x360 13',
+                price: 35900,
+                oldPrice: null,
+                category: 'laptops',
+                description: 'i5, 8/512 ГБ. Сенсорный экран-трансформер, стилус в комплекте.',
+                imageUrl: '',
+                badge: 'Новое поступление',
+                condition: 'Состояние B+ · 13.3"',
+                icon: 'i-laptop',
+                glow: 'rgba(220, 140, 255, .12)',
+                createdAt: '2026-11-05T10:00:00.000Z'
+            },
+            {
+                id: 'seed-09',
+                name: 'Sony WH-1000XM4',
+                price: 16900,
+                oldPrice: 21200,
+                category: 'accessories',
+                description: 'Беспроводные наушники с шумоподавлением. Комплект и кейс.',
+                imageUrl: '',
+                badge: '−20%',
+                condition: 'Состояние A · Комплект',
+                icon: 'i-headphones',
+                glow: 'rgba(255, 138, 0, .14)',
+                createdAt: '2026-11-04T10:00:00.000Z'
+            },
+            {
+                id: 'seed-10',
+                name: 'Apple Watch Series 8 45 мм',
+                price: 19900,
+                oldPrice: null,
+                category: 'accessories',
+                description: 'GPS, Midnight. Ремешок Sport Band, зарядка в комплекте.',
+                imageUrl: '',
+                badge: 'Гарантия',
+                condition: 'Состояние A · АКБ 92%',
+                icon: 'i-watch',
+                glow: 'rgba(120, 170, 255, .13)',
+                createdAt: '2026-11-03T10:00:00.000Z'
+            },
+            {
+                id: 'seed-11',
+                name: 'AirPods Pro 2 (USB-C)',
+                price: 12900,
+                oldPrice: null,
+                category: 'accessories',
+                description: 'Активное шумоподавление, кейс с MagSafe. Полный комплект.',
+                imageUrl: '',
+                badge: 'Хит',
+                condition: 'Состояние A · Комплект',
+                icon: 'i-earbuds',
+                glow: 'rgba(255, 196, 77, .13)',
+                createdAt: '2026-11-02T10:00:00.000Z'
+            },
+            {
+                id: 'seed-12',
+                name: 'JBL Charge 5',
+                price: 7900,
+                oldPrice: 9300,
+                category: 'accessories',
+                description: 'Портативная колонка, 20 часов работы. Защита IP67.',
+                imageUrl: '',
+                badge: '−15%',
+                condition: 'Состояние A · 20 Вт',
+                icon: 'i-speaker',
+                glow: 'rgba(255, 138, 0, .12)',
+                createdAt: '2026-11-01T10:00:00.000Z'
+            }
+        ];
+
+        const CATEGORY_META = {
+            phones: { label: 'Смартфоны', icon: 'i-phone' },
+            laptops: { label: 'Ноутбуки', icon: 'i-laptop' },
+            accessories: { label: 'Аксессуары', icon: 'i-headphones' }
+        };
+
+        const KNOWN_ICONS = new Set(['i-phone', 'i-laptop', 'i-headphones', 'i-watch', 'i-earbuds', 'i-speaker']);
+        const priceFormatter = new Intl.NumberFormat('ru-RU');
+
+        const $ = (selector, root = document) => root.querySelector(selector);
+        const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
+
+        const isFirebaseConfigured = () => Object.values(firebaseConfig).every((value) => (
+            typeof value === 'string' &&
+            value.trim() !== '' &&
+            !PLACEHOLDER_MARKERS.some((marker) => value.includes(marker))
+        ));
+
+        const escapeHtml = (value) => String(value ?? '').replace(/[&<>"']/g, (character) => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;'
+        }[character]));
+
+        const toNumber = (value) => {
+            if (typeof value === 'number' && Number.isFinite(value)) {
+                return Math.max(0, Math.round(value));
+            }
+            const digits = String(value ?? '').replace(/[^\d]/g, '');
+            return digits ? Number(digits) : 0;
+        };
+
+        const formatPrice = (value) => {
+            const amount = toNumber(value);
+            return amount > 0 ? priceFormatter.format(amount) + ' ₽' : 'Цена по запросу';
+        };
+
+        const normalizeCategory = (value) => (
+            Object.prototype.hasOwnProperty.call(CATEGORY_META, value) ? value : 'accessories'
+        );
+
+        const safeImageUrl = (value) => {
+            const url = String(value ?? '').trim();
+            if (!url) return '';
+            return /^(https?:\/\/|\/|\.\/|\.\.\/|data:image\/)/i.test(url) ? url : '';
+        };
+
+        const normalizeImageUrls = (source) => {
+            const list = Array.isArray(source.imageUrls) ? source.imageUrls : [];
+            const legacy = source.imageUrl ?? source.image ?? '';
+            const candidates = list.length ? list : [legacy];
+            return [...new Set(candidates.map(safeImageUrl).filter(Boolean))].slice(0, MAX_IMAGES);
+        };
+
+        const normalizeProduct = (raw) => {
+            const source = raw && typeof raw === 'object' ? raw : {};
+            const category = normalizeCategory(source.category);
+            const oldPrice = toNumber(source.oldPrice);
+            const imageUrls = normalizeImageUrls(source);
+
+            return {
+                id: String(source.id ?? ''),
+                name: String(source.name ?? 'Без названия').trim() || 'Без названия',
+                price: toNumber(source.price),
+                oldPrice: oldPrice > 0 ? oldPrice : null,
+                category,
+                description: String(source.description ?? '').trim(),
+                imageUrl: imageUrls[0] || '',
+                imageUrls,
+                badge: String(source.badge ?? '').trim(),
+                condition: String(source.condition ?? '').trim(),
+                icon: KNOWN_ICONS.has(source.icon) ? source.icon : '',
+                glow: String(source.glow ?? '').trim(),
+                visible: source.visible !== false,
+                createdAt: source.createdAt ?? null
+            };
+        };
+
+        const toTime = (value) => {
+            if (!value) return 0;
+            if (typeof value === 'number') return value;
+            if (typeof value === 'string') return Date.parse(value) || 0;
+            if (typeof value.toMillis === 'function') return value.toMillis();
+            if (typeof value.seconds === 'number') return value.seconds * 1000;
+            return 0;
+        };
+
+        const sortProducts = (items) => items
+            .slice()
+            .sort((first, second) => toTime(second.createdAt) - toTime(first.createdAt));
+
+        const writeDemoProducts = (items) => {
+            try {
+                localStorage.setItem(DEMO_STORAGE_KEY, JSON.stringify(items));
+                return true;
+            } catch (error) {
+                console.warn('Не удалось сохранить демо-товары:', error);
+                return false;
+            }
+        };
+
+        const assertDemoWrite = () => {
+            throw new Error('Не удалось сохранить данные в браузере: закончилось место. Удалите старые фото или подключите Firebase Storage.');
+        };
+
+        const readDemoProducts = () => {
+            try {
+                const stored = localStorage.getItem(DEMO_STORAGE_KEY);
+                if (stored) {
+                    const parsed = JSON.parse(stored);
+                    if (Array.isArray(parsed)) {
+                        return parsed.map(normalizeProduct);
+                    }
+                }
+            } catch (error) {
+                console.warn('Не удалось прочитать демо-товары:', error);
+            }
+
+            const seeded = SEED_PRODUCTS.map(normalizeProduct);
+            writeDemoProducts(seeded);
+            return seeded;
+        };
+
+        let firebaseServices = null;
+
+        const loadFirebase = async () => {
+            if (firebaseServices) return firebaseServices;
+
+            const appModule = await import(
+                'https://www.gstatic.com/firebasejs/' + FIREBASE_SDK_VERSION + '/firebase-app.js'
+            );
+            const authModule = await import(
+                'https://www.gstatic.com/firebasejs/' + FIREBASE_SDK_VERSION + '/firebase-auth.js'
+            );
+            const firestoreModule = await import(
+                'https://www.gstatic.com/firebasejs/' + FIREBASE_SDK_VERSION + '/firebase-firestore.js'
+            );
+
+            const app = appModule.getApps().length
+                ? appModule.getApp()
+                : appModule.initializeApp(firebaseConfig);
+
+            firebaseServices = {
+                app,
+                auth: authModule.getAuth(app),
+                db: firestoreModule.getFirestore(app),
+                signInWithEmailAndPassword: authModule.signInWithEmailAndPassword,
+                onAuthStateChanged: authModule.onAuthStateChanged,
+                signOut: authModule.signOut,
+                collection: firestoreModule.collection,
+                getDocs: firestoreModule.getDocs,
+                getDoc: firestoreModule.getDoc,
+                addDoc: firestoreModule.addDoc,
+                setDoc: firestoreModule.setDoc,
+                updateDoc: firestoreModule.updateDoc,
+                deleteDoc: firestoreModule.deleteDoc,
+                doc: firestoreModule.doc,
+                serverTimestamp: firestoreModule.serverTimestamp
+            };
+
+            return firebaseServices;
+        };
+
+        let storageServices = null;
+
+        const loadStorage = async () => {
+            if (storageServices) return storageServices;
+
+            const { app } = await loadFirebase();
+            const storageModule = await import(
+                'https://www.gstatic.com/firebasejs/' + FIREBASE_SDK_VERSION + '/firebase-storage.js'
+            );
+
+            storageServices = {
+                storage: storageModule.getStorage(app),
+                ref: storageModule.ref,
+                uploadBytes: storageModule.uploadBytes,
+                getDownloadURL: storageModule.getDownloadURL
+            };
+
+            return storageServices;
+        };
+
+        const loadFirestoreProducts = async () => {
+            const { db, collection, getDocs } = await loadFirebase();
+            const snapshot = await getDocs(collection(db, PRODUCTS_COLLECTION));
+            return snapshot.docs.map((documentSnapshot) => normalizeProduct({
+                ...documentSnapshot.data(),
+                id: documentSnapshot.id
+            }));
+        };
+
+        const getFriendlyError = (error) => {
+            const code = error && error.code ? error.code : '';
+            if (code === 'permission-denied') return 'Нет доступа к данным. Проверьте правила Firestore и Storage: запись должна быть разрешена только администратору.';
+            if (code === 'unauthenticated') return 'Сессия истекла. Войдите в админку заново.';
+            if (code === 'unavailable') return 'Firebase временно недоступен. Проверьте интернет и попробуйте снова.';
+            if (code === 'failed-precondition') return 'Firebase не инициализирован или требует настройки. Проверьте проект Firebase.';
+            if (code === 'storage/unauthorized') return 'Storage не разрешает загрузку. Проверьте правила Storage и email администратора.';
+            if (code === 'storage/canceled') return 'Загрузка фото отменена.';
+            if (code === 'storage/retry-limit-exceeded') return 'Не удалось загрузить фото: истекло время ожидания. Проверьте интернет и попробуйте снова.';
+            if (code === 'storage/unknown') return 'Storage вернул неизвестную ошибку. Проверьте, что Storage включён в проекте Firebase.';
+            return error && error.message ? error.message : 'Неизвестная ошибка. Попробуйте ещё раз.';
+        };
+
+        /* ---------- Ссылки на элементы ---------- */
+        const loginScreen = $('#loginScreen');
+        const loginForm = $('#loginForm');
+        const adminPassword = $('#adminPassword');
+        const loginError = $('#loginError');
+        const loginSubmit = $('#loginSubmit');
+        const loginModeNote = $('#loginModeNote');
+        const togglePassword = $('#togglePassword');
+        const adminApp = $('#adminApp');
+        const logoutBtn = $('#logoutBtn');
+        const modeBadge = $('#modeBadge');
+        const setupBanner = $('#setupBanner');
+        const productCount = $('#productCount');
+        const productForm = $('#productForm');
+        const addTitle = $('#addTitle');
+        const productName = $('#productName');
+        const productPrice = $('#productPrice');
+        const productOldPrice = $('#productOldPrice');
+        const productCategory = $('#productCategory');
+        const productBadge = $('#productBadge');
+        const productDescription = $('#productDescription');
+        const productImage = $('#productImage');
+        const productCondition = $('#productCondition');
+        const productSubmit = $('#productSubmit');
+        const productReset = $('#productReset');
+        const formStatus = $('#formStatus');
+        const imageGallery = $('#imageGallery');
+        const imageDropZone = $('#imageDropZone');
+        const imageCurrentNote = $('#imageCurrentNote');
+        const removeAllImagesBtn = $('#removeAllImagesBtn');
+        const uploadStatus = $('#uploadStatus');
+        const productTableBody = $('#productTableBody');
+        const tableNote = $('#tableNote');
+        const refreshBtn = $('#refreshBtn');
+        const productSearch = $('#productSearch');
+        const clearSearchBtn = $('#clearSearchBtn');
+        const productSort = $('#productSort');
+        const categoryFilter = $('#categoryFilter');
+        const visibilityFilter = $('#visibilityFilter');
+        const exportBtn = $('#exportBtn');
+        const totalValue = $('#totalValue');
+        const photoCount = $('#photoCount');
+        const hiddenCount = $('#hiddenCount');
+        const storeSettingsForm = $('#storeSettingsForm');
+        const storeNameInput = $('#storeNameInput');
+        const storeNameSubmit = $('#storeNameSubmit');
+        const storeNameStatus = $('#storeNameStatus');
+        const confirmModal = $('#confirmModal');
+        const confirmProductName = $('#confirmProductName');
+        const confirmError = $('#confirmError');
+        const confirmDeleteBtn = $('#confirmDeleteBtn');
+
+        let products = [];
+        let pendingDelete = null;
+        let editingId = '';
+        let imageEntries = [];
+        let searchQuery = '';
+        let sortMode = 'date-desc';
+        let categoryMode = 'all';
+        let visibilityMode = 'all';
+        let currentStoreName = DEFAULT_STORE_NAME;
+        let isSaving = false;
+        let isDeleting = false;
+        let isSavingStoreName = false;
+        let isTableAction = false;
+        let currentUser = null;
+
+        /* ---------- Название магазина ---------- */
+        const sanitizeStoreName = (value) => {
+            const name = String(value ?? '').replace(/\s+/g, ' ').trim().slice(0, 40);
+            return name.length >= 2 ? name : DEFAULT_STORE_NAME;
+        };
+
+        const applyStoreName = (value) => {
+            const name = sanitizeStoreName(value);
+            currentStoreName = name;
+
+            $$('[data-admin-store-name]').forEach((element) => {
+                element.textContent = name;
+                element.setAttribute('title', name);
+            });
+
+            $$('[data-admin-store-link]').forEach((element) => {
+                element.setAttribute('aria-label', name + ' — ' + element.dataset.adminStoreLink);
+            });
+
+            document.title = 'Админ-панель — ' + name;
+        };
+
+        const readDemoStoreName = () => {
+            try {
+                return sanitizeStoreName(localStorage.getItem(DEMO_STORE_NAME_KEY));
+            } catch (error) {
+                console.warn('Не удалось прочитать название магазина:', error);
+                return DEFAULT_STORE_NAME;
+            }
+        };
+
+        const loadStoreName = async () => {
+            let name = DEFAULT_STORE_NAME;
+
+            if (isFirebaseConfigured()) {
+                try {
+                    const { db, doc, getDoc } = await loadFirebase();
+                    const snapshot = await getDoc(doc(db, STORE_SETTINGS_COLLECTION, STORE_SETTINGS_DOC));
+                    if (snapshot.exists()) name = sanitizeStoreName(snapshot.data().name);
+                } catch (error) {
+                    console.warn('Не удалось загрузить название магазина из Firestore:', error);
+                }
+            } else {
+                name = readDemoStoreName();
+            }
+
+            applyStoreName(name);
+            if (storeNameInput && document.activeElement !== storeNameInput) {
+                storeNameInput.value = name;
+            }
+            return name;
+        };
+
+        const setStoreNameStatus = (message, type = '') => {
+            if (!storeNameStatus) return;
+            storeNameStatus.textContent = message;
+            storeNameStatus.classList.toggle('is-error', type === 'error');
+            storeNameStatus.classList.toggle('is-success', type === 'success');
+        };
+
+        const setStoreNameSaving = (loading) => {
+            isSavingStoreName = loading;
+            if (!storeNameSubmit) return;
+            storeNameSubmit.disabled = loading;
+            storeNameSubmit.classList.toggle('is-loading', loading);
+            storeNameSubmit.setAttribute('aria-busy', String(loading));
+        };
+
+        const updateModeUI = () => {
+            const configured = isFirebaseConfigured();
+
+            if (modeBadge) {
+                modeBadge.textContent = configured ? 'Firebase подключён' : 'Демо-режим';
+                modeBadge.classList.toggle('mode-badge--demo', !configured);
+            }
+            if (setupBanner) setupBanner.hidden = configured;
+            if (loginModeNote) {
+                loginModeNote.innerHTML = configured
+                    ? `Вход через Firebase Authentication. Email администратора: <code>${escapeHtml(ADMIN_EMAIL)}</code>. Пароль — тот, который вы создали в Firebase.`
+                    : `Firebase ещё не настроен. Демо-пароль: <code>${DEMO_PASSWORD}</code>. Данные и фото сохраняются только в этом браузере.`;
+            }
+        };
+
+        const updateTableNote = (visibleCount = products.length) => {
+            if (!tableNote) return;
+
+            const configured = isFirebaseConfigured();
+            const hasFilters = Boolean(searchQuery.trim()) || categoryMode !== 'all' || visibilityMode !== 'all';
+            const base = configured
+                ? 'Данные синхронизируются с Firebase Firestore и Storage. Изменения появятся на витрине после обновления index.html.'
+                : 'Демо-режим: товары и фото сохраняются в localStorage этого браузера. Витрина index.html на этом же домене увидит их после обновления.';
+
+            if (hasFilters) {
+                tableNote.textContent = `Показано ${visibleCount} из ${products.length} товаров по выбранным условиям. ` + base;
+            } else {
+                tableNote.textContent = `Показано ${products.length} товаров. ` + base;
+            }
+        };
+
+        const setLoginError = (message) => {
+            if (!loginError) return;
+            loginError.textContent = message;
+            loginError.classList.toggle('is-visible', Boolean(message));
+            const field = adminPassword ? adminPassword.closest('.field') : null;
+            if (field) field.classList.toggle('is-invalid', Boolean(message));
+        };
+
+        const clearLoginError = () => setLoginError('');
+
+        const setLoginLoading = (loading) => {
+            if (!loginSubmit) return;
+            loginSubmit.disabled = loading;
+            loginSubmit.classList.toggle('is-loading', loading);
+            loginSubmit.setAttribute('aria-busy', String(loading));
+        };
+
+        const showLogin = () => {
+            if (loginScreen) loginScreen.hidden = false;
+            if (adminApp) adminApp.hidden = true;
+            if (adminPassword) adminPassword.value = '';
+            clearLoginError();
+            setLoginLoading(false);
+            window.setTimeout(() => {
+                if (adminPassword) adminPassword.focus();
+            }, 80);
+        };
+
+        const showApp = () => {
+            const alreadyOpen = adminApp && !adminApp.hidden;
+            if (loginScreen) loginScreen.hidden = true;
+            if (adminApp) adminApp.hidden = false;
+            updateModeUI();
+
+            if (!alreadyOpen) {
+                loadStoreName();
+                loadProducts({ showLoading: true });
+                window.setTimeout(() => {
+                    if (productName) productName.focus();
+                }, 120);
+            }
+        };
+
+        const setFormStatus = (message, type = '') => {
+            if (!formStatus) return;
+            formStatus.textContent = message;
+            formStatus.classList.toggle('is-error', type === 'error');
+            formStatus.classList.toggle('is-success', type === 'success');
+        };
+
+        /* ---------- Фото товара ---------- */
+        const setUploadStatus = (message, type = '') => {
+            if (!uploadStatus) return;
+            uploadStatus.textContent = message;
+            uploadStatus.classList.toggle('is-error', type === 'error');
+            uploadStatus.classList.toggle('is-success', type === 'success');
+        };
+
+        const getImageEntryUrl = (entry) => (entry ? entry.url || entry.objectUrl || '' : '');
+
+        const releaseImageEntry = (entry) => {
+            if (entry && entry.objectUrl) {
+                URL.revokeObjectURL(entry.objectUrl);
+                entry.objectUrl = '';
+            }
+        };
+
+        const releaseImageObjectUrls = () => {
+            imageEntries.forEach(releaseImageEntry);
+        };
+
+        const renderImageGallery = () => {
+            if (!imageGallery) return;
+
+            if (!imageEntries.length) {
+                imageGallery.innerHTML = '<div class="image-gallery-empty">Фото пока нет. Первое выбранное фото станет обложкой карточки.</div>';
+            } else {
+                imageGallery.innerHTML = imageEntries.map((entry, index) => {
+                    const url = escapeHtml(getImageEntryUrl(entry));
+                    const coverBadge = index === 0 ? '<span class="image-tile-badge">Обложка</span>' : '';
+                    const coverButton = index === 0
+                        ? '<span></span>'
+                        : `<button class="image-tile-btn js-cover-image" type="button" data-index="${index}">Обложка</button>`;
+
+                    return `
+                        <div class="image-tile${index === 0 ? ' is-cover' : ''}" data-image-index="${index}">
+                            ${coverBadge}
+                            <img src="${url}" alt="Фото ${index + 1}" loading="lazy" decoding="async">
+                            <div class="image-tile-actions">
+                                ${coverButton}
+                                <button class="image-tile-btn image-tile-btn--remove js-remove-image" type="button" data-index="${index}" aria-label="Удалить фото ${index + 1}">×</button>
+                            </div>
+                        </div>`;
+                }).join('');
+            }
+
+            if (removeAllImagesBtn) removeAllImagesBtn.hidden = imageEntries.length === 0;
+            if (imageCurrentNote) {
+                const savedCount = imageEntries.filter((entry) => !entry.file).length;
+                imageCurrentNote.hidden = !(editingId && savedCount);
+                imageCurrentNote.textContent = savedCount
+                    ? `Сохранённых фото: ${savedCount}. Обложка — первое фото в галерее.`
+                    : '';
+            }
+        };
+
+        const clearImageEntries = () => {
+            releaseImageObjectUrls();
+            imageEntries = [];
+        };
+
+        const addImageFiles = (fileList) => {
+            const files = Array.from(fileList || []);
+            if (!files.length) return;
+
+            let added = 0;
+            let wrongType = 0;
+            let tooLarge = 0;
+
+            files.forEach((file) => {
+                if (imageEntries.length >= MAX_IMAGES) return;
+                if (!file.type || !file.type.startsWith('image/')) {
+                    wrongType += 1;
+                    return;
+                }
+                if (file.size > MAX_IMAGE_BYTES) {
+                    tooLarge += 1;
+                    return;
+                }
+
+                imageEntries.push({
+                    file,
+                    url: '',
+                    objectUrl: URL.createObjectURL(file)
+                });
+                added += 1;
+            });
+
+            clearFieldError(productImage);
+            renderImageGallery();
+
+            const notes = [];
+            if (added) notes.push(`Добавлено фото: ${added}.`);
+            if (wrongType) notes.push(`Пропущено не изображений: ${wrongType}.`);
+            if (tooLarge) notes.push(`Пропущено файлов больше 12 МБ: ${tooLarge}.`);
+            if (imageEntries.length >= MAX_IMAGES) notes.push(`Достигнут лимит: ${MAX_IMAGES} фото.`);
+
+            if (!notes.length) notes.push('Файлы не добавлены.');
+            setUploadStatus(notes.join(' '), added ? 'success' : 'error');
+        };
+
+        const removeImageAt = (index) => {
+            if (!Number.isInteger(index) || index < 0 || index >= imageEntries.length) return;
+
+            const [removed] = imageEntries.splice(index, 1);
+            releaseImageEntry(removed);
+            renderImageGallery();
+            setUploadStatus(imageEntries.length
+                ? 'Фото удалено из подборки. Изменения сохранятся вместе с товаром.'
+                : 'Все фото удалены. Изменения сохранятся вместе с товаром.');
+        };
+
+        const makeImageCover = (index) => {
+            if (!Number.isInteger(index) || index <= 0 || index >= imageEntries.length) return;
+
+            const [entry] = imageEntries.splice(index, 1);
+            imageEntries.unshift(entry);
+            renderImageGallery();
+            setUploadStatus('Обложка обновлена. Она сохранится вместе с товаром.', 'success');
+        };
+
+        if (imageGallery) {
+            imageGallery.addEventListener('click', (event) => {
+                const removeButton = event.target.closest('.js-remove-image');
+                if (removeButton) {
+                    removeImageAt(Number(removeButton.dataset.index));
+                    return;
+                }
+
+                const coverButton = event.target.closest('.js-cover-image');
+                if (coverButton) makeImageCover(Number(coverButton.dataset.index));
+            });
+        }
+
+        if (imageDropZone) {
+            ['dragenter', 'dragover'].forEach((type) => {
+                imageDropZone.addEventListener(type, (event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    imageDropZone.classList.add('is-dragover');
+                });
+            });
+
+            ['dragleave', 'dragend', 'drop'].forEach((type) => {
+                imageDropZone.addEventListener(type, (event) => {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    imageDropZone.classList.remove('is-dragover');
+                });
+            });
+
+            imageDropZone.addEventListener('drop', (event) => {
+                const files = event.dataTransfer ? event.dataTransfer.files : null;
+                addImageFiles(files);
+            });
+        }
+
+        const resetProductFormState = ({ keepStatus = false } = {}) => {
+            if (!productForm) return;
+
+            productForm.reset();
+            clearAllFieldErrors();
+            clearImageEntries();
+
+            editingId = '';
+
+            if (productImage) productImage.value = '';
+            if (addTitle) addTitle.textContent = 'Добавить товар';
+            if (productSubmit) productSubmit.textContent = 'Добавить товар';
+            if (productReset) productReset.textContent = 'Очистить';
+            renderImageGallery();
+            setUploadStatus('');
+            if (!keepStatus) setFormStatus('');
+        };
+
+        const startEditProduct = (product) => {
+            if (!product || !productForm) return;
+
+            clearImageEntries();
+            editingId = product.id;
+            imageEntries = (product.imageUrls || []).map((url) => ({
+                file: null,
+                url: safeImageUrl(url),
+                objectUrl: ''
+            })).filter((entry) => entry.url);
+
+            if (productName) productName.value = product.name;
+            if (productPrice) productPrice.value = product.price ? String(product.price) : '';
+            if (productOldPrice) productOldPrice.value = product.oldPrice ? String(product.oldPrice) : '';
+            if (productCategory) productCategory.value = product.category;
+            if (productBadge) productBadge.value = product.badge;
+            if (productDescription) productDescription.value = product.description;
+            if (productCondition) productCondition.value = product.condition;
+            if (productImage) productImage.value = '';
+
+            clearAllFieldErrors();
+            renderImageGallery();
+            setUploadStatus(imageEntries.length
+                ? 'Фото загружены. Можно добавить новые, выбрать обложку или удалить лишние.'
+                : 'Фото пока нет. Добавьте до 6 изображений.');
+            if (addTitle) addTitle.textContent = 'Редактировать товар';
+            if (productSubmit) productSubmit.textContent = 'Сохранить изменения';
+            if (productReset) productReset.textContent = 'Отменить';
+            setFormStatus('Редактирование: «' + product.name + '». Изменения появятся на витрине после сохранения.');
+
+            if (productForm) {
+                productForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+            window.setTimeout(() => {
+                if (productName) productName.focus({ preventScroll: true });
+            }, 320);
+        };
+
+        const compressImage = (file) => new Promise((resolve, reject) => {
+            if (!file || !file.type || !file.type.startsWith('image/')) {
+                reject(new Error('Выберите файл изображения: JPG, PNG или WebP.'));
+                return;
+            }
+            if (file.size > MAX_IMAGE_BYTES) {
+                reject(new Error('Фото больше 12 МБ. Выберите файл меньше.'));
+                return;
+            }
+
+            const objectUrl = URL.createObjectURL(file);
+            const image = new Image();
+
+            image.onload = () => {
+                try {
+                    const maxSide = isFirebaseConfigured() ? IMAGE_MAX_SIDE_FIREBASE : IMAGE_MAX_SIDE_DEMO;
+                    const scale = Math.min(1, maxSide / Math.max(image.naturalWidth, image.naturalHeight));
+                    const width = Math.max(1, Math.round(image.naturalWidth * scale));
+                    const height = Math.max(1, Math.round(image.naturalHeight * scale));
+                    const canvas = document.createElement('canvas');
+                    canvas.width = width;
+                    canvas.height = height;
+
+                    const context = canvas.getContext('2d');
+                    context.imageSmoothingEnabled = true;
+                    context.imageSmoothingQuality = 'high';
+                    context.fillStyle = '#ffffff';
+                    context.fillRect(0, 0, width, height);
+                    context.drawImage(image, 0, 0, width, height);
+
+                    canvas.toBlob((blob) => {
+                        URL.revokeObjectURL(objectUrl);
+                        if (!blob) {
+                            reject(new Error('Не удалось подготовить фото. Попробуйте другой файл.'));
+                            return;
+                        }
+                        const contentType = blob.type || 'image/jpeg';
+                        const extension = contentType.includes('png')
+                            ? 'png'
+                            : contentType.includes('webp')
+                                ? 'webp'
+                                : 'jpg';
+                        resolve({ blob, contentType, extension });
+                    }, 'image/webp', IMAGE_QUALITY);
+                } catch (error) {
+                    URL.revokeObjectURL(objectUrl);
+                    reject(error);
+                }
+            };
+
+            image.onerror = () => {
+                URL.revokeObjectURL(objectUrl);
+                reject(new Error('Не удалось прочитать изображение. Попробуйте JPG или PNG.'));
+            };
+
+            image.src = objectUrl;
+        });
+
+        const blobToDataUrl = (blob) => new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(String(reader.result || ''));
+            reader.onerror = () => reject(new Error('Не удалось сохранить фото в браузере.'));
+            reader.readAsDataURL(blob);
+        });
+
+        const uploadProductImage = async (file) => {
+            const prepared = await compressImage(file);
+
+            if (!isFirebaseConfigured()) {
+                return blobToDataUrl(prepared.blob);
+            }
+
+            const { storage, ref, uploadBytes, getDownloadURL } = await loadStorage();
+            const path = 'products/' + Date.now() + '-' + Math.random().toString(36).slice(2, 8) + '.' + prepared.extension;
+            const storageRef = ref(storage, path);
+
+            await uploadBytes(storageRef, prepared.blob, {
+                contentType: prepared.contentType,
+                cacheControl: 'public,max-age=31536000'
+            });
+
+            return getDownloadURL(storageRef);
+        };
+
+        /* ---------- Вход ---------- */
+        if (loginForm) {
+            loginForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                if (loginSubmit && loginSubmit.disabled) return;
+
+                clearLoginError();
+                const password = adminPassword ? adminPassword.value : '';
+
+                if (!password) {
+                    setLoginError('Введите пароль');
+                    if (adminPassword) adminPassword.focus();
+                    return;
+                }
+
+                setLoginLoading(true);
+
+                try {
+                    if (isFirebaseConfigured()) {
+                        const { auth, signInWithEmailAndPassword } = await loadFirebase();
+                        const credential = await signInWithEmailAndPassword(auth, ADMIN_EMAIL, password);
+                        currentUser = credential.user;
+                        showApp();
+                    } else {
+                        await new Promise((resolve) => window.setTimeout(resolve, 350));
+                        if (password !== DEMO_PASSWORD) {
+                            throw new Error('demo-invalid-password');
+                        }
+                        sessionStorage.setItem(DEMO_SESSION_KEY, '1');
+                        showApp();
+                    }
+                } catch (error) {
+                    console.error('Ошибка входа в админку:', error);
+                    const code = error && error.code ? error.code : '';
+
+                    if (code === 'auth/invalid-credential' || code === 'auth/wrong-password' || code === 'auth/user-not-found' || error.message === 'demo-invalid-password') {
+                        setLoginError(isFirebaseConfigured()
+                            ? 'Неверный пароль. Проверьте, что администратор создан в Firebase Authentication.'
+                            : 'Неверный пароль. Демо-пароль: admin123.');
+                    } else if (code === 'auth/too-many-requests') {
+                        setLoginError('Слишком много попыток. Подождите несколько минут и попробуйте снова.');
+                    } else if (code === 'auth/network-request-failed') {
+                        setLoginError('Нет соединения с Firebase. Проверьте интернет и попробуйте снова.');
+                    } else if (code === 'auth/operation-not-allowed') {
+                        setLoginError('Вход по email/паролю отключён. Включите Email/Password в Firebase Authentication.');
+                    } else {
+                        setLoginError('Не удалось войти. Проверьте firebaseConfig и подключение к интернету.');
+                    }
+
+                    if (adminPassword) adminPassword.select();
+                } finally {
+                    setLoginLoading(false);
+                }
+            });
+        }
+
+        if (adminPassword) {
+            adminPassword.addEventListener('input', clearLoginError);
+        }
+
+        if (togglePassword && adminPassword) {
+            togglePassword.addEventListener('click', () => {
+                const show = adminPassword.type === 'password';
+                adminPassword.type = show ? 'text' : 'password';
+                togglePassword.setAttribute('aria-label', show ? 'Скрыть пароль' : 'Показать пароль');
+                togglePassword.setAttribute('aria-pressed', String(show));
+                adminPassword.focus();
+            });
+        }
+
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', async () => {
+                try {
+                    if (isFirebaseConfigured()) {
+                        const { auth, signOut } = await loadFirebase();
+                        await signOut(auth);
+                    }
+                    sessionStorage.removeItem(DEMO_SESSION_KEY);
+                    currentUser = null;
+                    products = [];
+                    pendingDelete = null;
+                    resetProductFormState();
+                    renderTable([]);
+                    updateStats();
+                    showLogin();
+                } catch (error) {
+                    console.error('Ошибка выхода:', error);
+                    window.alert('Не удалось выйти. Обновите страницу.');
+                }
+            });
+        }
+
+        const initAuth = async () => {
+            updateModeUI();
+
+            if (!isFirebaseConfigured()) {
+                if (sessionStorage.getItem(DEMO_SESSION_KEY) === '1') {
+                    showApp();
+                } else {
+                    showLogin();
+                }
+                return;
+            }
+
+            try {
+                const { auth, onAuthStateChanged } = await loadFirebase();
+                onAuthStateChanged(auth, (user) => {
+                    currentUser = user;
+                    if (user) {
+                        showApp();
+                    } else {
+                        showLogin();
+                    }
+                });
+            } catch (error) {
+                console.error('Не удалось инициализировать Firebase Auth:', error);
+                setLoginError('Не удалось подключиться к Firebase. Проверьте firebaseConfig и интернет.');
+                showLogin();
+            }
+        };
+
+        /* ---------- Сохранение названия магазина ---------- */
+        if (storeSettingsForm) {
+            if (storeNameInput) {
+                storeNameInput.addEventListener('input', () => {
+                    clearFieldError(storeNameInput);
+                    setStoreNameStatus('');
+                });
+            }
+
+            storeSettingsForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                if (isSavingStoreName) return;
+
+                const rawName = storeNameInput ? storeNameInput.value.replace(/\s+/g, ' ').trim() : '';
+                if (rawName.length < 2 || rawName.length > 40) {
+                    setFieldError(storeNameInput, 'Введите название — от 2 до 40 символов');
+                    if (storeNameInput) storeNameInput.focus();
+                    return;
+                }
+
+                clearFieldError(storeNameInput);
+                setStoreNameSaving(true);
+                setStoreNameStatus('Сохраняем название…');
+
+                try {
+                    if (isFirebaseConfigured()) {
+                        const { db, doc, setDoc, serverTimestamp } = await loadFirebase();
+                        await setDoc(doc(db, STORE_SETTINGS_COLLECTION, STORE_SETTINGS_DOC), {
+                            name: rawName,
+                            updatedAt: serverTimestamp()
+                        }, { merge: true });
+                    } else {
+                        localStorage.setItem(DEMO_STORE_NAME_KEY, rawName);
+                    }
+
+                    applyStoreName(rawName);
+                    if (storeNameInput) storeNameInput.value = rawName;
+                    setStoreNameStatus('Название сохранено. Обновите витрину, чтобы увидеть изменения.', 'success');
+                } catch (error) {
+                    console.error('Не удалось сохранить название магазина:', error);
+                    setStoreNameStatus('Не удалось сохранить: ' + getFriendlyError(error), 'error');
+                } finally {
+                    setStoreNameSaving(false);
+                }
+            });
+        }
+
+        /* ---------- Загрузка и отрисовка списка ---------- */
+        const renderTableLoading = () => {
+            if (!productTableBody) return;
+            productTableBody.innerHTML = `
+                <tr>
+                    <td class="table-state" colspan="5">
+                        <strong>Загружаем товары…</strong>
+                        Пожалуйста, подождите.
+                    </td>
+                </tr>`;
+        };
+
+        const renderTableError = (message) => {
+            if (!productTableBody) return;
+            productTableBody.innerHTML = `
+                <tr>
+                    <td class="table-state" colspan="5">
+                        <strong>Не удалось загрузить товары</strong>
+                        ${escapeHtml(message)}
+                        <br>
+                        <button class="btn btn--ghost btn--sm" type="button" data-retry-table style="margin-top:12px">Повторить</button>
+                    </td>
+                </tr>`;
+        };
+
+        const renderTable = (items = [], { query = '' } = {}) => {
+            if (!productTableBody) return;
+
+            if (!items.length) {
+                const hasFilters = Boolean(query.trim()) || categoryMode !== 'all' || visibilityMode !== 'all';
+                productTableBody.innerHTML = `
+                    <tr>
+                        <td class="table-state" colspan="5">
+                            <strong>${hasFilters ? 'Ничего не найдено' : 'Товаров пока нет'}</strong>
+                            ${hasFilters
+                                ? 'По выбранным условиям товаров нет. Измените запрос, категорию или статус.'
+                                : 'Добавьте первый товар через форму — он сразу появится в этом списке.'}
+                        </td>
+                    </tr>`;
+                return;
+            }
+
+            productTableBody.innerHTML = items.map((product) => {
+                const meta = CATEGORY_META[product.category] || CATEGORY_META.accessories;
+                const icon = product.icon || meta.icon;
+                const images = Array.isArray(product.imageUrls) ? product.imageUrls : [];
+                const firstImage = images[0] || '';
+                const image = firstImage
+                    ? `<img src="${escapeHtml(firstImage)}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer">`
+                    : '';
+                const thumbCount = images.length > 1
+                    ? `<span class="thumb-count">${images.length}</span>`
+                    : '';
+                const oldPrice = product.oldPrice && product.oldPrice > product.price
+                    ? `<small>${escapeHtml(formatPrice(product.oldPrice))}</small>`
+                    : '';
+                const badge = product.badge ? escapeHtml(product.badge) : '—';
+                const description = product.description || 'Без описания';
+                const name = escapeHtml(product.name);
+                const id = escapeHtml(product.id);
+                const price = escapeHtml(formatPrice(product.price));
+                const isVisible = product.visible !== false;
+                const visibility = isVisible
+                    ? '<span class="pill pill--visible">В наличии</span>'
+                    : '<span class="pill pill--hidden">Скрыт</span>';
+
+                return `
+                    <tr>
+                        <td>
+                            <div class="table-product">
+                                <span class="table-thumb" aria-hidden="true">
+                                    <svg><use href="#${icon}"></use></svg>
+                                    ${image}
+                                    ${thumbCount}
+                                </span>
+                                <div class="table-product-info">
+                                    <strong title="${name}">${name}</strong>
+                                    <small>${escapeHtml(description)}</small>
+                                    <small class="table-product-mobile-price">${price}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="badge-stack">
+                                <span class="pill">${meta.label}</span>
+                                ${visibility}
+                            </div>
+                        </td>
+                        <td class="price-cell">
+                            <strong>${price}</strong>
+                            ${oldPrice}
+                        </td>
+                        <td class="badge-cell">${badge}</td>
+                        <td>
+                            <div class="row-actions">
+                                <button class="btn btn--ghost btn--sm js-edit" type="button" data-id="${id}" data-name="${name}">Редактировать</button>
+                                <button class="btn btn--ghost btn--sm js-duplicate" type="button" data-id="${id}">Дублировать</button>
+                                <button class="btn btn--ghost btn--sm js-toggle-visibility" type="button" data-id="${id}" data-visible="${isVisible ? '1' : '0'}">${isVisible ? 'Скрыть' : 'Показать'}</button>
+                                <button class="btn btn--danger btn--sm js-delete" type="button" data-id="${id}" data-name="${name}">Удалить</button>
+                            </div>
+                        </td>
+                    </tr>`;
+            }).join('');
+
+            productTableBody.querySelectorAll('.table-thumb img').forEach((image) => {
+                image.addEventListener('error', () => image.remove(), { once: true });
+            });
+        };
+
+        const sortItems = (items, mode = 'date-desc') => {
+            const copy = items.slice();
+            if (mode === 'price-asc') return copy.sort((first, second) => first.price - second.price);
+            if (mode === 'price-desc') return copy.sort((first, second) => second.price - first.price);
+            if (mode === 'date-asc') return copy.sort((first, second) => toTime(first.createdAt) - toTime(second.createdAt));
+            return copy.sort((first, second) => toTime(second.createdAt) - toTime(first.createdAt));
+        };
+
+        const getVisibleProducts = () => {
+            const query = searchQuery.trim().toLocaleLowerCase('ru-RU');
+            const filtered = products.filter((product) => {
+                if (categoryMode !== 'all' && product.category !== categoryMode) return false;
+                if (visibilityMode === 'visible' && product.visible === false) return false;
+                if (visibilityMode === 'hidden' && product.visible !== false) return false;
+                if (query && !product.name.toLocaleLowerCase('ru-RU').includes(query)) return false;
+                return true;
+            });
+            return sortItems(filtered, sortMode);
+        };
+
+        const updateStats = () => {
+            if (productCount) productCount.textContent = String(products.length);
+            if (totalValue) {
+                const total = products.reduce((sum, product) => sum + (Number(product.price) || 0), 0);
+                totalValue.textContent = formatPrice(total);
+            }
+            if (photoCount) {
+                photoCount.textContent = String(products.filter((product) => Array.isArray(product.imageUrls) && product.imageUrls.length).length);
+            }
+            if (hiddenCount) {
+                hiddenCount.textContent = String(products.filter((product) => product.visible === false).length);
+            }
+        };
+
+        const renderProductList = () => {
+            const visible = getVisibleProducts();
+            renderTable(visible, { query: searchQuery });
+            updateTableNote(visible.length);
+            updateStats();
+        };
+
+        const loadProducts = async ({ showLoading = true } = {}) => {
+            if (showLoading) renderTableLoading();
+
+            try {
+                const loaded = isFirebaseConfigured()
+                    ? await loadFirestoreProducts()
+                    : readDemoProducts();
+
+                products = loaded;
+                renderProductList();
+                updateModeUI();
+            } catch (error) {
+                console.error('Не удалось загрузить товары:', error);
+                renderTableError(getFriendlyError(error));
+                products = [];
+                updateStats();
+                if (tableNote) tableNote.textContent = 'Не удалось загрузить список. Проверьте настройки Firebase и нажмите «Обновить».';
+            }
+        };
+
+        /* ---------- Создание, редактирование и удаление ---------- */
+        const createProduct = async (payload) => {
+            if (isFirebaseConfigured()) {
+                const { db, collection, addDoc, serverTimestamp } = await loadFirebase();
+                await addDoc(collection(db, PRODUCTS_COLLECTION), {
+                    ...payload,
+                    createdAt: serverTimestamp()
+                });
+                return;
+            }
+
+            const demoProducts = readDemoProducts();
+            const newProduct = normalizeProduct({
+                ...payload,
+                id: 'local-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8),
+                createdAt: new Date().toISOString()
+            });
+
+            demoProducts.unshift(newProduct);
+            if (!writeDemoProducts(demoProducts)) assertDemoWrite();
+        };
+
+        const duplicateProduct = async (product) => {
+            if (!product) throw new Error('Товар не найден. Обновите список и попробуйте снова.');
+
+            const suffix = ' (копия)';
+            const baseName = product.name.length + suffix.length > 120
+                ? product.name.slice(0, 120 - suffix.length).trim()
+                : product.name;
+
+            await createProduct({
+                name: baseName + suffix,
+                price: product.price,
+                oldPrice: product.oldPrice,
+                category: product.category,
+                description: product.description,
+                badge: product.badge,
+                condition: product.condition,
+                icon: product.icon,
+                glow: product.glow,
+                imageUrl: product.imageUrl || '',
+                imageUrls: Array.isArray(product.imageUrls) ? product.imageUrls.slice() : [],
+                visible: false
+            });
+        };
+
+        const updateProduct = async (id, payload) => {
+            if (!id) throw new Error('Не указан идентификатор товара.');
+
+            if (isFirebaseConfigured()) {
+                const { db, doc, updateDoc } = await loadFirebase();
+                await updateDoc(doc(db, PRODUCTS_COLLECTION, id), payload);
+                return;
+            }
+
+            const demoProducts = readDemoProducts();
+            const index = demoProducts.findIndex((product) => product.id === id);
+            if (index === -1) throw new Error('Товар не найден. Обновите список и попробуйте снова.');
+
+            const existing = demoProducts[index];
+            demoProducts[index] = normalizeProduct({
+                ...existing,
+                ...payload,
+                id: existing.id,
+                createdAt: existing.createdAt
+            });
+
+            if (!writeDemoProducts(demoProducts)) assertDemoWrite();
+        };
+
+        const deleteProduct = async (id) => {
+            if (!id) throw new Error('Не указан идентификатор товара.');
+
+            if (isFirebaseConfigured()) {
+                const { db, doc, deleteDoc } = await loadFirebase();
+                await deleteDoc(doc(db, PRODUCTS_COLLECTION, id));
+                return;
+            }
+
+            if (!writeDemoProducts(readDemoProducts().filter((product) => product.id !== id))) {
+                assertDemoWrite();
+            }
+        };
+
+        /* ---------- Валидация формы ---------- */
+        const setFieldError = (input, message) => {
+            if (!input) return;
+            const field = input.closest('.field');
+            if (!field) return;
+
+            field.classList.toggle('is-invalid', Boolean(message));
+            const error = field.querySelector('.field-error');
+            if (error && message) error.textContent = message;
+            input.setAttribute('aria-invalid', message ? 'true' : 'false');
+        };
+
+        const clearFieldError = (input) => {
+            if (!input) return;
+            const field = input.closest('.field');
+            if (field) field.classList.remove('is-invalid');
+            input.removeAttribute('aria-invalid');
+        };
+
+        const clearAllFieldErrors = () => {
+            if (!productForm) return;
+            $$('.field.is-invalid', productForm).forEach((field) => field.classList.remove('is-invalid'));
+            $$('[aria-invalid]', productForm).forEach((input) => input.removeAttribute('aria-invalid'));
+        };
+
+        const validateProductForm = () => {
+            let isValid = true;
+
+            const name = productName ? productName.value.trim() : '';
+            if (name.length < 2) {
+                setFieldError(productName, 'Введите название — минимум 2 символа');
+                isValid = false;
+            } else {
+                clearFieldError(productName);
+            }
+
+            const priceRaw = productPrice ? productPrice.value.trim() : '';
+            const price = Number(priceRaw);
+            if (!priceRaw || !Number.isInteger(price) || price <= 0) {
+                setFieldError(productPrice, 'Введите целую цену больше 0');
+                isValid = false;
+            } else {
+                clearFieldError(productPrice);
+            }
+
+            const oldPriceRaw = productOldPrice ? productOldPrice.value.trim() : '';
+            if (oldPriceRaw) {
+                const oldPrice = Number(oldPriceRaw);
+                if (!Number.isInteger(oldPrice) || oldPrice <= 0) {
+                    setFieldError(productOldPrice, 'Введите целое число больше 0');
+                    isValid = false;
+                } else if (price > 0 && oldPrice <= price) {
+                    setFieldError(productOldPrice, 'Старая цена должна быть больше текущей');
+                    isValid = false;
+                } else {
+                    clearFieldError(productOldPrice);
+                }
+            } else {
+                clearFieldError(productOldPrice);
+            }
+
+            if (!productCategory || !productCategory.value) {
+                setFieldError(productCategory, 'Выберите категорию');
+                isValid = false;
+            } else {
+                clearFieldError(productCategory);
+            }
+
+            if (imageEntries.length > MAX_IMAGES) {
+                setFieldError(productImage, `Можно добавить не более ${MAX_IMAGES} фото`);
+                isValid = false;
+            } else {
+                clearFieldError(productImage);
+            }
+
+            return isValid;
+        };
+
+        const setSaving = (loading) => {
+            isSaving = loading;
+            if (!productSubmit) return;
+            productSubmit.disabled = loading;
+            productSubmit.classList.toggle('is-loading', loading);
+            productSubmit.setAttribute('aria-busy', String(loading));
+        };
+
+        /* ---------- Модальное окно удаления ---------- */
+        const openConfirm = (id, name) => {
+            if (!confirmModal || !id) return;
+
+            pendingDelete = { id, name };
+            if (confirmProductName) confirmProductName.textContent = name;
+            if (confirmError) confirmError.textContent = '';
+
+            confirmModal.classList.add('is-open');
+            confirmModal.setAttribute('aria-hidden', 'false');
+            document.body.classList.add('is-locked');
+
+            window.setTimeout(() => {
+                if (confirmDeleteBtn) confirmDeleteBtn.focus();
+            }, 60);
+        };
+
+        const closeConfirm = () => {
+            if (!confirmModal || !confirmModal.classList.contains('is-open')) return;
+            if (isDeleting) return;
+
+            confirmModal.classList.remove('is-open');
+            confirmModal.setAttribute('aria-hidden', 'true');
+            document.body.classList.remove('is-locked');
+            pendingDelete = null;
+            if (confirmError) confirmError.textContent = '';
+        };
+
+        const setDeleting = (loading) => {
+            isDeleting = loading;
+            if (!confirmDeleteBtn) return;
+            confirmDeleteBtn.disabled = loading;
+            confirmDeleteBtn.classList.toggle('is-loading', loading);
+            confirmDeleteBtn.setAttribute('aria-busy', String(loading));
+        };
+
+        /* ---------- Обработчики формы ---------- */
+        if (productForm) {
+            $$('input, select, textarea', productForm).forEach((input) => {
+                input.addEventListener('input', () => clearFieldError(input));
+                input.addEventListener('change', () => clearFieldError(input));
+            });
+
+            if (productImage) {
+                productImage.addEventListener('change', () => {
+                    addImageFiles(productImage.files);
+                    productImage.value = '';
+                });
+            }
+
+            if (removeAllImagesBtn) {
+                removeAllImagesBtn.addEventListener('click', () => {
+                    clearImageEntries();
+                    if (productImage) productImage.value = '';
+                    clearFieldError(productImage);
+                    renderImageGallery();
+                    setUploadStatus('Все фото убраны. Изменения сохранятся вместе с товаром.');
+                });
+            }
+
+            productForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                if (isSaving) return;
+
+                setFormStatus('');
+
+                if (!validateProductForm()) {
+                    const firstInvalid = productForm.querySelector('.field.is-invalid input, .field.is-invalid select, .field.is-invalid textarea');
+                    if (firstInvalid) firstInvalid.focus();
+                    return;
+                }
+
+                const wasEditing = Boolean(editingId);
+                const editedName = wasEditing
+                    ? (products.find((product) => product.id === editingId) || {}).name || 'Товар'
+                    : '';
+
+                const payload = {
+                    name: productName.value.trim(),
+                    price: Number(productPrice.value.trim()),
+                    oldPrice: productOldPrice.value.trim() ? Number(productOldPrice.value.trim()) : null,
+                    category: productCategory.value,
+                    description: productDescription.value.trim(),
+                    badge: productBadge.value.trim(),
+                    condition: productCondition.value.trim()
+                };
+
+                setSaving(true);
+
+                try {
+                    const imageUrls = [];
+
+                    for (let index = 0; index < imageEntries.length; index += 1) {
+                        const entry = imageEntries[index];
+
+                        if (!entry.file) {
+                            const savedUrl = safeImageUrl(entry.url);
+                            if (savedUrl) imageUrls.push(savedUrl);
+                            continue;
+                        }
+
+                        setUploadStatus(isFirebaseConfigured()
+                            ? `Сжимаем и загружаем фото ${index + 1} из ${imageEntries.length} в Firebase Storage…`
+                            : `Сжимаем и сохраняем фото ${index + 1} из ${imageEntries.length} в браузере…`);
+                        imageUrls.push(await uploadProductImage(entry.file));
+                    }
+
+                    payload.imageUrls = imageUrls;
+                    payload.imageUrl = imageUrls[0] || '';
+                    setUploadStatus(imageUrls.length
+                        ? 'Фото готовы и сохранены вместе с товаром.'
+                        : 'Товар сохранён без фото.', 'success');
+
+                    if (wasEditing) {
+                        await updateProduct(editingId, payload);
+                    } else {
+                        await createProduct(payload);
+                    }
+
+                    resetProductFormState({ keepStatus: true });
+                    setFormStatus(wasEditing
+                        ? 'Товар «' + editedName + '» обновлён. Изменения появятся на витрине после обновления index.html.'
+                        : 'Товар добавлен. Он уже в списке и появится на витрине после обновления index.html.', 'success');
+                    await loadProducts({ showLoading: false });
+                    if (productName) productName.focus();
+                } catch (error) {
+                    console.error(wasEditing ? 'Не удалось сохранить товар:' : 'Не удалось добавить товар:', error);
+                    setUploadStatus('', '');
+                    setFormStatus((wasEditing ? 'Не удалось сохранить изменения: ' : 'Не удалось добавить товар: ') + getFriendlyError(error), 'error');
+                } finally {
+                    setSaving(false);
+                }
+            });
+        }
+
+        if (productReset) {
+            productReset.addEventListener('click', () => {
+                resetProductFormState();
+                if (productName) productName.focus();
+            });
+        }
+
+        /* ---------- Таблица, поиск, сортировка, обновление и удаление ---------- */
+        if (productTableBody) {
+            productTableBody.addEventListener('click', async (event) => {
+                const editButton = event.target.closest('.js-edit');
+                if (editButton) {
+                    const product = products.find((item) => item.id === editButton.dataset.id);
+                    if (product) startEditProduct(product);
+                    return;
+                }
+
+                const duplicateButton = event.target.closest('.js-duplicate');
+                if (duplicateButton) {
+                    if (isTableAction) return;
+                    const product = products.find((item) => item.id === duplicateButton.dataset.id);
+                    if (!product) return;
+
+                    isTableAction = true;
+                    duplicateButton.disabled = true;
+                    try {
+                        await duplicateProduct(product);
+                        await loadProducts({ showLoading: false });
+                        setFormStatus('Копия товара «' + product.name + '» создана и скрыта. Включите её кнопкой «Показать».', 'success');
+                    } catch (error) {
+                        console.error('Не удалось дублировать товар:', error);
+                        setFormStatus('Не удалось дублировать товар: ' + getFriendlyError(error), 'error');
+                    } finally {
+                        isTableAction = false;
+                    }
+                    return;
+                }
+
+                const toggleButton = event.target.closest('.js-toggle-visibility');
+                if (toggleButton) {
+                    if (isTableAction) return;
+                    const product = products.find((item) => item.id === toggleButton.dataset.id);
+                    if (!product) return;
+
+                    const nextVisible = product.visible === false;
+                    isTableAction = true;
+                    toggleButton.disabled = true;
+                    try {
+                        await updateProduct(product.id, { visible: nextVisible });
+                        await loadProducts({ showLoading: false });
+                        setFormStatus('Товар «' + product.name + '» ' + (nextVisible ? 'показан на витрине.' : 'скрыт с витрины.'), 'success');
+                    } catch (error) {
+                        console.error('Не удалось изменить видимость товара:', error);
+                        setFormStatus('Не удалось изменить видимость: ' + getFriendlyError(error), 'error');
+                    } finally {
+                        isTableAction = false;
+                    }
+                    return;
+                }
+
+                const deleteButton = event.target.closest('.js-delete');
+                if (deleteButton) {
+                    openConfirm(deleteButton.dataset.id, deleteButton.dataset.name || 'Товар');
+                    return;
+                }
+
+                if (event.target.closest('[data-retry-table]')) {
+                    loadProducts({ showLoading: true });
+                }
+            });
+        }
+
+        if (productSearch) {
+            productSearch.addEventListener('input', () => {
+                searchQuery = productSearch.value;
+                if (clearSearchBtn) clearSearchBtn.hidden = !searchQuery;
+                renderProductList();
+            });
+        }
+
+        if (clearSearchBtn) {
+            clearSearchBtn.addEventListener('click', () => {
+                searchQuery = '';
+                if (productSearch) {
+                    productSearch.value = '';
+                    productSearch.focus();
+                }
+                clearSearchBtn.hidden = true;
+                renderProductList();
+            });
+        }
+
+        if (productSort) {
+            productSort.addEventListener('change', () => {
+                sortMode = productSort.value;
+                renderProductList();
+            });
+        }
+
+        if (categoryFilter) {
+            categoryFilter.addEventListener('change', () => {
+                categoryMode = categoryFilter.value;
+                renderProductList();
+            });
+        }
+
+        if (visibilityFilter) {
+            visibilityFilter.addEventListener('change', () => {
+                visibilityMode = visibilityFilter.value;
+                renderProductList();
+            });
+        }
+
+        if (exportBtn) {
+            exportBtn.addEventListener('click', () => {
+                try {
+                    const exportedAt = new Date().toISOString();
+                    const payload = JSON.stringify({
+                        storeName: currentStoreName,
+                        exportedAt,
+                        products
+                    }, null, 2);
+                    const blob = new Blob([payload], { type: 'application/json;charset=utf-8' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement('a');
+
+                    link.href = url;
+                    link.download = 'retro-products-' + exportedAt.slice(0, 10) + '.json';
+                    document.body.appendChild(link);
+                    link.click();
+                    link.remove();
+                    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+                    setFormStatus('Экспорт готов: файл с товарами скачан.', 'success');
+                } catch (error) {
+                    console.error('Не удалось экспортировать товары:', error);
+                    setFormStatus('Не удалось экспортировать товары: ' + getFriendlyError(error), 'error');
+                }
+            });
+        }
+
+        if (refreshBtn) {
+            refreshBtn.addEventListener('click', async () => {
+                setFormStatus('');
+                refreshBtn.disabled = true;
+                refreshBtn.setAttribute('aria-busy', 'true');
+                try {
+                    await loadProducts({ showLoading: true });
+                } finally {
+                    refreshBtn.disabled = false;
+                    refreshBtn.removeAttribute('aria-busy');
+                }
+            });
+        }
+
+        if (confirmModal) {
+            confirmModal.addEventListener('click', (event) => {
+                if (event.target.closest('[data-confirm-close]')) closeConfirm();
+            });
+        }
+
+        if (confirmDeleteBtn) {
+            confirmDeleteBtn.addEventListener('click', async () => {
+                if (!pendingDelete || isDeleting) return;
+
+                const target = { ...pendingDelete };
+                if (confirmError) confirmError.textContent = '';
+                setDeleting(true);
+
+                try {
+                    await deleteProduct(target.id);
+                    setDeleting(false);
+                    closeConfirm();
+                    if (editingId === target.id) resetProductFormState({ keepStatus: true });
+                    await loadProducts({ showLoading: false });
+                    setFormStatus('Товар «' + target.name + '» удалён из каталога.', 'success');
+                } catch (error) {
+                    console.error('Не удалось удалить товар:', error);
+                    if (confirmError) confirmError.textContent = getFriendlyError(error);
+                } finally {
+                    setDeleting(false);
+                }
+            });
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key !== 'Escape') return;
+            if (confirmModal && confirmModal.classList.contains('is-open')) {
+                event.preventDefault();
+                closeConfirm();
+            }
+        });
+
+        /* ---------- Запуск ---------- */
+        console.info(
+            isFirebaseConfigured()
+                ? 'Retro Admin: Firebase настроен, вход через Firebase Authentication.'
+                : 'Retro Admin: Firebase не настроен, включён демо-режим (пароль admin123).'
+        );
+
+        renderImageGallery();
+        initAuth();
+    </script>
+</body>
+</html>
