@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Retro — комиссионный магазин техники в Москве</title>
-    <meta name="description" content="Retro — комиссионный магазин техники: смартфоны, ноутбуки и аксессуары с проверкой по 42 пунктам и гарантией 90 дней. Покупаем, продаём, обмениваем. Заявка без онлайн-оплаты.">
-    <meta name="keywords" content="комиссионный магазин техники, б/у смартфоны, б/у ноутбуки, техника с гарантией, купить iPhone, купить MacBook, обмен техники, Москва">
-    <meta name="author" content="Retro">
+    <title>Ретро — комиссионный магазин в Москве</title>
+    <meta name="description" content="Ретро — комиссионный магазин: посуда, книги, пластинки, сувениры, CD и DVD. Покупаем и принимаем на комиссию. Ленинский проспект, 62/1. Ежедневно с 11:00 до 20:00.">
+    <meta name="keywords" content="комиссионный магазин, ретро-вещи, посуда, книги, пластинки, винил, сувениры, CD и DVD, купить ретро, сдать на комиссию, Москва, Ленинский проспект">
+    <meta name="author" content="Ретро">
     <meta name="theme-color" content="#f7f4ff">
     <meta name="robots" content="index, follow">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%237b2ff7'/%3E%3Cpath d='M36 7 15 36h14l-2 21 22-31H34l2-19Z' fill='%23c8ff4d'/%3E%3C/svg%3E">
@@ -14,12 +14,12 @@
     <!-- Open Graph / Twitter. После публикации подставьте свой абсолютный URL и обложку. -->
     <meta property="og:type" content="website">
     <meta property="og:locale" content="ru_RU">
-    <meta property="og:site_name" content="Retro">
-    <meta property="og:title" content="Retro — комиссионный магазин техники">
-    <meta property="og:description" content="Проверенная техника с гарантией 90 дней. Покупаем, продаём, обмениваем. Оставьте заявку — перезвоним за 15 минут.">
+    <meta property="og:site_name" content="Ретро">
+    <meta property="og:title" content="Ретро — комиссионный магазин">
+    <meta property="og:description" content="Посуда, книги, пластинки, сувениры, CD и DVD. Покупаем и принимаем на комиссию. Ленинский проспект, 62/1.">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Retro — комиссионный магазин техники">
-    <meta name="twitter:description" content="Смартфоны, ноутбуки и аксессуары с проверкой по 42 пунктам. Без онлайн-оплаты — только заявка.">
+    <meta name="twitter:title" content="Ретро — комиссионный магазин">
+    <meta name="twitter:description" content="Посуда, книги, пластинки, сувениры, CD и DVD. Покупаем и принимаем на комиссию.">
 
     <!--
       Домен пока не подключён. Пока сайт живёт на GitHub Pages,
@@ -468,6 +468,82 @@
             background: var(--accent);
             box-shadow: 0 0 18px var(--accent);
         }
+        .hero-vinyl {
+            position: relative;
+            z-index: 2;
+            display: grid;
+            justify-items: center;
+            gap: 24px;
+        }
+        .vinyl-disc {
+            position: relative;
+            display: grid;
+            width: min(330px, 74vw);
+            aspect-ratio: 1;
+            place-items: center;
+            border-radius: 50%;
+            background:
+                repeating-radial-gradient(circle at 50% 50%, #171029 0 3px, #241940 3px 6px);
+            box-shadow:
+                0 45px 90px rgba(23, 16, 41, .45),
+                0 0 0 1px rgba(255, 255, 255, .12),
+                inset 0 0 70px rgba(0, 0, 0, .45);
+            transform: rotate(-7deg);
+        }
+        .vinyl-disc::before {
+            content: "";
+            position: absolute;
+            inset: 9%;
+            border-radius: 50%;
+            background: repeating-radial-gradient(circle at 50% 50%, transparent 0 4px, rgba(255, 255, 255, .045) 4px 5px);
+        }
+        .vinyl-disc::after {
+            content: "";
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #f7f4ff;
+            box-shadow: 0 0 0 2px rgba(23, 16, 41, .9);
+        }
+        .vinyl-label {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            width: 116px;
+            height: 116px;
+            place-items: center;
+            align-content: center;
+            gap: 2px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), #5b21b6);
+            color: #fff;
+            text-align: center;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .28);
+        }
+        .vinyl-label span {
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: .18em;
+        }
+        .vinyl-label small {
+            font-size: 10px;
+            letter-spacing: .12em;
+            opacity: .75;
+        }
+        .vinyl-caption { text-align: center; }
+        .vinyl-caption strong {
+            display: block;
+            color: var(--text);
+            font-size: 15px;
+            font-weight: 800;
+        }
+        .vinyl-caption span {
+            display: block;
+            margin-top: 4px;
+            color: var(--dim);
+            font-size: 12px;
+        }
         .hero-phone {
             position: relative;
             z-index: 2;
@@ -641,7 +717,7 @@
             animation: float 6.5s ease-in-out infinite;
         }
         .float-card--check { top: 78px; left: -14px; }
-        .float-card--warranty { right: -18px; bottom: 88px; animation-delay: -3.2s; }
+        .float-card--warranty { right: -18px; bottom: 150px; animation-delay: -3.2s; }
         .float-icon {
             display: grid;
             place-items: center;
@@ -2000,16 +2076,16 @@
         }
         .category-grid {
             display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 18px;
+            grid-template-columns: repeat(5, minmax(0, 1fr));
+            gap: 14px;
             margin-top: 28px;
         }
         .category-tile {
             position: relative;
             display: flex;
             flex-direction: column;
-            min-height: 200px;
-            padding: 24px;
+            min-height: 215px;
+            padding: 20px;
             overflow: hidden;
             border-radius: 24px;
             color: #fff;
@@ -2033,6 +2109,8 @@
         .category-tile--purple { background: linear-gradient(135deg, #9d5cff, var(--accent) 55%, #5b21b6); }
         .category-tile--dark { background: linear-gradient(135deg, #39206b, #171029 72%); }
         .category-tile--lime { background: linear-gradient(135deg, #e6ffa8, var(--accent-2) 52%, #a8e62e); color: #171029; }
+        .category-tile--blue { background: linear-gradient(135deg, #5b9bff, #2b5bd7 58%, #1b3b8f); }
+        .category-tile--rose { background: linear-gradient(135deg, #ff9ab5, #e4557f 55%, #a92f56); }
         .category-tile-icon {
             display: grid;
             width: 52px;
@@ -2430,14 +2508,17 @@
         .reveal-ready .category-tile[data-reveal]:nth-child(2) { transition-delay: .08s; }
         .reveal-ready .step-card[data-reveal]:nth-child(3),
         .reveal-ready .category-tile[data-reveal]:nth-child(3) { transition-delay: .16s; }
+        .reveal-ready .category-tile[data-reveal]:nth-child(4) { transition-delay: .24s; }
+        .reveal-ready .category-tile[data-reveal]:nth-child(5) { transition-delay: .32s; }
 
+        @media (max-width: 1180px) {
+            .category-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        }
         @media (max-width: 980px) {
             .category-grid { grid-template-columns: 1fr 1fr; }
-            .category-tile--lime { grid-column: 1 / -1; }
         }
         @media (max-width: 780px) {
             .category-grid { grid-template-columns: 1fr; }
-            .category-tile--lime { grid-column: auto; }
             .category-tile { min-height: 170px; }
         }
         @media (max-width: 560px) {
@@ -2453,25 +2534,25 @@
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
-        "@type": "ElectronicsStore",
-        "name": "Retro",
-        "description": "Комиссионный магазин проверенной техники: смартфоны, ноутбуки и аксессуары с гарантией 90 дней. Покупаем, продаём, обмениваем.",
-        "telephone": "+7-495-120-45-45",
+        "@type": "Store",
+        "name": "Ретро",
+        "description": "Комиссионный магазин: посуда, книги, пластинки, сувениры, CD и DVD. Покупаем и принимаем на комиссию.",
+        "telephone": "+7-926-221-7420",
         "email": "hello@retro.ru",
         "priceRange": "₽₽",
         "currenciesAccepted": "RUB",
         "paymentAccepted": "Наличные, банковская карта",
         "address": {
             "@type": "PostalAddress",
-            "streetAddress": "ул. Тверская, 18",
+            "streetAddress": "Ленинский проспект, 62/1",
             "addressLocality": "Москва",
             "addressCountry": "RU"
         },
         "openingHoursSpecification": {
             "@type": "OpeningHoursSpecification",
             "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-            "opens": "10:00",
-            "closes": "21:00"
+            "opens": "11:00",
+            "closes": "20:00"
         },
         "sameAs": [
             "https://t.me/",
@@ -2485,13 +2566,12 @@
       БЫСТРОЕ РЕДАКТИРОВАНИЕ
       • Товары теперь хранятся в Firebase Firestore (коллекция products) и добавляются
         через отдельную панель admin.html. Жёстко зашитых карточек в index.html больше нет.
-      • Пока firebaseConfig не заполнен, витрина и админка работают в демо-режиме:
-        товары хранятся в localStorage браузера (исторический ключ sitecrafting_products_v1).
+      • Пока ключи не заполнены, витрина и админка работают в демо-режиме:
+        товары хранятся в localStorage браузера (ключ retro_products_v2).
         Это удобно для предварительного просмотра, но для реального магазина
         обязательно подключите Firebase.
-      • Подробная инструкция по Firebase — в комментарии перед скриптом
-        «КАТАЛОГ ИЗ FIRESTORE» в конце файла. Конфиг нужно вставить в ДВА файла:
-        index.html и admin.html.
+      • Инструкция по Firebase — в комментариях файла firebase-config.js.
+        Ключи вставляются только туда, оба HTML-файла читают их оттуда.
       • Контакты и соцсети: секция #contact и подвал.
       • Реальная отправка заявок: константа FORM_ENDPOINT в конце файла.
       • Домен: canonical закомментирован в <head> — добавьте его
@@ -2504,22 +2584,22 @@
          ============================================================ -->
     <header class="site-header" id="top">
         <div class="container header-inner">
-            <a class="logo" href="#top" aria-label="Retro — на главную" data-store-link="на главную">
+            <a class="logo" href="#top" aria-label="Ретро — на главную" data-store-link="на главную">
                 <span class="logo-mark">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M13.5 2 4.8 13.4h6.1L10 22l9.2-11.9h-6.4L13.5 2Z" fill="currentColor" stroke="none"/>
                     </svg>
                 </span>
                 <span class="logo-text">
-                    <span class="logo-name" data-store-name>RETRO</span>
-                    <span class="logo-sub">TECH STORE</span>
+                    <span class="logo-name" data-store-name>Ретро</span>
+                    <span class="logo-sub">РЕТРО-МАГАЗИН</span>
                 </span>
             </a>
 
             <nav class="nav" aria-label="Основная навигация">
                 <a class="nav-link" href="#catalog">Каталог</a>
                 <a class="nav-link" href="#how">Как это работает</a>
-                <a class="nav-link" href="#guarantee">Гарантия</a>
+                <a class="nav-link" href="#guarantee">Комиссия</a>
                 <a class="nav-link" href="#contact">Контакты</a>
             </nav>
 
@@ -2536,9 +2616,9 @@
 
     <!-- Мобильное меню -->
     <div class="mobile-menu" id="mobileMenu">
-        <a href="#catalog">Каталог <span>12 товаров</span></a>
+        <a href="#catalog">Каталог <span>Ретро-вещи</span></a>
         <a href="#how">Как это работает</a>
-        <a href="#guarantee">Гарантия 90 дней</a>
+        <a href="#guarantee">Комиссия</a>
         <a href="#contact">Контакты</a>
         <a class="btn btn--primary btn--block" href="#contact">
             Связаться
@@ -2554,32 +2634,32 @@
             <div class="container hero-grid">
                 <div class="hero-copy">
                     <span class="eyebrow eyebrow--dot">Комиссионный магазин · Москва</span>
-                    <h1 id="heroTitle">Техника, которой<br class="hero-break"> можно <span class="accent">доверять</span></h1>
-                    <p class="hero-lead">Покупаем, продаём и обмениваем смартфоны, ноутбуки и аксессуары. Каждое устройство проходит диагностику по 42 пунктам — вы получаете рабочую технику без сюрпризов.</p>
+                    <h1 id="heroTitle">Ретро-вещи<br class="hero-break"> с <span class="accent">историей</span></h1>
+                    <p class="hero-lead">Покупаем и принимаем на комиссию посуду, книги, пластинки, сувениры, CD и DVD. Найдите вещь с историей или сдайте свою — оценим на месте.</p>
 
                     <div class="hero-actions">
                         <a class="btn btn--primary" href="#catalog">
-                            Смотреть товары
+                            Смотреть каталог
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                         </a>
                         <a class="btn btn--glass" href="#contact">
-                            Сдать свою технику
+                            Сдать вещи на комиссию
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
                         </a>
                     </div>
 
                     <div class="hero-stats">
                         <div class="stat">
-                            <strong>90 дней</strong>
-                            <span>гарантии на технику</span>
+                            <strong>11:00–20:00</strong>
+                            <span>ежедневно, без выходных</span>
                         </div>
                         <div class="stat">
-                            <strong>42 пункта</strong>
-                            <span>проверки каждого устройства</span>
+                            <strong>Комиссия</strong>
+                            <span>покупаем и принимаем вещи</span>
                         </div>
                         <div class="stat">
-                            <strong>4,9 / 5</strong>
-                            <span>рейтинг покупателей</span>
+                            <strong>Ленинский 62/1</strong>
+                            <span>вход со двора</span>
                         </div>
                     </div>
                 </div>
@@ -2588,58 +2668,39 @@
                 <div class="hero-visual" aria-hidden="true">
                     <div class="hero-glow"></div>
                     <div class="hero-ring"></div>
-                    <div class="float-badge">−15% на аксессуары</div>
+                    <div class="float-badge">Посуда · Книги · Пластинки</div>
 
                     <div class="float-card float-card--check">
                         <div class="float-icon">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4L19 6"/></svg>
                         </div>
                         <div>
-                            <strong>Проверено</strong>
-                            <small>42 пункта диагностики</small>
+                            <strong>Оценка на месте</strong>
+                            <small>Поможем определить ценность</small>
                         </div>
                     </div>
 
-                    <div class="hero-phone">
-                        <div class="phone-screen">
-                            <div class="phone-status">
-                                <span>9:41</span>
-                                <span class="phone-status-icons"><i></i><i></i><i></i></span>
+                    <div class="hero-vinyl">
+                        <div class="vinyl-disc">
+                            <div class="vinyl-grooves"></div>
+                            <div class="vinyl-label">
+                                <span>РЕТРО</span>
+                                <small>33⅓</small>
                             </div>
-                            <div class="phone-island"></div>
-                            <div class="phone-brand">RETRO TECH</div>
-                            <div class="phone-model">iPhone <span>13 Pro</span></div>
-                            <div class="phone-tagline">256 ГБ · Graphite · Состояние A+</div>
-                            <div class="phone-orb">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
-                                    <rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/>
-                                    <path d="M10.5 5.5h3"/>
-                                    <circle cx="12" cy="18" r=".8" fill="currentColor" stroke="none"/>
-                                </svg>
-                            </div>
-                            <div class="phone-specs">
-                                <span>Аккумулятор 89%</span>
-                                <span>Face ID</span>
-                            </div>
-                            <div class="phone-footer">
-                                <div>
-                                    <small>Цена</small>
-                                    <strong>54 900 ₽</strong>
-                                </div>
-                                <span class="phone-cta">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-                                </span>
-                            </div>
+                        </div>
+                        <div class="vinyl-caption">
+                            <strong>Пластинки, книги, посуда</strong>
+                            <span>Вещи, которые хранят историю</span>
                         </div>
                     </div>
 
                     <div class="float-card float-card--warranty">
                         <div class="float-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4.5 6v5.4c0 4.5 3.1 8.4 7.5 9.6 4.4-1.2 7.5-5.1 7.5-9.6V6L12 3Z"/><path d="m9 12 2 2 4-4"/></svg>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12 12 4H4v8l8 8 8-8Z"/><circle cx="8" cy="8" r="1.2" fill="currentColor" stroke="none"/></svg>
                         </div>
                         <div>
-                            <strong>Гарантия 90 дней</strong>
-                            <small>Возврат и обмен</small>
+                            <strong>Приём на комиссию</strong>
+                            <small>Покупаем и принимаем вещи</small>
                         </div>
                     </div>
                 </div>
@@ -2649,16 +2710,16 @@
         <!-- ============================================================
              БРЕНДЫ
              ============================================================ -->
-        <section class="brands" aria-label="Бренды техники в наличии">
+        <section class="brands" aria-label="Ретро-товары в наличии">
             <div class="container brands-inner">
-                <span class="brands-label">Работаем с техникой</span>
+                <span class="brands-label">В наличии и на комиссии</span>
                 <div class="brand-list">
-                    <span class="brand-name">APPLE</span>
-                    <span class="brand-name">SAMSUNG</span>
-                    <span class="brand-name">XIAOMI</span>
-                    <span class="brand-name">SONY</span>
-                    <span class="brand-name">ASUS</span>
-                    <span class="brand-name">LENOVO</span>
+                    <span class="brand-name">СССР</span>
+                    <span class="brand-name">ФАРФОР</span>
+                    <span class="brand-name">ХРУСТАЛЬ</span>
+                    <span class="brand-name">ВИНИЛ</span>
+                    <span class="brand-name">БУКИНИСТИКА</span>
+                    <span class="brand-name">РЕТРО</span>
                 </div>
             </div>
         </section>
@@ -2671,34 +2732,50 @@
                 <div class="categories-head" data-reveal>
                     <div>
                         <span class="eyebrow">Категории</span>
-                        <h2 class="section-title" id="categoriesTitle">Найдите свою технику</h2>
+                        <h2 class="section-title" id="categoriesTitle">Найдите свою вещь</h2>
                     </div>
-                    <p class="section-sub">Три направления, один стандарт проверки. Выберите категорию — покажем актуальные позиции.</p>
+                    <p class="section-sub">Пять направлений — от фарфора до винила. Выберите категорию, чтобы увидеть актуальные позиции.</p>
                 </div>
                 <div class="category-grid">
-                    <a class="category-tile category-tile--purple" href="#catalog" data-filter-link="phones" data-reveal>
-                        <span class="category-tile-count" data-category-count="phones">0</span>
+                    <a class="category-tile category-tile--purple" href="#catalog" data-filter-link="tableware" data-reveal>
+                        <span class="category-tile-count" data-category-count="tableware">0</span>
                         <span class="category-tile-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.6"/><path d="M10.5 5.5h3"/><circle cx="12" cy="18" r=".8" fill="currentColor" stroke="none"/></svg>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10h12v4.2A5.8 5.8 0 0 1 10.2 20h-.4A5.8 5.8 0 0 1 4 14.2V10Z"/><path d="M16 11h2.2a2.8 2.8 0 0 1 0 5.6H16"/><path d="M3 21h15"/></svg>
                         </span>
-                        <h3>Смартфоны</h3>
-                        <p>iPhone, Samsung, Xiaomi и другие — с проверенной батареей и чистым IMEI.</p>
+                        <h3>Посуда</h3>
+                        <p>Сервизы, чайники, вазы и хрусталь — с историей и без сколов.</p>
                     </a>
-                    <a class="category-tile category-tile--dark" href="#catalog" data-filter-link="laptops" data-reveal>
-                        <span class="category-tile-count" data-category-count="laptops">0</span>
+                    <a class="category-tile category-tile--dark" href="#catalog" data-filter-link="books" data-reveal>
+                        <span class="category-tile-count" data-category-count="books">0</span>
                         <span class="category-tile-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4.5" width="16" height="11" rx="1.8"/><path d="M2.5 19h19l-1.7-3.5H4.2L2.5 19Z"/><path d="M10 17h4"/></svg>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15.5H6.5A2.5 2.5 0 0 0 4 21V5.5Z"/><path d="M4 18.5A2.5 2.5 0 0 1 6.5 16H20"/><path d="M8 7h8M8 10.5h5"/></svg>
                         </span>
-                        <h3>Ноутбуки</h3>
-                        <p>MacBook, ThinkPad, Zenbook — лёгкие, быстрые и готовые к работе.</p>
+                        <h3>Книги</h3>
+                        <p>Букинистика, классика и редкие издания для вашей библиотеки.</p>
                     </a>
-                    <a class="category-tile category-tile--lime" href="#catalog" data-filter-link="accessories" data-reveal>
-                        <span class="category-tile-count" data-category-count="accessories">0</span>
+                    <a class="category-tile category-tile--lime" href="#catalog" data-filter-link="vinyl" data-reveal>
+                        <span class="category-tile-count" data-category-count="vinyl">0</span>
                         <span class="category-tile-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 13v-1a8 8 0 0 1 16 0v1"/><rect x="2.8" y="12.5" width="4.4" height="7.2" rx="2.2"/><rect x="16.8" y="12.5" width="4.4" height="7.2" rx="2.2"/></svg>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.2"/><circle cx="12" cy="12" r=".9" fill="currentColor" stroke="none"/></svg>
                         </span>
-                        <h3>Аксессуары</h3>
-                        <p>Наушники, часы и колонки, которые дополняют вашу технику.</p>
+                        <h3>Пластинки</h3>
+                        <p>Винил отечественных и зарубежных исполнителей. Проверен на проигрывателе.</p>
+                    </a>
+                    <a class="category-tile category-tile--blue" href="#catalog" data-filter-link="souvenirs" data-reveal>
+                        <span class="category-tile-count" data-category-count="souvenirs">0</span>
+                        <span class="category-tile-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="9" width="16" height="11" rx="1.5"/><path d="M3 9h18v4H3zM12 9v11"/><path d="M12 9C10 9 7.5 8.5 7.5 6.5A2.5 2.5 0 0 1 12 5.2 2.5 2.5 0 0 1 16.5 6.5C16.5 8.5 14 9 12 9Z"/></svg>
+                        </span>
+                        <h3>Сувениры</h3>
+                        <p>Значки, статуэтки, открытки и предметы ушедшей эпохи.</p>
+                    </a>
+                    <a class="category-tile category-tile--rose" href="#catalog" data-filter-link="media" data-reveal>
+                        <span class="category-tile-count" data-category-count="media">0</span>
+                        <span class="category-tile-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2"/></svg>
+                        </span>
+                        <h3>CD и DVD</h3>
+                        <p>Музыка, фильмы и коллекционные издания на дисках.</p>
                     </a>
                 </div>
             </div>
@@ -2717,17 +2794,19 @@
                 <div class="catalog-head" data-reveal>
                     <div>
                         <span class="eyebrow">Витрина</span>
-                        <h2 class="section-title" id="catalogTitle">Каталог проверенной<br>техники</h2>
-                        <p class="section-sub">Смартфоны, ноутбуки и аксессуары в отличном состоянии. Все позиции проверены, очищены и готовы к работе.</p>
+                        <h2 class="section-title" id="catalogTitle">Каталог<br>ретро-вещей</h2>
+                        <p class="section-sub">Посуда, книги, пластинки, сувениры, CD и DVD. Каждая вещь отобрана вручную — состояние и комплектацию уточняйте у продавца.</p>
                     </div>
-                    <p class="catalog-note"><strong>Без онлайн-оплаты.</strong> Оставьте заявку — проверим наличие, забронируем устройство и пригласим на осмотр.</p>
+                    <p class="catalog-note"><strong>Без онлайн-оплаты.</strong> Оставьте заявку — проверим наличие и отложим вещь до вашего визита.</p>
                 </div>
 
                 <div class="filters" role="group" aria-label="Фильтр товаров по категориям">
                     <button class="filter-btn is-active" type="button" data-filter="all" aria-pressed="true">Все <span class="filter-count">0</span></button>
-                    <button class="filter-btn" type="button" data-filter="phones" aria-pressed="false">Смартфоны <span class="filter-count">0</span></button>
-                    <button class="filter-btn" type="button" data-filter="laptops" aria-pressed="false">Ноутбуки <span class="filter-count">0</span></button>
-                    <button class="filter-btn" type="button" data-filter="accessories" aria-pressed="false">Аксессуары <span class="filter-count">0</span></button>
+                    <button class="filter-btn" type="button" data-filter="tableware" aria-pressed="false">Посуда <span class="filter-count">0</span></button>
+                    <button class="filter-btn" type="button" data-filter="books" aria-pressed="false">Книги <span class="filter-count">0</span></button>
+                    <button class="filter-btn" type="button" data-filter="vinyl" aria-pressed="false">Пластинки <span class="filter-count">0</span></button>
+                    <button class="filter-btn" type="button" data-filter="souvenirs" aria-pressed="false">Сувениры <span class="filter-count">0</span></button>
+                    <button class="filter-btn" type="button" data-filter="media" aria-pressed="false">CD и DVD <span class="filter-count">0</span></button>
                 </div>
 
                 <div class="catalog-topline">
@@ -2756,9 +2835,9 @@
                 <div class="steps-head" data-reveal>
                     <div>
                         <span class="eyebrow">Как это работает</span>
-                        <h2 class="section-title" id="howTitle">Прозрачно от выбора<br>до получения</h2>
+                        <h2 class="section-title" id="howTitle">Просто, честно<br>и без спешки</h2>
                     </div>
-                    <p class="section-sub">Никаких скрытых платежей и онлайн-оплаты. Вы сначала смотрите устройство, проверяете его и только потом принимаете решение.</p>
+                    <p class="section-sub">Приходите в магазин, рассматривайте вещи и задавайте вопросы. Онлайн-оплаты нет — только заявка и живое общение.</p>
                 </div>
 
                 <div class="steps-grid">
@@ -2769,43 +2848,43 @@
                             </span>
                             <span class="step-num">01</span>
                         </div>
-                        <h3>Выбираете устройство</h3>
-                        <p>Смотрите каталог или пишете нам, что ищете. Подберём варианты под ваш бюджет и задачи.</p>
+                        <h3>Выбираете вещь</h3>
+                        <p>Смотрите каталог или пишете нам. Подскажем, что есть в наличии, и отложим находку.</p>
                         <span class="step-line"></span>
                     </article>
 
                     <article class="step-card" data-reveal>
                         <div class="step-top">
                             <span class="step-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4.5 6v5.4c0 4.5 3.1 8.4 7.5 9.6 4.4-1.2 7.5-5.1 7.5-9.6V6L12 3Z"/><path d="m9 12 2 2 4-4"/></svg>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-5.6 7-11a7 7 0 1 0-14 0c0 5.4 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
                             </span>
                             <span class="step-num">02</span>
                         </div>
-                        <h3>Проверяем и бронируем</h3>
-                        <p>Фиксируем цену и держим устройство 24 часа. При необходимости покажем диагностику по 42 пунктам.</p>
+                        <h3>Приходите в магазин</h3>
+                        <p>Ленинский проспект, 62/1, вход со двора. Покажем вещь, расскажем её историю и поможем с выбором.</p>
                         <span class="step-line"></span>
                     </article>
 
                     <article class="step-card" data-reveal>
                         <div class="step-top">
                             <span class="step-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7.5 12 3l8 4.5v9L12 21l-8-4.5v-9Z"/><path d="m4 7.5 8 4.5 8-4.5M12 12v9"/></svg>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1.2 12H6.2L5 8Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
                             </span>
                             <span class="step-num">03</span>
                         </div>
-                        <h3>Забираете или получаете</h3>
-                        <p>Самовывоз в центре Москвы или доставка по городу. Оплата только после осмотра устройства.</p>
+                        <h3>Забираете покупку</h3>
+                        <p>Оплата после осмотра. Или сдаёте свои вещи на комиссию — оценим на месте.</p>
                         <span class="step-line"></span>
                     </article>
                 </div>
 
                 <div class="guarantee-band" id="guarantee" data-reveal>
                     <div>
-                        <h3>90 дней гарантии на каждое устройство</h3>
-                        <p>Если что-то пойдёт не так — бесплатно отремонтируем или вернём деньги. Гарантия действует на смартфоны, ноутбуки и аксессуары.</p>
+                        <h3>Покупаем и принимаем на комиссию</h3>
+                        <p>Оценим посуду, книги, пластинки, сувениры, CD и DVD. Принесите вещи в магазин — обсудим цену и условия.</p>
                     </div>
                     <a class="btn btn--ghost" href="#contact">
-                        Задать вопрос
+                        Сдать вещи
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
                     </a>
                 </div>
@@ -2820,7 +2899,7 @@
                 <div class="contact-info" data-reveal>
                     <span class="eyebrow">Контакты</span>
                     <h2 class="section-title" id="contactTitle">Расскажите,<br>что ищете</h2>
-                    <p class="section-sub">Подберём устройство под бюджет, проверим состояние и забронируем на удобное время. Или оценим вашу технику для обмена.</p>
+                    <p class="section-sub">Подберём вещь, проверим наличие и отложим до вашего визита. Или оценим ваши вещи для комиссии.</p>
 
                     <div class="contact-list">
                         <div class="contact-item">
@@ -2829,8 +2908,8 @@
                             </span>
                             <div>
                                 <small>Телефон</small>
-                                <a href="tel:+74951204545">+7 (495) 120-45-45</a>
-                                <span>Ежедневно с 10:00 до 21:00</span>
+                                <a href="tel:+79262217420">8 926 221 7420</a>
+                                <span>Ежедневно с 11:00 до 20:00</span>
                             </div>
                         </div>
 
@@ -2851,8 +2930,8 @@
                             </span>
                             <div>
                                 <small>Адрес</small>
-                                <strong>Москва, ул. Тверская, 18</strong>
-                                <span>м. Пушкинская, 4 минуты пешком</span>
+                                <strong>Ленинский проспект, 62/1</strong>
+                                <span>Вход со двора между 10 и 11 подъездом</span>
                             </div>
                         </div>
 
@@ -2862,8 +2941,8 @@
                             </span>
                             <div>
                                 <small>Режим работы</small>
-                                <strong>Пн–Вс: 10:00–21:00</strong>
-                                <span>Без выходных</span>
+                                <strong>Ежедневно: 11:00–20:00</strong>
+                                <span>Без выходных и перерыва на обед</span>
                             </div>
                         </div>
                     </div>
@@ -2883,9 +2962,9 @@
 
                 <div class="form-card" data-reveal>
                     <div class="form-head">
-                        <span class="form-badge"><i></i> Ответим за 15 минут</span>
+                        <span class="form-badge"><i></i> Ответим в рабочее время</span>
                         <h3>Оставить заявку</h3>
-                        <p>Перезвоним, уточним детали и забронируем устройство на 24 часа.</p>
+                        <p>Перезвоним, уточним детали и отложим вещь до вашего визита.</p>
                     </div>
 
                     <form id="contactForm" novalidate>
@@ -2901,17 +2980,17 @@
                                 <span class="field-error">Введите корректный номер телефона</span>
                             </div>
                             <div class="field field--full">
-                                <label for="contactDelivery">Способ получения</label>
+                                <label for="contactDelivery">Как вам удобнее?</label>
                                 <select id="contactDelivery" name="delivery" required>
                                     <option value="" selected disabled>Выберите вариант</option>
-                                    <option value="Самовывоз">Самовывоз — Москва, Тверская, 18</option>
-                                    <option value="Доставка">Доставка по Москве — от 500 ₽</option>
+                                    <option value="Приду в магазин">Приду в магазин — Ленинский проспект, 62/1</option>
+                                    <option value="Позвоните мне">Позвоните мне — обсудим по телефону</option>
                                 </select>
                                 <span class="field-error">Выберите способ получения</span>
                             </div>
                             <div class="field field--full">
                                 <label for="contactComment">Комментарий <span style="text-transform:none;letter-spacing:0;color:var(--dim);font-weight:400">— необязательно</span></label>
-                                <textarea id="contactComment" name="comment" placeholder="Например: интересует iPhone 13 Pro, хочу обменять свой Samsung"></textarea>
+                                <textarea id="contactComment" name="comment" placeholder="Например: интересует чайный сервиз или хочу сдать пластинки"></textarea>
                             </div>
                         </div>
 
@@ -2927,7 +3006,7 @@
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
                         </div>
                         <h3>Спасибо, мы свяжемся с вами</h3>
-                        <p>Менеджер перезвонит в течение 15 минут в рабочее время и поможет с выбором.</p>
+                        <p>Сотрудник перезвонит в рабочее время, подтвердит наличие и отложит вещь.</p>
                         <button class="btn btn--ghost btn--sm" type="button" id="contactReset">Отправить ещё одну заявку</button>
                     </div>
                 </div>
@@ -2941,18 +3020,18 @@
         <div class="container">
             <div class="footer-top">
                 <div class="footer-brand">
-                    <a class="logo" href="#top" aria-label="Retro — наверх" data-store-link="наверх">
+                    <a class="logo" href="#top" aria-label="Ретро — наверх" data-store-link="наверх">
                         <span class="logo-mark">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                 <path d="M13.5 2 4.8 13.4h6.1L10 22l9.2-11.9h-6.4L13.5 2Z" fill="currentColor" stroke="none"/>
                             </svg>
                         </span>
                         <span class="logo-text">
-                            <span class="logo-name" data-store-name>RETRO</span>
-                            <span class="logo-sub">TECH STORE</span>
+                            <span class="logo-name" data-store-name>Ретро</span>
+                            <span class="logo-sub">РЕТРО-МАГАЗИН</span>
                         </span>
                     </a>
-                    <p>Комиссионный магазин проверенной техники. Покупаем, продаём и обмениваем смартфоны, ноутбуки и аксессуары с гарантией 90 дней.</p>
+                    <p>Комиссионный магазин. Покупаем и принимаем на комиссию посуду, книги, пластинки, сувениры, CD и DVD.</p>
 
                     <div class="socials footer-socials" aria-label="Мы в социальных сетях">
                         <a class="social-link" href="https://t.me/" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
@@ -2972,9 +3051,11 @@
                         <h4>Каталог</h4>
                         <ul>
                             <li><a href="#catalog" data-filter-link="all">Все товары</a></li>
-                            <li><a href="#catalog" data-filter-link="phones">Смартфоны</a></li>
-                            <li><a href="#catalog" data-filter-link="laptops">Ноутбуки</a></li>
-                            <li><a href="#catalog" data-filter-link="accessories">Аксессуары</a></li>
+                            <li><a href="#catalog" data-filter-link="tableware">Посуда</a></li>
+                            <li><a href="#catalog" data-filter-link="books">Книги</a></li>
+                            <li><a href="#catalog" data-filter-link="vinyl">Пластинки</a></li>
+                            <li><a href="#catalog" data-filter-link="souvenirs">Сувениры</a></li>
+                            <li><a href="#catalog" data-filter-link="media">CD и DVD</a></li>
                         </ul>
                     </div>
 
@@ -2982,8 +3063,8 @@
                         <h4>Магазин</h4>
                         <ul>
                             <li><a href="#how">Как это работает</a></li>
-                            <li><a href="#guarantee">Гарантия 90 дней</a></li>
-                            <li><a href="#contact">Сдать технику</a></li>
+                            <li><a href="#guarantee">Покупаем и принимаем</a></li>
+                            <li><a href="#contact">Сдать вещи</a></li>
                             <li><a href="#contact">Контакты</a></li>
                         </ul>
                     </div>
@@ -2991,10 +3072,10 @@
                     <div class="footer-col">
                         <h4>Контакты</h4>
                         <ul>
-                            <li><a href="tel:+74951204545">+7 (495) 120-45-45</a></li>
+                            <li><a href="tel:+79262217420">8 926 221 7420</a></li>
                             <li><a href="mailto:hello@retro.ru">hello@retro.ru</a></li>
-                            <li><span>Москва, ул. Тверская, 18</span></li>
-                            <li><span>Пн–Вс: 10:00–21:00</span></li>
+                            <li><span>Ленинский проспект, 62/1</span></li>
+                            <li><span>Ежедневно: 11:00–20:00</span></li>
                         </ul>
                     </div>
                 </div>
@@ -3006,7 +3087,7 @@
                     <a href="#catalog">Каталог</a>
                     <a href="#contact">Связаться</a>
                     <a href="admin.html" rel="nofollow">Управление магазином</a>
-                    <span>Москва</span>
+                    <span>Ленинский проспект, 62/1</span>
                 </div>
             </div>
         </div>
@@ -3022,7 +3103,7 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
             </button>
 
-            <span class="modal-kicker">Заявка на устройство</span>
+            <span class="modal-kicker">Заявка на товар</span>
             <h2 class="modal-title" id="modalTitle">Оформить заказ</h2>
 
             <div class="modal-gallery" id="modalGallery" hidden>
@@ -3041,13 +3122,13 @@
 
             <div class="modal-product">
                 <span class="modal-thumb">
-                    <svg aria-hidden="true"><use id="modalIconUse" href="#i-phone"></use></svg>
+                    <svg aria-hidden="true"><use id="modalIconUse" href="#i-tableware"></use></svg>
                 </span>
                 <div class="modal-product-info">
-                    <small id="modalCategory">Смартфоны</small>
-                    <strong id="modalProductName">iPhone 13 Pro 256 ГБ</strong>
+                    <small id="modalCategory">Посуда</small>
+                    <strong id="modalProductName">Чайный сервиз</strong>
                 </div>
-                <span class="modal-price" id="modalPrice">54 900 ₽</span>
+                <span class="modal-price" id="modalPrice">6 500 ₽</span>
             </div>
 
             <form class="modal-form" id="orderForm" novalidate>
@@ -3063,11 +3144,11 @@
                         <span class="field-error">Введите корректный номер телефона</span>
                     </div>
                     <div class="field field--full">
-                        <label for="orderDelivery">Способ получения</label>
+                        <label for="orderDelivery">Как вам удобнее?</label>
                         <select id="orderDelivery" name="delivery" required>
                             <option value="" selected disabled>Выберите вариант</option>
-                            <option value="Самовывоз">Самовывоз — Москва, Тверская, 18</option>
-                            <option value="Доставка">Доставка по Москве — от 500 ₽</option>
+                            <option value="Приду в магазин">Приду в магазин — Ленинский проспект, 62/1</option>
+                            <option value="Позвоните мне">Позвоните мне — обсудим по телефону</option>
                         </select>
                         <span class="field-error">Выберите способ получения</span>
                     </div>
@@ -3085,7 +3166,7 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>
                 </div>
                 <h3>Спасибо, мы свяжемся с вами</h3>
-                <p>Менеджер перезвонит в течение 15 минут в рабочее время, подтвердит наличие и забронирует устройство.</p>
+                <p>Сотрудник перезвонит в рабочее время, подтвердит наличие и отложит вещь.</p>
                 <button class="btn btn--ghost btn--sm" type="button" data-close>Отлично</button>
             </div>
         </div>
@@ -3125,6 +3206,31 @@
                 <circle cx="12" cy="8" r="2.2"/>
                 <circle cx="12" cy="15.3" r="3.3"/>
                 <path d="M12 13.8v3"/>
+            </symbol>
+            <symbol id="i-tableware" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 10h12v4.2A5.8 5.8 0 0 1 10.2 20h-.4A5.8 5.8 0 0 1 4 14.2V10Z"/>
+                <path d="M16 11h2.2a2.8 2.8 0 0 1 0 5.6H16"/>
+                <path d="M3 21h15"/>
+            </symbol>
+            <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15.5H6.5A2.5 2.5 0 0 0 4 21V5.5Z"/>
+                <path d="M4 18.5A2.5 2.5 0 0 1 6.5 16H20"/>
+                <path d="M8 7h8M8 10.5h5"/>
+            </symbol>
+            <symbol id="i-vinyl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"/>
+                <circle cx="12" cy="12" r="3.2"/>
+                <circle cx="12" cy="12" r=".9" fill="currentColor" stroke="none"/>
+            </symbol>
+            <symbol id="i-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="4" y="9" width="16" height="11" rx="1.5"/>
+                <path d="M3 9h18v4H3zM12 9v11"/>
+                <path d="M12 9C10 9 7.5 8.5 7.5 6.5A2.5 2.5 0 0 1 12 5.2 2.5 2.5 0 0 1 16.5 6.5C16.5 8.5 14 9 12 9Z"/>
+            </symbol>
+            <symbol id="i-disc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"/>
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M12 3v2M12 19v2M3 12h2M19 12h2"/>
             </symbol>
         </defs>
     </svg>
@@ -3202,7 +3308,7 @@
 
             const updateFilterCounts = () => {
                 const cards = getCards();
-                const counts = { all: cards.length, phones: 0, laptops: 0, accessories: 0 };
+                const counts = { all: cards.length, tableware: 0, books: 0, vinyl: 0, souvenirs: 0, media: 0 };
 
                 cards.forEach((card) => {
                     const category = card.dataset.category;
@@ -3616,7 +3722,7 @@
                         }
                     } catch (error) {
                         console.error('Не удалось отправить заявку:', error);
-                        window.alert('Не удалось отправить заявку. Позвоните нам: +7 (495) 120-45-45');
+                        window.alert('Не удалось отправить заявку. Позвоните нам: 8 926 221 7420');
                     } finally {
                         setLoading(orderSubmit, false);
                     }
@@ -3660,7 +3766,7 @@
                         }
                     } catch (error) {
                         console.error('Не удалось отправить заявку:', error);
-                        window.alert('Не удалось отправить заявку. Позвоните нам: +7 (495) 120-45-45');
+                        window.alert('Не удалось отправить заявку. Позвоните нам: 8 926 221 7420');
                     } finally {
                         setLoading(submitButton, false);
                     }
@@ -3705,100 +3811,31 @@
     <!-- ============================================================
          КАТАЛОГ ИЗ FIRESTORE
          ============================================================ -->
+    <script src="firebase-config.js"></script>
     <script type="module">
         /* ============================================================
-           КАТАЛОГ ИЗ FIRESTORE — ПОДРОБНАЯ ИНСТРУКЦИЯ
-           ============================================================
+           КАТАЛОГ ИЗ FIRESTORE
 
-           Этот скрипт асинхронно получает товары из Firebase Firestore
-           (коллекция products) и рисует карточки в #productGrid.
+           Товары хранятся в Firestore (коллекция products), фотографии —
+           в Firebase Storage. Ключи проекта лежат в firebase-config.js.
 
-           ПОКА FIREBASE НЕ ПОДКЛЮЧЁН
-           --------------------------
-           Сайт работает в демо-режиме: 12 стартовых товаров хранятся
-           в localStorage браузера под историческим ключом sitecrafting_products_v1.
-           Добавлять и удалять товары можно в admin.html — изменения
-           появятся на витрине после обновления страницы (или сразу,
-           если витрина открыта во второй вкладке этого же браузера).
-           Демо-режим нужен только для предварительного просмотра.
-           Пароль демо-админки: admin123. Индикатор демо-режима на витрине
-           скрыт, чтобы не портить дизайн; его можно показать, открыв
-           index.html?demo=1.
+           КАК ПОДКЛЮЧИТЬ FIREBASE
+           -----------------------
+           1. Создайте проект на https://console.firebase.google.com/.
+           2. Включите Firestore Database (Production mode) и Storage.
+           3. Включите Authentication → Email/Password и создайте админа.
+           4. Project settings → Your apps → Web: скопируйте firebaseConfig.
+           5. Вставьте значения в firebase-config.js.
+           6. Опубликуйте правила Firestore и Storage — они расписаны
+              в комментариях внутри firebase-config.js.
 
-           КАК ПОДКЛЮЧИТЬ FIREBASE (бесплатный тариф Spark)
-           ------------------------------------------------
-           1. Откройте https://console.firebase.google.com/ и войдите
-              в аккаунт Google.
-           2. Нажмите «Создать проект» (Add project), придумайте название,
-              например retro-tech. Google Analytics можно отключить.
-           3. В левом меню откройте «Build» → «Firestore Database» →
-              «Create database». Выберите режим Production mode и регион
-              (например, europe-west3). Нажмите «Create».
-           4. В левом меню откройте «Build» → «Authentication» →
-              «Get started» → вкладка «Sign-in method» → включите
-              Email/Password. Затем на вкладке «Users» нажмите
-              «Add user» и создайте администратора:
-                 Email: admin@retro.ru
-                 Пароль: придумайте надёжный пароль
-              Этот email прописан в admin.html в константе ADMIN_EMAIL.
-              Если укажете другой email — измените ADMIN_EMAIL в admin.html
-              и точно такой же email в правиле allow write ниже.
-           5. Откройте «Project settings» (шестерёнка) → вкладка «General» →
-              блок «Your apps» → нажмите значок Web </> → зарегистрируйте
-              приложение (например, Retro Web). Firebase покажет
-              объект firebaseConfig. Скопируйте его.
-           6. Вставьте firebaseConfig НИЖЕ в этом файле и точно такой же
-              конфиг в admin.html (там есть такой же блок). Оба файла должны
-              использовать один и тот же проект Firebase.
-           7. Откройте «Firestore Database» → вкладка «Rules» и замените
-              правила на такие:
-
-                 rules_version = '2';
-                 service cloud.firestore {
-                   match /databases/{database}/documents {
-                     match /products/{productId} {
-                       // Витрину может читать любой посетитель.
-                       allow read: if true;
-                       // Добавлять и удалять товары — только администратор
-                       // с email, указанным в ADMIN_EMAIL в admin.html.
-                       allow write: if request.auth != null
-                                    && request.auth.token.email == 'admin@retro.ru';
-                     }
-                     match /settings/{settingId} {
-                       // Название магазина читает витрина, пишет только админ.
-                       allow read: if true;
-                       allow write: if request.auth != null
-                                    && request.auth.token.email == 'admin@retro.ru';
-                     }
-                   }
-                 }
-
-              Нажмите «Publish». Коллекция products создастся автоматически
-              при добавлении первого товара через admin.html. Если вы сменили
-              email администратора, замените admin@retro.ru и в строке
-              allow write, и в константе ADMIN_EMAIL в admin.html.
-           8. Если сайт опубликован на GitHub Pages, добавьте домен
-              sitecraft-studio.github.io в Authentication → Settings →
-              Authorized domains. Иначе вход в админку может блокироваться.
-           9. Откройте admin.html, войдите с email и паролем администратора,
-              добавьте товар. Обновите index.html — товар появится в каталоге.
-
-           ВАЖНО ПРО БЕЗОПАСНОСТЬ
-           ----------------------
-           apiKey из firebaseConfig — не секрет, его можно показывать в коде.
-           Доступ к данным защищают правила Firestore (Rules) и Firebase Auth.
-           Пароль демо-режима admin123 хранится в коде и НЕ защищает реальные
-           данные: он работает только пока Firebase не настроен. Для настоящего
-           магазина обязательно подключите Firebase Auth и правила выше.
-
-           GITHUB PAGES
-           ------------
-           Никакой сборки не нужно. Загрузите index.html, admin.html и
-           остальные файлы в репозиторий, включите GitHub Pages. Сайт будет
-           работать по HTTPS, а Firebase SDK загрузится с CDN.
+           Пока ключи не заполнены, работает демо-режим: 12 товаров
+           хранятся в localStorage. Пароль демо-админки: admin123.
            ============================================================ */
 
-        const firebaseConfig = {
+        // Ключи Firebase хранятся в отдельном файле firebase-config.js.
+        // Откройте его и замените заглушки значениями из консоли Firebase.
+        const firebaseConfig = window.RETRO_FIREBASE_CONFIG || {
             apiKey: "ВСТАВЬТЕ_API_KEY",
             authDomain: "ВАШ_ПРОЕКТ.firebaseapp.com",
             projectId: "ВАШ_ПРОЕКТ",
@@ -3810,11 +3847,10 @@
         const PRODUCTS_COLLECTION = 'products';
         const STORE_SETTINGS_COLLECTION = 'settings';
         const STORE_SETTINGS_DOC = 'store';
-        const DEFAULT_STORE_NAME = 'Retro';
-        // Исторический ключ оставлен, чтобы не потерять товары, добавленные
-        // в демо-режиме до переименования магазина.
-        const DEMO_STORAGE_KEY = 'sitecrafting_products_v1';
-        const DEMO_STORE_NAME_KEY = 'retro_store_name_v1';
+        const DEFAULT_STORE_NAME = 'Ретро';
+        // Новые ключи демо-данных: старый каталог с техникой не показывается.
+        const DEMO_STORAGE_KEY = 'retro_products_v2';
+        const DEMO_STORE_NAME_KEY = 'retro_store_name_v2';
         const FIREBASE_SDK_VERSION = '10.12.5';
         const PLACEHOLDER_MARKERS = ['ВСТАВЬТЕ', 'ВАШ_ПРОЕКТ', 'PASTE_', 'YOUR_'];
 
@@ -3823,181 +3859,183 @@
         const SEED_PRODUCTS = [
             {
                 id: 'seed-01',
-                name: 'iPhone 13 Pro 256 ГБ',
-                price: 54900,
-                oldPrice: 59900,
-                category: 'phones',
-                description: 'Graphite, полный комплект. Без царапин и следов ремонта.',
+                name: 'Чайный сервиз «Золотая роза»',
+                price: 6500,
+                oldPrice: 7900,
+                category: 'tableware',
+                description: 'Фарфор, роспись золотом. Полный комплект: чайник, 6 чашек и блюдец.',
                 imageUrl: '',
                 badge: 'Хит',
-                condition: 'Состояние A+ · АКБ 89%',
-                icon: 'i-phone',
+                condition: 'СССР · Фарфор · Полный комплект',
+                icon: 'i-tableware',
                 glow: 'rgba(255, 138, 0, .17)',
                 createdAt: '2026-11-12T10:00:00.000Z'
             },
             {
                 id: 'seed-02',
-                name: 'Samsung Galaxy S22 128 ГБ',
-                price: 32900,
-                oldPrice: 37400,
-                category: 'phones',
-                description: 'Phantom Black, один владелец. Чистый IMEI, полный комплект.',
+                name: 'Столовый сервиз «Мадонна»',
+                price: 12800,
+                oldPrice: null,
+                category: 'tableware',
+                description: 'Фарфор с позолотой, 24 предмета. Без сколов и трещин.',
                 imageUrl: '',
-                badge: '−12%',
-                condition: 'Состояние A · АКБ 91%',
-                icon: 'i-phone',
+                badge: 'Новое поступление',
+                condition: 'СССР · 24 предмета',
+                icon: 'i-tableware',
                 glow: 'rgba(120, 170, 255, .14)',
                 createdAt: '2026-11-11T10:00:00.000Z'
             },
             {
                 id: 'seed-03',
-                name: 'Xiaomi 13T 256 ГБ',
-                price: 28500,
-                oldPrice: null,
-                category: 'phones',
-                description: 'Alpine Blue, 256 ГБ. Яркий AMOLED и камера Leica.',
+                name: 'Ваза «Ленинградский фарфор»',
+                price: 3400,
+                oldPrice: 4200,
+                category: 'tableware',
+                description: 'Белая глазурь, ручная роспись. Высота 28 см.',
                 imageUrl: '',
-                badge: 'Новое поступление',
-                condition: 'Состояние A · АКБ 94%',
-                icon: 'i-phone',
+                badge: '−19%',
+                condition: 'СССР · Высота 28 см',
+                icon: 'i-tableware',
                 glow: 'rgba(255, 196, 77, .16)',
                 createdAt: '2026-11-10T10:00:00.000Z'
             },
             {
                 id: 'seed-04',
-                name: 'Google Pixel 7 128 ГБ',
-                price: 26900,
-                oldPrice: 29400,
-                category: 'phones',
-                description: 'Obsidian, 128 ГБ. Лучшая камера в своём классе.',
+                name: 'Книга «Мастер и Маргарита»',
+                price: 2800,
+                oldPrice: 3500,
+                category: 'books',
+                description: 'М. Булгаков. Издание 1988 года, твёрдый переплёт, хорошее состояние.',
                 imageUrl: '',
-                badge: '−8%',
-                condition: 'Состояние B+ · АКБ 87%',
-                icon: 'i-phone',
+                badge: '−20%',
+                condition: '1988 · Твёрдый переплёт',
+                icon: 'i-book',
                 glow: 'rgba(130, 255, 205, .1)',
                 createdAt: '2026-11-09T10:00:00.000Z'
             },
             {
                 id: 'seed-05',
-                name: 'MacBook Air M1 13" 8/256 ГБ',
-                price: 49900,
-                oldPrice: 57900,
-                category: 'laptops',
-                description: 'Silver, цикл батареи 124. Лёгкий и полностью рабочий.',
+                name: 'Книга «Двенадцать стульев»',
+                price: 1200,
+                oldPrice: null,
+                category: 'books',
+                description: 'И. Ильф, Е. Петров. Букинистическое издание с иллюстрациями.',
                 imageUrl: '',
-                badge: 'Хит',
-                condition: 'Состояние A · Цикл 124',
-                icon: 'i-laptop',
-                glow: 'rgba(255, 138, 0, .15)',
+                badge: 'Букинистика',
+                condition: '1975 · Иллюстрации',
+                icon: 'i-book',
+                glow: 'rgba(220, 140, 255, .12)',
                 createdAt: '2026-11-08T10:00:00.000Z'
             },
             {
                 id: 'seed-06',
-                name: 'ASUS Zenbook 14 OLED',
-                price: 41500,
-                oldPrice: 46000,
-                category: 'laptops',
-                description: 'Core i5, 16/512 ГБ. OLED 2.8K, корпус без вмятин.',
+                name: 'Атлас мира, 1978 год',
+                price: 4600,
+                oldPrice: 5200,
+                category: 'books',
+                description: 'Большой иллюстрированный атлас. Крепкий блок, все страницы на месте.',
                 imageUrl: '',
-                badge: '−10%',
-                condition: 'Состояние A · 2 месяца',
-                icon: 'i-laptop',
-                glow: 'rgba(120, 170, 255, .13)',
+                badge: '−12%',
+                condition: '1978 · Большой формат',
+                icon: 'i-book',
+                glow: 'rgba(255, 138, 0, .14)',
                 createdAt: '2026-11-07T10:00:00.000Z'
             },
             {
                 id: 'seed-07',
-                name: 'Lenovo ThinkPad X1 Carbon',
-                price: 38900,
+                name: 'The Beatles — «Abbey Road»',
+                price: 4500,
                 oldPrice: null,
-                category: 'laptops',
-                description: 'Gen 9, i7, 16/512 ГБ. Лёгкий корпус, отличная клавиатура.',
+                category: 'vinyl',
+                description: 'Виниловая пластинка, оригинальное издание. Проверена, без заиданий.',
                 imageUrl: '',
-                badge: 'Бизнес-класс',
-                condition: 'Состояние A · 14"',
-                icon: 'i-laptop',
-                glow: 'rgba(255, 196, 77, .13)',
+                badge: 'Хит',
+                condition: 'LP · 33⅓ · Отличное состояние',
+                icon: 'i-vinyl',
+                glow: 'rgba(120, 170, 255, .13)',
                 createdAt: '2026-11-06T10:00:00.000Z'
             },
             {
                 id: 'seed-08',
-                name: 'HP Spectre x360 13',
-                price: 35900,
-                oldPrice: null,
-                category: 'laptops',
-                description: 'i5, 8/512 ГБ. Сенсорный экран-трансформер, стилус в комплекте.',
+                name: 'Кино — «Группа крови»',
+                price: 3200,
+                oldPrice: 3900,
+                category: 'vinyl',
+                description: 'Винил, переиздание. Конверт и вкладыш в комплекте.',
                 imageUrl: '',
-                badge: 'Новое поступление',
-                condition: 'Состояние B+ · 13.3"',
-                icon: 'i-laptop',
-                glow: 'rgba(220, 140, 255, .12)',
+                badge: '−18%',
+                condition: 'LP · Переиздание',
+                icon: 'i-vinyl',
+                glow: 'rgba(255, 196, 77, .13)',
                 createdAt: '2026-11-05T10:00:00.000Z'
             },
             {
                 id: 'seed-09',
-                name: 'Sony WH-1000XM4',
-                price: 16900,
-                oldPrice: 21200,
-                category: 'accessories',
-                description: 'Беспроводные наушники с шумоподавлением. Комплект и кейс.',
+                name: 'Значок «Гагарин»',
+                price: 900,
+                oldPrice: null,
+                category: 'souvenirs',
+                description: 'Металл, эмаль. Коллекционный значок 1980-х годов.',
                 imageUrl: '',
-                badge: '−20%',
-                condition: 'Состояние A · Комплект',
-                icon: 'i-headphones',
-                glow: 'rgba(255, 138, 0, .14)',
+                badge: 'Коллекционное',
+                condition: 'СССР · Эмаль',
+                icon: 'i-gift',
+                glow: 'rgba(130, 255, 205, .1)',
                 createdAt: '2026-11-04T10:00:00.000Z'
             },
             {
                 id: 'seed-10',
-                name: 'Apple Watch Series 8 45 мм',
-                price: 19900,
-                oldPrice: null,
-                category: 'accessories',
-                description: 'GPS, Midnight. Ремешок Sport Band, зарядка в комплекте.',
+                name: 'Статуэтка «Девушка с веслом»',
+                price: 5600,
+                oldPrice: 6400,
+                category: 'souvenirs',
+                description: 'Бисквит, высота 32 см. Редкая форма, без повреждений.',
                 imageUrl: '',
-                badge: 'Гарантия',
-                condition: 'Состояние A · АКБ 92%',
-                icon: 'i-watch',
-                glow: 'rgba(120, 170, 255, .13)',
+                badge: '−13%',
+                condition: 'СССР · Бисквит',
+                icon: 'i-gift',
+                glow: 'rgba(220, 140, 255, .12)',
                 createdAt: '2026-11-03T10:00:00.000Z'
             },
             {
                 id: 'seed-11',
-                name: 'AirPods Pro 2 (USB-C)',
-                price: 12900,
+                name: 'Pink Floyd — «The Wall» (CD)',
+                price: 1800,
                 oldPrice: null,
-                category: 'accessories',
-                description: 'Активное шумоподавление, кейс с MagSafe. Полный комплект.',
+                category: 'media',
+                description: 'Компакт-диск, издание 1994 года. Диск без царапин, буклет в комплекте.',
                 imageUrl: '',
-                badge: 'Хит',
-                condition: 'Состояние A · Комплект',
-                icon: 'i-earbuds',
-                glow: 'rgba(255, 196, 77, .13)',
+                badge: 'Новое поступление',
+                condition: 'CD · 1994 · Буклет',
+                icon: 'i-disc',
+                glow: 'rgba(255, 138, 0, .12)',
                 createdAt: '2026-11-02T10:00:00.000Z'
             },
             {
                 id: 'seed-12',
-                name: 'JBL Charge 5',
-                price: 7900,
-                oldPrice: 9300,
-                category: 'accessories',
-                description: 'Портативная колонка, 20 часов работы. Защита IP67.',
+                name: 'DVD «Иван Васильевич меняет профессию»',
+                price: 700,
+                oldPrice: 900,
+                category: 'media',
+                description: 'Лицензионное издание, реставрированная версия. Диск в отличном состоянии.',
                 imageUrl: '',
-                badge: '−15%',
-                condition: 'Состояние A · 20 Вт',
-                icon: 'i-speaker',
-                glow: 'rgba(255, 138, 0, .12)',
+                badge: '−22%',
+                condition: 'DVD · Лицензия',
+                icon: 'i-disc',
+                glow: 'rgba(120, 170, 255, .13)',
                 createdAt: '2026-11-01T10:00:00.000Z'
             }
         ];
 
         const CATEGORY_META = {
-            phones: { label: 'Смартфоны', icon: 'i-phone' },
-            laptops: { label: 'Ноутбуки', icon: 'i-laptop' },
-            accessories: { label: 'Аксессуары', icon: 'i-headphones' }
+            tableware: { label: 'Посуда', icon: 'i-tableware' },
+            books: { label: 'Книги', icon: 'i-book' },
+            vinyl: { label: 'Пластинки', icon: 'i-vinyl' },
+            souvenirs: { label: 'Сувениры', icon: 'i-gift' },
+            media: { label: 'CD и DVD', icon: 'i-disc' }
         };
 
-        const KNOWN_ICONS = new Set(['i-phone', 'i-laptop', 'i-headphones', 'i-watch', 'i-earbuds', 'i-speaker']);
+        const KNOWN_ICONS = new Set(['i-tableware', 'i-book', 'i-vinyl', 'i-gift', 'i-disc']);
         const CARD_GLOWS = [
             'rgba(255, 138, 0, .16)',
             'rgba(120, 170, 255, .14)',
@@ -4037,15 +4075,11 @@
             return amount > 0 ? priceFormatter.format(amount) + ' ₽' : 'Цена по запросу';
         };
 
-        const formatMonthly = (value) => {
-            const amount = toNumber(value);
-            if (amount <= 0) return '';
-            const monthly = Math.max(10, Math.round(amount / 24 / 10) * 10);
-            return 'от ' + priceFormatter.format(monthly) + ' ₽/мес';
-        };
+        // Рассрочка в ретро-магазине не используется.
+        const formatMonthly = () => '';
 
         const normalizeCategory = (value) => (
-            Object.prototype.hasOwnProperty.call(CATEGORY_META, value) ? value : 'accessories'
+            Object.prototype.hasOwnProperty.call(CATEGORY_META, value) ? value : 'tableware'
         );
 
         const safeImageUrl = (value) => {
@@ -4217,7 +4251,7 @@
             const glow = safeGlow(product.glow, index);
             const price = formatPrice(product.price);
             const monthly = formatMonthly(product.price);
-            const description = product.description || 'Проверенная техника из наличия. Уточните комплектацию у менеджера.';
+            const description = product.description || 'Ретро-вещь из наличия. Уточните состояние и комплектацию у продавца.';
             const oldPrice = product.oldPrice && product.oldPrice > product.price
                 ? `<span class="product-old">${escapeHtml(formatPrice(product.oldPrice))}</span>`
                 : '';
@@ -4314,7 +4348,7 @@
                 element.setAttribute('aria-label', name + ' — ' + element.dataset.storeLink);
             });
 
-            document.title = name + ' — комиссионный магазин техники в Москве';
+            document.title = name + ' — комиссионный магазин в Москве';
         };
 
         const loadStoreName = async () => {
@@ -4373,8 +4407,8 @@
 
         console.info(
             isFirebaseConfigured()
-                ? 'Retro: каталог загружается из Firebase Firestore.'
-                : 'Retro: Firebase не настроен, включён демо-режим (localStorage).'
+                ? 'Ретро: каталог загружается из Firebase Firestore.'
+                : 'Ретро: Firebase не настроен, включён демо-режим (localStorage).'
         );
 
         loadStoreName();

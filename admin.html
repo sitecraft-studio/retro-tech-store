@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Админ-панель — Retro</title>
-    <meta name="description" content="Панель управления каталогом Retro: добавление, редактирование и удаление товаров.">
+    <title>Админ-панель — Ретро</title>
+    <meta name="description" content="Панель управления каталогом Ретро: добавление, редактирование и удаление товаров.">
     <meta name="robots" content="noindex, nofollow">
     <meta name="theme-color" content="#f7f4ff">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%237b2ff7'/%3E%3Cpath d='M36 7 15 36h14l-2 21 22-31H34l2-19Z' fill='%23c8ff4d'/%3E%3C/svg%3E">
@@ -1356,15 +1356,15 @@
          ============================================================ -->
     <main class="login-screen" id="loginScreen">
         <section class="login-card" aria-labelledby="loginTitle">
-            <a class="brand" href="index.html" aria-label="Retro — на витрину" data-admin-store-link="на витрину">
+            <a class="brand" href="index.html" aria-label="Ретро — на витрину" data-admin-store-link="на витрину">
                 <span class="logo-mark">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <path d="M13.5 2 4.8 13.4h6.1L10 22l9.2-11.9h-6.4L13.5 2Z" fill="currentColor" stroke="none"/>
                     </svg>
                 </span>
                 <span class="logo-text">
-                    <span class="logo-name" data-admin-store-name>RETRO</span>
-                    <span class="logo-sub">TECH ADMIN</span>
+                    <span class="logo-name" data-admin-store-name>Ретро</span>
+                    <span class="logo-sub">РЕТРО · АДМИН</span>
                 </span>
             </a>
 
@@ -1400,7 +1400,7 @@
     <div class="admin-app" id="adminApp" hidden>
         <header class="admin-header">
             <div class="admin-header-inner">
-                <a class="brand" href="index.html" aria-label="Retro — на витрину" data-admin-store-link="на витрину">
+                <a class="brand" href="index.html" aria-label="Ретро — на витрину" data-admin-store-link="на витрину">
                     <span class="logo-mark">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <path d="M13.5 2 4.8 13.4h6.1L10 22l9.2-11.9h-6.4L13.5 2Z" fill="currentColor" stroke="none"/>
@@ -1408,7 +1408,7 @@
                     </span>
                     <span class="logo-text">
                         <span class="logo-name" data-admin-store-name>RETRO</span>
-                        <span class="logo-sub">TECH ADMIN</span>
+                        <span class="logo-sub">РЕТРО · АДМИН</span>
                     </span>
                 </a>
 
@@ -1454,7 +1454,7 @@
                 </svg>
                 <div>
                     <strong>Firebase ещё не подключён — включён демо-режим</strong>
-                    <p>Товары и фото сохраняются только в этом браузере. Вставьте firebaseConfig в index.html и admin.html, включите Firestore и Storage, затем создайте администратора в Firebase Authentication. Подробности — в блоке «Как подключить Firebase» ниже.</p>
+                    <p>Товары и фото сохраняются только в этом браузере. Вставьте ключи в файл firebase-config.js, включите Firestore и Storage, затем создайте администратора в Firebase Authentication. Подробности — в блоке «Как подключить Firebase» ниже.</p>
                 </div>
             </div>
 
@@ -1466,7 +1466,7 @@
                 <form class="settings-form" id="storeSettingsForm" novalidate>
                     <div class="field">
                         <label for="storeNameInput">Название магазина</label>
-                        <input id="storeNameInput" name="storeName" type="text" maxlength="40" placeholder="Retro" required>
+                        <input id="storeNameInput" name="storeName" type="text" maxlength="40" placeholder="Ретро" required>
                         <span class="field-hint">Показывается в шапке, подвале и заголовке вкладки. От 2 до 40 символов.</span>
                         <span class="field-error">Введите название — от 2 до 40 символов</span>
                     </div>
@@ -1486,7 +1486,7 @@
                         <div class="form-grid">
                             <div class="field field--full">
                                 <label for="productName">Название *</label>
-                                <input id="productName" name="name" type="text" maxlength="120" placeholder="Например, iPhone 13 Pro 256 ГБ" required>
+                                <input id="productName" name="name" type="text" maxlength="120" placeholder="Например, Чайный сервиз «Золотая роза»" required>
                                 <span class="field-error">Введите название товара — минимум 2 символа</span>
                             </div>
 
@@ -1506,9 +1506,11 @@
                                 <label for="productCategory">Категория *</label>
                                 <select id="productCategory" name="category" required>
                                     <option value="" selected disabled>Выберите</option>
-                                    <option value="phones">Смартфоны</option>
-                                    <option value="laptops">Ноутбуки</option>
-                                    <option value="accessories">Аксессуары</option>
+                                    <option value="tableware">Посуда</option>
+                                    <option value="books">Книги</option>
+                                    <option value="vinyl">Пластинки</option>
+                                    <option value="souvenirs">Сувениры</option>
+                                    <option value="media">CD и DVD</option>
                                 </select>
                                 <span class="field-error">Выберите категорию</span>
                             </div>
@@ -1522,8 +1524,8 @@
                                     <option value="−15%"></option>
                                     <option value="−20%"></option>
                                     <option value="Новое поступление"></option>
-                                    <option value="Бизнес-класс"></option>
-                                    <option value="Гарантия"></option>
+                                    <option value="Букинистика"></option>
+                                    <option value="Коллекционное"></option>
                                 </datalist>
                                 <span class="field-hint">Необязательно. Показывается в углу карточки.</span>
                             </div>
@@ -1563,8 +1565,8 @@
 
                             <div class="field field--full">
                                 <label for="productCondition">Состояние</label>
-                                <input id="productCondition" name="condition" type="text" maxlength="60" placeholder="Состояние A · АКБ 89%">
-                                <span class="field-hint">Необязательно. Например: «Состояние A · Комплект».</span>
+                                <input id="productCondition" name="condition" type="text" maxlength="60" placeholder="СССР · Фарфор · Полный комплект">
+                                <span class="field-hint">Необязательно. Например: «1988 · Твёрдый переплёт».</span>
                             </div>
                         </div>
 
@@ -1598,9 +1600,11 @@
                             <span class="sr-only">Фильтр по категории</span>
                             <select id="categoryFilter" aria-label="Фильтр по категории">
                                 <option value="all">Все категории</option>
-                                <option value="phones">Смартфоны</option>
-                                <option value="laptops">Ноутбуки</option>
-                                <option value="accessories">Аксессуары</option>
+                                <option value="tableware">Посуда</option>
+                                <option value="books">Книги</option>
+                                <option value="vinyl">Пластинки</option>
+                                <option value="souvenirs">Сувениры</option>
+                                <option value="media">CD и DVD</option>
                             </select>
                         </label>
                         <label class="sort-box filter-box">
@@ -1654,7 +1658,7 @@
                         <li>Создайте проект на <a href="https://console.firebase.google.com/" target="_blank" rel="noopener">console.firebase.google.com</a> (тариф Spark бесплатный).</li>
                         <li>Включите Firestore Database в режиме Production, Storage и Authentication → Sign-in method → Email/Password.</li>
                         <li>В Authentication → Users создайте администратора с email <code>admin@retro.ru</code>. Если нужен другой email, измените константу <code>ADMIN_EMAIL</code> в admin.html и email в правилах <code>allow write</code> ниже.</li>
-                        <li>Откройте Project settings → Your apps → Web <code>&lt;/&gt;</code>, скопируйте <code>firebaseConfig</code> и вставьте его в <code>index.html</code> и <code>admin.html</code>.</li>
+                        <li>Откройте Project settings → Your apps → Web <code>&lt;/&gt;</code>, скопируйте <code>firebaseConfig</code> и вставьте значения в файл <code>firebase-config.js</code>.</li>
                         <li>В Firestore → Rules опубликуйте правила ниже. Они разрешают чтение каталога и названия магазина всем, а запись — только администратору.</li>
                         <li>В Storage → Rules опубликуйте правила для загрузки фото. Читать фото смогут все, загружать — только администратор.</li>
                     </ol>
@@ -1741,108 +1745,63 @@ service firebase.storage {
                 <circle cx="12" cy="15.3" r="3.3"/>
                 <path d="M12 13.8v3"/>
             </symbol>
+            <symbol id="i-tableware" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 10h12v4.2A5.8 5.8 0 0 1 10.2 20h-.4A5.8 5.8 0 0 1 4 14.2V10Z"/>
+                <path d="M16 11h2.2a2.8 2.8 0 0 1 0 5.6H16"/>
+                <path d="M3 21h15"/>
+            </symbol>
+            <symbol id="i-book" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15.5H6.5A2.5 2.5 0 0 0 4 21V5.5Z"/>
+                <path d="M4 18.5A2.5 2.5 0 0 1 6.5 16H20"/>
+                <path d="M8 7h8M8 10.5h5"/>
+            </symbol>
+            <symbol id="i-vinyl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"/>
+                <circle cx="12" cy="12" r="3.2"/>
+                <circle cx="12" cy="12" r=".9" fill="currentColor" stroke="none"/>
+            </symbol>
+            <symbol id="i-gift" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="4" y="9" width="16" height="11" rx="1.5"/>
+                <path d="M3 9h18v4H3zM12 9v11"/>
+                <path d="M12 9C10 9 7.5 8.5 7.5 6.5A2.5 2.5 0 0 1 12 5.2 2.5 2.5 0 0 1 16.5 6.5C16.5 8.5 14 9 12 9Z"/>
+            </symbol>
+            <symbol id="i-disc" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9"/>
+                <circle cx="12" cy="12" r="3"/>
+                <path d="M12 3v2M12 19v2M3 12h2M19 12h2"/>
+            </symbol>
         </defs>
     </svg>
 
     <!-- ============================================================
          ЛОГИКА АДМИН-ПАНЕЛИ
          ============================================================ -->
+    <script src="firebase-config.js"></script>
     <script type="module">
         /* ============================================================
-           АДМИН-ПАНЕЛЬ RETRO — ПОДРОБНАЯ ИНСТРУКЦИЯ
-           ============================================================
+           АДМИН-ПАНЕЛЬ «РЕТРО»
 
-           Что делает этот файл
-           --------------------
-           • Показывает экран входа с паролем.
-           • В демо-режиме (Firebase не настроен) пускает по паролю admin123
-             и хранит товары и фото в localStorage этого браузера.
-           • После настройки Firebase входит через Firebase Authentication
-             (email администратора + пароль), работает с Firestore и Storage.
-           • Добавляет, редактирует и удаляет товары в коллекции products.
-           • Загружает фото в Firebase Storage и подставляет ссылку в товар.
-           • Меняет название магазина (документ settings/store).
-           • Витрина index.html читает те же данные и показывает товары.
+           Товары хранятся в Firestore (products), фото — в Firebase
+           Storage. Ключи проекта лежат в firebase-config.js.
 
-           КАК СОЗДАТЬ ПРОЕКТ FIREBASE
-           ---------------------------
-           1. Откройте https://console.firebase.google.com/ и войдите
-              в аккаунт Google.
-           2. Нажмите «Создать проект» (Add project). Название любое,
-              например retro-tech. Google Analytics можно отключить.
-           3. В меню «Build» откройте «Firestore Database» → «Create database».
-              Выберите Production mode и регион (например, europe-west3).
-           4. В меню «Build» откройте «Storage» → «Get started». Storage нужен
-              для загрузки фото товаров. Если Firebase предложит тариф Blaze,
-              проверьте актуальные условия бесплатного тарифа.
-           5. В меню «Build» откройте «Authentication» → «Get started» →
-              вкладка «Sign-in method» → включите Email/Password.
-           6. На вкладке «Users» нажмите «Add user» и создайте администратора:
-                 Email: admin@retro.ru
-                 Пароль: придумайте надёжный пароль (не admin123)
-              Этот email записан в константе ADMIN_EMAIL ниже. Если создадите
-              пользователя с другим email — измените ADMIN_EMAIL и email
-              в правилах allow write ниже.
-           7. Откройте «Project settings» (шестерёнка) → «General» →
-              «Your apps» → Web </> → зарегистрируйте приложение.
-              Firebase покажет объект firebaseConfig. Скопируйте его.
-           8. Вставьте firebaseConfig ниже в этом файле и точно такой же
-              конфиг в index.html. Оба файла должны смотреть в один проект.
-           9. Откройте Firestore Database → Rules и опубликуйте правила:
+           КАК ПОДКЛЮЧИТЬ FIREBASE
+           -----------------------
+           1. Создайте проект на https://console.firebase.google.com/.
+           2. Включите Firestore Database (Production mode) и Storage.
+           3. Включите Authentication → Email/Password, создайте админа
+              admin@retro.ru и задайте надёжный пароль.
+           4. Project settings → Your apps → Web: скопируйте firebaseConfig.
+           5. Вставьте значения в firebase-config.js.
+           6. Опубликуйте правила Firestore и Storage — они расписаны
+              в комментариях внутри firebase-config.js.
 
-                 rules_version = '2';
-                 service cloud.firestore {
-                   match /databases/{database}/documents {
-                     match /products/{productId} {
-                       allow read: if true;
-                       allow write: if request.auth != null
-                                    && request.auth.token.email == 'admin@retro.ru';
-                     }
-                     match /settings/{settingId} {
-                       allow read: if true;
-                       allow write: if request.auth != null
-                                    && request.auth.token.email == 'admin@retro.ru';
-                     }
-                   }
-                 }
-
-              Коллекция products создастся сама при добавлении первого товара.
-              Документ settings/store создастся при сохранении названия магазина.
-          10. Откройте Storage → Rules и опубликуйте правила загрузки фото:
-
-                 rules_version = '2';
-                 service firebase.storage {
-                   match /b/{bucket}/o {
-                     match /products/{allPaths=**} {
-                       allow read: if true;
-                       allow write: if request.auth != null
-                                    && request.auth.token.email == 'admin@retro.ru';
-                     }
-                   }
-                 }
-
-          11. Если сайт на GitHub Pages, добавьте домен
-              ВАШ_ЛОГИН.github.io в Authentication → Settings →
-              Authorized domains. Иначе Firebase может блокировать вход.
-          12. Откройте admin.html, войдите с email и паролем администратора,
-              добавьте товар с фото и обновите index.html — товар появится
-              в каталоге.
-
-           ВАЖНО
-           -----
-           apiKey из firebaseConfig не является секретом. Доступ защищают
-           правила Firestore и Firebase Authentication. Демо-пароль admin123
-           хранится прямо в коде и работает только пока Firebase не настроен.
-           Для реального магазина обязательно подключите Firebase Auth.
-
-           GITHUB PAGES
-           ------------
-           Сборка не нужна. Загрузите index.html, admin.html и остальные файлы
-           в репозиторий и включите GitHub Pages. Firebase SDK загрузится с CDN,
-           а Firestore будет работать по HTTPS без собственного сервера.
+           Пока ключи не заполнены, работает демо-режим: товары и фото
+           хранятся в localStorage, пароль входа — admin123.
            ============================================================ */
 
-        const firebaseConfig = {
+        // Ключи Firebase хранятся в отдельном файле firebase-config.js.
+        // Откройте его и замените заглушки значениями из консоли Firebase.
+        const firebaseConfig = window.RETRO_FIREBASE_CONFIG || {
             apiKey: "ВСТАВЬТЕ_API_KEY",
             authDomain: "ВАШ_ПРОЕКТ.firebaseapp.com",
             projectId: "ВАШ_ПРОЕКТ",
@@ -1860,12 +1819,11 @@ service firebase.storage {
         const PRODUCTS_COLLECTION = 'products';
         const STORE_SETTINGS_COLLECTION = 'settings';
         const STORE_SETTINGS_DOC = 'store';
-        const DEFAULT_STORE_NAME = 'Retro';
-        // Ключи демо-данных оставлены прежними, чтобы не потерять товары,
-        // добавленные в браузере до переименования магазина.
-        const DEMO_STORAGE_KEY = 'sitecrafting_products_v1';
+        const DEFAULT_STORE_NAME = 'Ретро';
+        // Новые ключи демо-данных: старый каталог с техникой не показывается.
+        const DEMO_STORAGE_KEY = 'retro_products_v2';
         const DEMO_SESSION_KEY = 'sitecrafting_admin_demo_v1';
-        const DEMO_STORE_NAME_KEY = 'retro_store_name_v1';
+        const DEMO_STORE_NAME_KEY = 'retro_store_name_v2';
         const FIREBASE_SDK_VERSION = '10.12.5';
         const PLACEHOLDER_MARKERS = ['ВСТАВЬТЕ', 'ВАШ_ПРОЕКТ', 'PASTE_', 'YOUR_'];
         const MAX_IMAGE_BYTES = 12 * 1024 * 1024;
@@ -1879,181 +1837,183 @@ service firebase.storage {
         const SEED_PRODUCTS = [
             {
                 id: 'seed-01',
-                name: 'iPhone 13 Pro 256 ГБ',
-                price: 54900,
-                oldPrice: 59900,
-                category: 'phones',
-                description: 'Graphite, полный комплект. Без царапин и следов ремонта.',
+                name: 'Чайный сервиз «Золотая роза»',
+                price: 6500,
+                oldPrice: 7900,
+                category: 'tableware',
+                description: 'Фарфор, роспись золотом. Полный комплект: чайник, 6 чашек и блюдец.',
                 imageUrl: '',
                 badge: 'Хит',
-                condition: 'Состояние A+ · АКБ 89%',
-                icon: 'i-phone',
+                condition: 'СССР · Фарфор · Полный комплект',
+                icon: 'i-tableware',
                 glow: 'rgba(255, 138, 0, .17)',
                 createdAt: '2026-11-12T10:00:00.000Z'
             },
             {
                 id: 'seed-02',
-                name: 'Samsung Galaxy S22 128 ГБ',
-                price: 32900,
-                oldPrice: 37400,
-                category: 'phones',
-                description: 'Phantom Black, один владелец. Чистый IMEI, полный комплект.',
+                name: 'Столовый сервиз «Мадонна»',
+                price: 12800,
+                oldPrice: null,
+                category: 'tableware',
+                description: 'Фарфор с позолотой, 24 предмета. Без сколов и трещин.',
                 imageUrl: '',
-                badge: '−12%',
-                condition: 'Состояние A · АКБ 91%',
-                icon: 'i-phone',
+                badge: 'Новое поступление',
+                condition: 'СССР · 24 предмета',
+                icon: 'i-tableware',
                 glow: 'rgba(120, 170, 255, .14)',
                 createdAt: '2026-11-11T10:00:00.000Z'
             },
             {
                 id: 'seed-03',
-                name: 'Xiaomi 13T 256 ГБ',
-                price: 28500,
-                oldPrice: null,
-                category: 'phones',
-                description: 'Alpine Blue, 256 ГБ. Яркий AMOLED и камера Leica.',
+                name: 'Ваза «Ленинградский фарфор»',
+                price: 3400,
+                oldPrice: 4200,
+                category: 'tableware',
+                description: 'Белая глазурь, ручная роспись. Высота 28 см.',
                 imageUrl: '',
-                badge: 'Новое поступление',
-                condition: 'Состояние A · АКБ 94%',
-                icon: 'i-phone',
+                badge: '−19%',
+                condition: 'СССР · Высота 28 см',
+                icon: 'i-tableware',
                 glow: 'rgba(255, 196, 77, .16)',
                 createdAt: '2026-11-10T10:00:00.000Z'
             },
             {
                 id: 'seed-04',
-                name: 'Google Pixel 7 128 ГБ',
-                price: 26900,
-                oldPrice: 29400,
-                category: 'phones',
-                description: 'Obsidian, 128 ГБ. Лучшая камера в своём классе.',
+                name: 'Книга «Мастер и Маргарита»',
+                price: 2800,
+                oldPrice: 3500,
+                category: 'books',
+                description: 'М. Булгаков. Издание 1988 года, твёрдый переплёт, хорошее состояние.',
                 imageUrl: '',
-                badge: '−8%',
-                condition: 'Состояние B+ · АКБ 87%',
-                icon: 'i-phone',
+                badge: '−20%',
+                condition: '1988 · Твёрдый переплёт',
+                icon: 'i-book',
                 glow: 'rgba(130, 255, 205, .1)',
                 createdAt: '2026-11-09T10:00:00.000Z'
             },
             {
                 id: 'seed-05',
-                name: 'MacBook Air M1 13" 8/256 ГБ',
-                price: 49900,
-                oldPrice: 57900,
-                category: 'laptops',
-                description: 'Silver, цикл батареи 124. Лёгкий и полностью рабочий.',
+                name: 'Книга «Двенадцать стульев»',
+                price: 1200,
+                oldPrice: null,
+                category: 'books',
+                description: 'И. Ильф, Е. Петров. Букинистическое издание с иллюстрациями.',
                 imageUrl: '',
-                badge: 'Хит',
-                condition: 'Состояние A · Цикл 124',
-                icon: 'i-laptop',
-                glow: 'rgba(255, 138, 0, .15)',
+                badge: 'Букинистика',
+                condition: '1975 · Иллюстрации',
+                icon: 'i-book',
+                glow: 'rgba(220, 140, 255, .12)',
                 createdAt: '2026-11-08T10:00:00.000Z'
             },
             {
                 id: 'seed-06',
-                name: 'ASUS Zenbook 14 OLED',
-                price: 41500,
-                oldPrice: 46000,
-                category: 'laptops',
-                description: 'Core i5, 16/512 ГБ. OLED 2.8K, корпус без вмятин.',
+                name: 'Атлас мира, 1978 год',
+                price: 4600,
+                oldPrice: 5200,
+                category: 'books',
+                description: 'Большой иллюстрированный атлас. Крепкий блок, все страницы на месте.',
                 imageUrl: '',
-                badge: '−10%',
-                condition: 'Состояние A · 2 месяца',
-                icon: 'i-laptop',
-                glow: 'rgba(120, 170, 255, .13)',
+                badge: '−12%',
+                condition: '1978 · Большой формат',
+                icon: 'i-book',
+                glow: 'rgba(255, 138, 0, .14)',
                 createdAt: '2026-11-07T10:00:00.000Z'
             },
             {
                 id: 'seed-07',
-                name: 'Lenovo ThinkPad X1 Carbon',
-                price: 38900,
+                name: 'The Beatles — «Abbey Road»',
+                price: 4500,
                 oldPrice: null,
-                category: 'laptops',
-                description: 'Gen 9, i7, 16/512 ГБ. Лёгкий корпус, отличная клавиатура.',
+                category: 'vinyl',
+                description: 'Виниловая пластинка, оригинальное издание. Проверена, без заиданий.',
                 imageUrl: '',
-                badge: 'Бизнес-класс',
-                condition: 'Состояние A · 14"',
-                icon: 'i-laptop',
-                glow: 'rgba(255, 196, 77, .13)',
+                badge: 'Хит',
+                condition: 'LP · 33⅓ · Отличное состояние',
+                icon: 'i-vinyl',
+                glow: 'rgba(120, 170, 255, .13)',
                 createdAt: '2026-11-06T10:00:00.000Z'
             },
             {
                 id: 'seed-08',
-                name: 'HP Spectre x360 13',
-                price: 35900,
-                oldPrice: null,
-                category: 'laptops',
-                description: 'i5, 8/512 ГБ. Сенсорный экран-трансформер, стилус в комплекте.',
+                name: 'Кино — «Группа крови»',
+                price: 3200,
+                oldPrice: 3900,
+                category: 'vinyl',
+                description: 'Винил, переиздание. Конверт и вкладыш в комплекте.',
                 imageUrl: '',
-                badge: 'Новое поступление',
-                condition: 'Состояние B+ · 13.3"',
-                icon: 'i-laptop',
-                glow: 'rgba(220, 140, 255, .12)',
+                badge: '−18%',
+                condition: 'LP · Переиздание',
+                icon: 'i-vinyl',
+                glow: 'rgba(255, 196, 77, .13)',
                 createdAt: '2026-11-05T10:00:00.000Z'
             },
             {
                 id: 'seed-09',
-                name: 'Sony WH-1000XM4',
-                price: 16900,
-                oldPrice: 21200,
-                category: 'accessories',
-                description: 'Беспроводные наушники с шумоподавлением. Комплект и кейс.',
+                name: 'Значок «Гагарин»',
+                price: 900,
+                oldPrice: null,
+                category: 'souvenirs',
+                description: 'Металл, эмаль. Коллекционный значок 1980-х годов.',
                 imageUrl: '',
-                badge: '−20%',
-                condition: 'Состояние A · Комплект',
-                icon: 'i-headphones',
-                glow: 'rgba(255, 138, 0, .14)',
+                badge: 'Коллекционное',
+                condition: 'СССР · Эмаль',
+                icon: 'i-gift',
+                glow: 'rgba(130, 255, 205, .1)',
                 createdAt: '2026-11-04T10:00:00.000Z'
             },
             {
                 id: 'seed-10',
-                name: 'Apple Watch Series 8 45 мм',
-                price: 19900,
-                oldPrice: null,
-                category: 'accessories',
-                description: 'GPS, Midnight. Ремешок Sport Band, зарядка в комплекте.',
+                name: 'Статуэтка «Девушка с веслом»',
+                price: 5600,
+                oldPrice: 6400,
+                category: 'souvenirs',
+                description: 'Бисквит, высота 32 см. Редкая форма, без повреждений.',
                 imageUrl: '',
-                badge: 'Гарантия',
-                condition: 'Состояние A · АКБ 92%',
-                icon: 'i-watch',
-                glow: 'rgba(120, 170, 255, .13)',
+                badge: '−13%',
+                condition: 'СССР · Бисквит',
+                icon: 'i-gift',
+                glow: 'rgba(220, 140, 255, .12)',
                 createdAt: '2026-11-03T10:00:00.000Z'
             },
             {
                 id: 'seed-11',
-                name: 'AirPods Pro 2 (USB-C)',
-                price: 12900,
+                name: 'Pink Floyd — «The Wall» (CD)',
+                price: 1800,
                 oldPrice: null,
-                category: 'accessories',
-                description: 'Активное шумоподавление, кейс с MagSafe. Полный комплект.',
+                category: 'media',
+                description: 'Компакт-диск, издание 1994 года. Диск без царапин, буклет в комплекте.',
                 imageUrl: '',
-                badge: 'Хит',
-                condition: 'Состояние A · Комплект',
-                icon: 'i-earbuds',
-                glow: 'rgba(255, 196, 77, .13)',
+                badge: 'Новое поступление',
+                condition: 'CD · 1994 · Буклет',
+                icon: 'i-disc',
+                glow: 'rgba(255, 138, 0, .12)',
                 createdAt: '2026-11-02T10:00:00.000Z'
             },
             {
                 id: 'seed-12',
-                name: 'JBL Charge 5',
-                price: 7900,
-                oldPrice: 9300,
-                category: 'accessories',
-                description: 'Портативная колонка, 20 часов работы. Защита IP67.',
+                name: 'DVD «Иван Васильевич меняет профессию»',
+                price: 700,
+                oldPrice: 900,
+                category: 'media',
+                description: 'Лицензионное издание, реставрированная версия. Диск в отличном состоянии.',
                 imageUrl: '',
-                badge: '−15%',
-                condition: 'Состояние A · 20 Вт',
-                icon: 'i-speaker',
-                glow: 'rgba(255, 138, 0, .12)',
+                badge: '−22%',
+                condition: 'DVD · Лицензия',
+                icon: 'i-disc',
+                glow: 'rgba(120, 170, 255, .13)',
                 createdAt: '2026-11-01T10:00:00.000Z'
             }
         ];
 
         const CATEGORY_META = {
-            phones: { label: 'Смартфоны', icon: 'i-phone' },
-            laptops: { label: 'Ноутбуки', icon: 'i-laptop' },
-            accessories: { label: 'Аксессуары', icon: 'i-headphones' }
+            tableware: { label: 'Посуда', icon: 'i-tableware' },
+            books: { label: 'Книги', icon: 'i-book' },
+            vinyl: { label: 'Пластинки', icon: 'i-vinyl' },
+            souvenirs: { label: 'Сувениры', icon: 'i-gift' },
+            media: { label: 'CD и DVD', icon: 'i-disc' }
         };
 
-        const KNOWN_ICONS = new Set(['i-phone', 'i-laptop', 'i-headphones', 'i-watch', 'i-earbuds', 'i-speaker']);
+        const KNOWN_ICONS = new Set(['i-tableware', 'i-book', 'i-vinyl', 'i-gift', 'i-disc']);
         const priceFormatter = new Intl.NumberFormat('ru-RU');
 
         const $ = (selector, root = document) => root.querySelector(selector);
@@ -2087,7 +2047,7 @@ service firebase.storage {
         };
 
         const normalizeCategory = (value) => (
-            Object.prototype.hasOwnProperty.call(CATEGORY_META, value) ? value : 'accessories'
+            Object.prototype.hasOwnProperty.call(CATEGORY_META, value) ? value : 'tableware'
         );
 
         const safeImageUrl = (value) => {
@@ -2978,7 +2938,7 @@ service firebase.storage {
             }
 
             productTableBody.innerHTML = items.map((product) => {
-                const meta = CATEGORY_META[product.category] || CATEGORY_META.accessories;
+                const meta = CATEGORY_META[product.category] || CATEGORY_META.tableware;
                 const icon = product.icon || meta.icon;
                 const images = Array.isArray(product.imageUrls) ? product.imageUrls : [];
                 const firstImage = images[0] || '';
@@ -3605,8 +3565,8 @@ service firebase.storage {
         /* ---------- Запуск ---------- */
         console.info(
             isFirebaseConfigured()
-                ? 'Retro Admin: Firebase настроен, вход через Firebase Authentication.'
-                : 'Retro Admin: Firebase не настроен, включён демо-режим (пароль admin123).'
+                ? 'Ретро Админ: Firebase настроен, вход через Firebase Authentication.'
+                : 'Ретро Админ: Firebase не настроен, включён демо-режим (пароль admin123).'
         );
 
         renderImageGallery();
