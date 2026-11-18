@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ретро — комиссионный магазин в Москве</title>
-    <meta name="description" content="Ретро — комиссионный магазин: посуда, книги, пластинки, сувениры, CD и DVD. Покупаем и принимаем на комиссию. Ленинский проспект, 62/1. Ежедневно с 11:00 до 20:00.">
-    <meta name="keywords" content="комиссионный магазин, ретро-вещи, посуда, книги, пластинки, винил, сувениры, CD и DVD, купить ретро, сдать на комиссию, Москва, Ленинский проспект">
+    <meta name="description" content="Ретро — комиссионный магазин: посуда, книги, пластинки, сувениры, значки, открытки, CD и DVD. Покупаем и принимаем на комиссию. Ленинский проспект, 62/1. Ежедневно с 11:00 до 20:00.">
+    <meta name="keywords" content="комиссионный магазин, ретро-вещи, посуда, книги, пластинки, винил, сувениры, значки, открытки, CD и DVD, купить ретро, сдать на комиссию, Москва, Ленинский проспект">
     <meta name="author" content="Ретро">
     <meta name="theme-color" content="#f7f4ff">
     <meta name="robots" content="index, follow">
@@ -16,10 +16,10 @@
     <meta property="og:locale" content="ru_RU">
     <meta property="og:site_name" content="Ретро">
     <meta property="og:title" content="Ретро — комиссионный магазин">
-    <meta property="og:description" content="Посуда, книги, пластинки, сувениры, CD и DVD. Покупаем и принимаем на комиссию. Ленинский проспект, 62/1.">
+    <meta property="og:description" content="Посуда, книги, пластинки, сувениры, значки, открытки, CD и DVD. Покупаем и принимаем на комиссию. Ленинский проспект, 62/1.">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Ретро — комиссионный магазин">
-    <meta name="twitter:description" content="Посуда, книги, пластинки, сувениры, CD и DVD. Покупаем и принимаем на комиссию.">
+    <meta name="twitter:description" content="Посуда, книги, пластинки, сувениры, значки, открытки, CD и DVD. Покупаем и принимаем на комиссию.">
 
     <!--
       Домен пока не подключён. Пока сайт живёт на GitHub Pages,
@@ -317,6 +317,29 @@
         .nav-link:hover { color: var(--text); }
         .nav-link:hover::after { transform: scaleX(1); transform-origin: left; }
         .header-cta { margin-left: 4px; }
+        .header-max {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            height: 38px;
+            margin-left: -18px;
+            padding: 0 13px;
+            border: 1px solid var(--line-strong);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .6);
+            color: var(--text);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: .04em;
+            transition: color .2s, border-color .2s, background .2s, transform .2s var(--ease);
+        }
+        .header-max svg { width: 16px; height: 16px; }
+        .header-max:hover {
+            color: var(--accent);
+            border-color: rgba(123, 47, 247, .38);
+            background: #fff;
+            transform: translateY(-1px);
+        }
         .menu-toggle {
             display: none;
             place-items: center;
@@ -1739,6 +1762,7 @@
         @media (max-width: 980px) {
             .nav { display: none; }
             .header-cta { display: none; }
+            .header-max { display: none; }
             .menu-toggle { display: grid; }
             .hero { padding-top: calc(var(--header-h) + 58px); }
             .hero-grid { grid-template-columns: 1fr; gap: 26px; }
@@ -2076,7 +2100,7 @@
         }
         .category-grid {
             display: grid;
-            grid-template-columns: repeat(5, minmax(0, 1fr));
+            grid-template-columns: repeat(4, minmax(0, 1fr));
             gap: 14px;
             margin-top: 28px;
         }
@@ -2111,6 +2135,8 @@
         .category-tile--lime { background: linear-gradient(135deg, #e6ffa8, var(--accent-2) 52%, #a8e62e); color: #171029; }
         .category-tile--blue { background: linear-gradient(135deg, #5b9bff, #2b5bd7 58%, #1b3b8f); }
         .category-tile--rose { background: linear-gradient(135deg, #ff9ab5, #e4557f 55%, #a92f56); }
+        .category-tile--teal { background: linear-gradient(135deg, #4fe0cf, #0d9488 56%, #115e59); }
+        .category-tile--amber { background: linear-gradient(135deg, #ffd27a, #f59e0b 56%, #b45309); color: #2b1600; }
         .category-tile-icon {
             display: grid;
             width: 52px;
@@ -2122,6 +2148,8 @@
             -webkit-backdrop-filter: blur(8px);
         }
         .category-tile--lime .category-tile-icon { background: rgba(23, 16, 41, .1); }
+        .category-tile--teal .category-tile-icon { background: rgba(6, 46, 42, .18); }
+        .category-tile--amber .category-tile-icon { background: rgba(43, 22, 0, .12); }
         .category-tile-icon svg { width: 26px; height: 26px; }
         .category-tile h3 {
             margin-top: auto;
@@ -2152,6 +2180,8 @@
             backdrop-filter: blur(8px);
         }
         .category-tile--lime .category-tile-count { background: rgba(23, 16, 41, .1); }
+        .category-tile--teal .category-tile-count { background: rgba(6, 46, 42, .18); }
+        .category-tile--amber .category-tile-count { background: rgba(43, 22, 0, .12); }
 
         /* ---------- Каталог ---------- */
         .filters {
@@ -2510,6 +2540,8 @@
         .reveal-ready .category-tile[data-reveal]:nth-child(3) { transition-delay: .16s; }
         .reveal-ready .category-tile[data-reveal]:nth-child(4) { transition-delay: .24s; }
         .reveal-ready .category-tile[data-reveal]:nth-child(5) { transition-delay: .32s; }
+        .reveal-ready .category-tile[data-reveal]:nth-child(6) { transition-delay: .4s; }
+        .reveal-ready .category-tile[data-reveal]:nth-child(7) { transition-delay: .48s; }
 
         @media (max-width: 1180px) {
             .category-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -2536,7 +2568,7 @@
         "@context": "https://schema.org",
         "@type": "Store",
         "name": "Ретро",
-        "description": "Комиссионный магазин: посуда, книги, пластинки, сувениры, CD и DVD. Покупаем и принимаем на комиссию.",
+        "description": "Комиссионный магазин: посуда, книги, пластинки, сувениры, значки, открытки, CD и DVD. Покупаем и принимаем на комиссию.",
         "telephone": "+7-926-221-7420",
         "email": "hello@retro.ru",
         "priceRange": "₽₽",
@@ -2608,6 +2640,11 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
             </a>
 
+            <a class="header-max" href="https://max.ru/" target="_blank" rel="noopener noreferrer" aria-label="Ссылка на MAX - Ретро на Ленинском" title="Ссылка на MAX - Ретро на Ленинском">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L4 20l1.2-4.2A8.5 8.5 0 1 1 21 11.5Z"/><path d="M8.5 15V9.5l3.5 3.5 3.5-3.5V15"/></svg>
+                <span>MAX</span>
+            </a>
+
             <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="Открыть меню">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
             </button>
@@ -2620,6 +2657,7 @@
         <a href="#how">Как это работает</a>
         <a href="#guarantee">Комиссия</a>
         <a href="#contact">Контакты</a>
+        <a href="https://max.ru/" target="_blank" rel="noopener noreferrer">Ссылка на MAX - Ретро на Ленинском <span>Мессенджер</span></a>
         <a class="btn btn--primary btn--block" href="#contact">
             Связаться
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -2635,7 +2673,7 @@
                 <div class="hero-copy">
                     <span class="eyebrow eyebrow--dot">Комиссионный магазин · Москва</span>
                     <h1 id="heroTitle">Ретро-вещи<br class="hero-break"> с <span class="accent">историей</span></h1>
-                    <p class="hero-lead">Покупаем и принимаем на комиссию посуду, книги, пластинки, сувениры, CD и DVD. Найдите вещь с историей или сдайте свою — оценим на месте.</p>
+                    <p class="hero-lead">Покупаем и принимаем на комиссию посуду, книги, пластинки, сувениры, значки, открытки, CD и DVD. Найдите вещь с историей или сдайте свою — оценим на месте.</p>
 
                     <div class="hero-actions">
                         <a class="btn btn--primary" href="#catalog">
@@ -2734,7 +2772,7 @@
                         <span class="eyebrow">Категории</span>
                         <h2 class="section-title" id="categoriesTitle">Найдите свою вещь</h2>
                     </div>
-                    <p class="section-sub">Пять направлений — от фарфора до винила. Выберите категорию, чтобы увидеть актуальные позиции.</p>
+                    <p class="section-sub">Семь направлений — от фарфора до винила и коллекционных открыток. Выберите категорию, чтобы увидеть актуальные позиции.</p>
                 </div>
                 <div class="category-grid">
                     <a class="category-tile category-tile--purple" href="#catalog" data-filter-link="tableware" data-reveal>
@@ -2767,7 +2805,23 @@
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="9" width="16" height="11" rx="1.5"/><path d="M3 9h18v4H3zM12 9v11"/><path d="M12 9C10 9 7.5 8.5 7.5 6.5A2.5 2.5 0 0 1 12 5.2 2.5 2.5 0 0 1 16.5 6.5C16.5 8.5 14 9 12 9Z"/></svg>
                         </span>
                         <h3>Сувениры</h3>
-                        <p>Значки, статуэтки, открытки и предметы ушедшей эпохи.</p>
+                        <p>Статуэтки, брелоки и предметы ушедшей эпохи.</p>
+                    </a>
+                    <a class="category-tile category-tile--teal" href="#catalog" data-filter-link="badges" data-reveal>
+                        <span class="category-tile-count" data-category-count="badges">0</span>
+                        <span class="category-tile-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.5" r="5.5"/><path d="M9.8 13.2 8.5 21l3.5-2 3.5 2-1.3-7.8"/><path d="m12 6.2.8 1.6 1.8.3-1.3 1.3.3 1.8-1.6-.9-1.6.9.3-1.8-1.3-1.3 1.8-.3.8-1.6Z"/></svg>
+                        </span>
+                        <h3>Значки</h3>
+                        <p>Советская символика, космос, спорт и памятные даты в эмали.</p>
+                    </a>
+                    <a class="category-tile category-tile--amber" href="#catalog" data-filter-link="postcards" data-reveal>
+                        <span class="category-tile-count" data-category-count="postcards">0</span>
+                        <span class="category-tile-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><rect x="15" y="7.5" width="3" height="3.5" rx=".5"/><path d="M7 9h5M7 12h4M7 15h7"/></svg>
+                        </span>
+                        <h3>Открытки</h3>
+                        <p>Праздничные, видовые и поздравительные открытки прошлых лет.</p>
                     </a>
                     <a class="category-tile category-tile--rose" href="#catalog" data-filter-link="media" data-reveal>
                         <span class="category-tile-count" data-category-count="media">0</span>
@@ -2795,7 +2849,7 @@
                     <div>
                         <span class="eyebrow">Витрина</span>
                         <h2 class="section-title" id="catalogTitle">Каталог<br>ретро-вещей</h2>
-                        <p class="section-sub">Посуда, книги, пластинки, сувениры, CD и DVD. Каждая вещь отобрана вручную — состояние и комплектацию уточняйте у продавца.</p>
+                        <p class="section-sub">Посуда, книги, пластинки, сувениры, значки, открытки, CD и DVD. Каждая вещь отобрана вручную — состояние и комплектацию уточняйте у продавца.</p>
                     </div>
                     <p class="catalog-note"><strong>Без онлайн-оплаты.</strong> Оставьте заявку — проверим наличие и отложим вещь до вашего визита.</p>
                 </div>
@@ -2806,6 +2860,8 @@
                     <button class="filter-btn" type="button" data-filter="books" aria-pressed="false">Книги <span class="filter-count">0</span></button>
                     <button class="filter-btn" type="button" data-filter="vinyl" aria-pressed="false">Пластинки <span class="filter-count">0</span></button>
                     <button class="filter-btn" type="button" data-filter="souvenirs" aria-pressed="false">Сувениры <span class="filter-count">0</span></button>
+                    <button class="filter-btn" type="button" data-filter="badges" aria-pressed="false">Значки <span class="filter-count">0</span></button>
+                    <button class="filter-btn" type="button" data-filter="postcards" aria-pressed="false">Открытки <span class="filter-count">0</span></button>
                     <button class="filter-btn" type="button" data-filter="media" aria-pressed="false">CD и DVD <span class="filter-count">0</span></button>
                 </div>
 
@@ -2881,7 +2937,7 @@
                 <div class="guarantee-band" id="guarantee" data-reveal>
                     <div>
                         <h3>Покупаем и принимаем на комиссию</h3>
-                        <p>Оценим посуду, книги, пластинки, сувениры, CD и DVD. Принесите вещи в магазин — обсудим цену и условия.</p>
+                        <p>Оценим посуду, книги, пластинки, сувениры, значки, открытки, CD и DVD. Принесите вещи в магазин — обсудим цену и условия.</p>
                     </div>
                     <a class="btn btn--ghost" href="#contact">
                         Сдать вещи
@@ -2945,6 +3001,16 @@
                                 <span>Без выходных и перерыва на обед</span>
                             </div>
                         </div>
+
+                        <div class="contact-item">
+                            <span class="contact-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L4 20l1.2-4.2A8.5 8.5 0 1 1 21 11.5Z"/><path d="M8.5 15V9.5l3.5 3.5 3.5-3.5V15"/></svg>
+                            </span>
+                            <div>
+                                <small>MAX</small>
+                                <a href="https://max.ru/" target="_blank" rel="noopener noreferrer">Ссылка на MAX - Ретро на Ленинском</a>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="socials" aria-label="Мы в социальных сетях">
@@ -2956,6 +3022,9 @@
                         </a>
                         <a class="social-link" href="https://vk.com/" target="_blank" rel="noopener noreferrer" aria-label="ВКонтакте">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8c.4 5 3.1 8 8 8h1v-3c1.5.3 2.6 1.2 3.3 3H19c-.5-2.4-2-4-3.4-4.6 1.2-.7 2.5-2.1 2.9-3.4h-2.7c-.4 1.3-1.5 2.6-2.8 2.9V8h-1v4.2C10.5 11.8 9.2 9.9 9 8H4Z"/></svg>
+                        </a>
+                        <a class="social-link" href="https://max.ru/" target="_blank" rel="noopener noreferrer" aria-label="Ссылка на MAX - Ретро на Ленинском" title="Ссылка на MAX - Ретро на Ленинском">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L4 20l1.2-4.2A8.5 8.5 0 1 1 21 11.5Z"/><path d="M8.5 15V9.5l3.5 3.5 3.5-3.5V15"/></svg>
                         </a>
                     </div>
                 </div>
@@ -3031,7 +3100,7 @@
                             <span class="logo-sub">РЕТРО-МАГАЗИН</span>
                         </span>
                     </a>
-                    <p>Комиссионный магазин. Покупаем и принимаем на комиссию посуду, книги, пластинки, сувениры, CD и DVD.</p>
+                    <p>Комиссионный магазин. Покупаем и принимаем на комиссию посуду, книги, пластинки, сувениры, значки, открытки, CD и DVD.</p>
 
                     <div class="socials footer-socials" aria-label="Мы в социальных сетях">
                         <a class="social-link" href="https://t.me/" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
@@ -3042,6 +3111,9 @@
                         </a>
                         <a class="social-link" href="https://vk.com/" target="_blank" rel="noopener noreferrer" aria-label="ВКонтакте">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8c.4 5 3.1 8 8 8h1v-3c1.5.3 2.6 1.2 3.3 3H19c-.5-2.4-2-4-3.4-4.6 1.2-.7 2.5-2.1 2.9-3.4h-2.7c-.4 1.3-1.5 2.6-2.8 2.9V8h-1v4.2C10.5 11.8 9.2 9.9 9 8H4Z"/></svg>
+                        </a>
+                        <a class="social-link" href="https://max.ru/" target="_blank" rel="noopener noreferrer" aria-label="Ссылка на MAX - Ретро на Ленинском" title="Ссылка на MAX - Ретро на Ленинском">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L4 20l1.2-4.2A8.5 8.5 0 1 1 21 11.5Z"/><path d="M8.5 15V9.5l3.5 3.5 3.5-3.5V15"/></svg>
                         </a>
                     </div>
                 </div>
@@ -3055,6 +3127,8 @@
                             <li><a href="#catalog" data-filter-link="books">Книги</a></li>
                             <li><a href="#catalog" data-filter-link="vinyl">Пластинки</a></li>
                             <li><a href="#catalog" data-filter-link="souvenirs">Сувениры</a></li>
+                            <li><a href="#catalog" data-filter-link="badges">Значки</a></li>
+                            <li><a href="#catalog" data-filter-link="postcards">Открытки</a></li>
                             <li><a href="#catalog" data-filter-link="media">CD и DVD</a></li>
                         </ul>
                     </div>
@@ -3074,6 +3148,7 @@
                         <ul>
                             <li><a href="tel:+79262217420">8 926 221 7420</a></li>
                             <li><a href="mailto:hello@retro.ru">hello@retro.ru</a></li>
+                            <li><a href="https://max.ru/" target="_blank" rel="noopener noreferrer">Ссылка на MAX - Ретро на Ленинском</a></li>
                             <li><span>Ленинский проспект, 62/1</span></li>
                             <li><span>Ежедневно: 11:00–20:00</span></li>
                         </ul>
@@ -3232,6 +3307,16 @@
                 <circle cx="12" cy="12" r="3"/>
                 <path d="M12 3v2M12 19v2M3 12h2M19 12h2"/>
             </symbol>
+            <symbol id="i-badge" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="8.5" r="5.5"/>
+                <path d="M9.8 13.2 8.5 21l3.5-2 3.5 2-1.3-7.8"/>
+                <path d="m12 6.2.8 1.6 1.8.3-1.3 1.3.3 1.8-1.6-.9-1.6.9.3-1.8-1.3-1.3 1.8-.3.8-1.6Z"/>
+            </symbol>
+            <symbol id="i-postcard" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="5" width="18" height="14" rx="2"/>
+                <rect x="15" y="7.5" width="3" height="3.5" rx=".5"/>
+                <path d="M7 9h5M7 12h4M7 15h7"/>
+            </symbol>
         </defs>
     </svg>
     <script>
@@ -3308,7 +3393,7 @@
 
             const updateFilterCounts = () => {
                 const cards = getCards();
-                const counts = { all: cards.length, tableware: 0, books: 0, vinyl: 0, souvenirs: 0, media: 0 };
+                const counts = { all: cards.length, tableware: 0, books: 0, vinyl: 0, souvenirs: 0, badges: 0, postcards: 0, media: 0 };
 
                 cards.forEach((card) => {
                     const category = card.dataset.category;
@@ -3850,6 +3935,7 @@
         const DEFAULT_STORE_NAME = 'Ретро';
         // Новые ключи демо-данных: старый каталог с техникой не показывается.
         const DEMO_STORAGE_KEY = 'retro_products_v2';
+        const DEMO_SEED_MARKER = 'retro_products_seed_badges_v1';
         const DEMO_STORE_NAME_KEY = 'retro_store_name_v2';
         const FIREBASE_SDK_VERSION = '10.12.5';
         const PLACEHOLDER_MARKERS = ['ВСТАВЬТЕ', 'ВАШ_ПРОЕКТ', 'PASTE_', 'YOUR_'];
@@ -4024,6 +4110,34 @@
                 icon: 'i-disc',
                 glow: 'rgba(120, 170, 255, .13)',
                 createdAt: '2026-11-01T10:00:00.000Z'
+            },
+            {
+                id: 'seed-13',
+                name: 'Значок «Спутник-1»',
+                price: 1200,
+                oldPrice: null,
+                category: 'badges',
+                description: 'Металл, эмаль. Памятный значок к запуску первого спутника, 1957 год.',
+                imageUrl: '',
+                badge: 'Коллекционное',
+                condition: 'СССР · Металл · Эмаль',
+                icon: 'i-badge',
+                glow: 'rgba(79, 224, 207, .13)',
+                createdAt: '2026-11-17T10:00:00.000Z'
+            },
+            {
+                id: 'seed-14',
+                name: 'Открытка «С Новым годом!», 1965',
+                price: 450,
+                oldPrice: null,
+                category: 'postcards',
+                description: 'Оригинальная советская открытка. Чистая, без надписей и заломов.',
+                imageUrl: '',
+                badge: 'Редкость',
+                condition: 'СССР · 1965 · Чистая',
+                icon: 'i-postcard',
+                glow: 'rgba(255, 210, 122, .14)',
+                createdAt: '2026-11-16T10:00:00.000Z'
             }
         ];
 
@@ -4032,10 +4146,12 @@
             books: { label: 'Книги', icon: 'i-book' },
             vinyl: { label: 'Пластинки', icon: 'i-vinyl' },
             souvenirs: { label: 'Сувениры', icon: 'i-gift' },
+            badges: { label: 'Значки', icon: 'i-badge' },
+            postcards: { label: 'Открытки', icon: 'i-postcard' },
             media: { label: 'CD и DVD', icon: 'i-disc' }
         };
 
-        const KNOWN_ICONS = new Set(['i-tableware', 'i-book', 'i-vinyl', 'i-gift', 'i-disc']);
+        const KNOWN_ICONS = new Set(['i-tableware', 'i-book', 'i-vinyl', 'i-gift', 'i-disc', 'i-badge', 'i-postcard']);
         const CARD_GLOWS = [
             'rgba(255, 138, 0, .16)',
             'rgba(120, 170, 255, .14)',
@@ -4153,7 +4269,24 @@
                 if (stored) {
                     const parsed = JSON.parse(stored);
                     if (Array.isArray(parsed)) {
-                        return parsed.map(normalizeProduct);
+                        const products = parsed.map(normalizeProduct);
+                        if (!localStorage.getItem(DEMO_SEED_MARKER)) {
+                            const additions = SEED_PRODUCTS.filter((seed) => (
+                                ['seed-13', 'seed-14'].includes(seed.id) &&
+                                !products.some((product) => product.id === seed.id)
+                            ));
+                            const merged = additions.length
+                                ? products.concat(additions.map(normalizeProduct))
+                                : products;
+                            if (additions.length) writeDemoProducts(merged);
+                            try {
+                                localStorage.setItem(DEMO_SEED_MARKER, '1');
+                            } catch (error) {
+                                console.warn('Не удалось сохранить отметку о новых демо-товарах:', error);
+                            }
+                            return merged;
+                        }
+                        return products;
                     }
                 }
             } catch (error) {
