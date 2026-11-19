@@ -4356,6 +4356,10 @@
                         });
                     });
                     heroVisual.addEventListener('pointerleave', () => {
+                        if (heroFrame) {
+                            cancelAnimationFrame(heroFrame);
+                            heroFrame = 0;
+                        }
                         heroVisual.style.setProperty('--mx', '0');
                         heroVisual.style.setProperty('--my', '0');
                     });
